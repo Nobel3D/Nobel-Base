@@ -1,0 +1,19 @@
+# depslib dependency file v1.0
+1461568206 source:/mnt/programming/Git/NBL/Array.cpp
+	"Array.h"
+
+1462129154 /mnt/programming/Git/NBL/Array.h
+	<cstddef>
+
+1462131997 source:/mnt/programming/Git/NBL/NString.cpp
+	"NString.h"
+	<stdio.h>
+	<cstdlib>
+	<ctype.h>
+
+1462120686 /mnt/programming/Git/NBL/NString.h
+	"Array.h"
+	"def.h"
+
+1461935634 /mnt/programming/Git/NBL/def.h
+
