@@ -11,29 +11,32 @@ namespace NobelLib
 	class NString
 	{
 	private:
-		NString addString(const char* add);
-		NString addString(const char add);
-		bool Equal(const char* Compare);
+		void addString(const byte* add);
+		void addString(const NString &add);
 		void newString(const byte* data);
-		void formString(const byte* newstr, int& newlen);
-		void formString(const NString& copystr);
-		int byteSize(const byte* array);
-		int byteSize(const char* array);
+
+		bool Equal(const char* Compare);
+
 		Array<NString>& splitString(NString Splitter);
+
+        void formString(const byte* newstr, int newlen);
+		void formString(const NString& copystr);
+
+        int byteSize(const byte* array);
+		int byteSize(const char* array);
 
 		byte* str_yData;
 		int str_iLength;
 		static byte* str_yEmpty;
 
-
 		public:
 
-		~NString();
-		NString();
-		NString(const char Const);
-		NString(const byte* Const);
-		NString(const char* Const);
-		NString(const NString& CopyCC);
+		inline ~NString();
+		inline NString();
+		inline NString(const char Const);
+		inline NString(const byte* Const);
+		inline NString(const char* Const);
+		inline NString(const NString& CopyCC);
 
         void Delete();
 		void Clear();
@@ -43,7 +46,7 @@ namespace NobelLib
 
 		bool chk_Number(); //this string is a number?
 
-		Array<NString>& Split(NString& Splitter);
+		Array<NString>& Split(NString Splitter);
 		Array<NString>& Split(const char* Splitter);
 		Array<NString>& Split(const char Splitter);
 		bool Find(const NString* strMy);

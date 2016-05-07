@@ -165,7 +165,7 @@ namespace NobelLib
 
 		const Type& operator[] (int Index)const
 		{
-			//if (Index >= 0 && Index < array_iCount)
+			if (Index >= 0 && Index < array_iCount)
 				return array_cData[Index];
 		}
 

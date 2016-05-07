@@ -29,12 +29,10 @@ NString::NString(const char* Const)
     newString((byte*)Const);
 }
 
-
 NString::NString(const NString& CopyCC)
 {
 	newString(CopyCC.str_yData);
 }
-
 
 NString::~NString()
 {
@@ -49,7 +47,7 @@ int NString::byteSize(const byte* array)
 {
     int i = 0;
 
-    while(*array++) i++;
+     while(array[i] != '\0') i++;
 
     return i;
 }
@@ -58,11 +56,11 @@ int NString::byteSize(const char* array)
 {
     int i = 0;
 
-    while(*array++) i++;
+    while(array[i] != '\0') i++;
 
     return i;
 }
-void NString::formString(const byte* newstr, int& newlen)
+void NString::formString(const byte* newstr, int newlen)
 {
     this->Clear();
     this->str_yData = (byte*)newstr;
@@ -89,7 +87,7 @@ void NString::newString(const byte* data)
 	this->str_yData[this->str_iLength]= '\0';
 }
 
-NString NString::addString(const char* add)
+void NString::addString(const byte* add)
 {
     int addLength = byteSize(add);
 	int newLength = this->str_iLength + addLength + 1;
@@ -108,14 +106,29 @@ NString NString::addString(const char* add)
 
 	newString[newLength] = '\0';
 
-	return NString(newString);
+	this->formString(newString,newLength - 1);
 }
 
-NString NString::addString(const char add)
+void NString::addString(const NString &add)
 {
-	return addString((char*)add);
-}
+	int newLength = this->str_iLength + add.str_iLength + 1;
+	byte* newString = new byte[newLength];
 
+	int i = 0;
+
+	while(i < this->str_iLength)
+	{
+		newString[i] = this->str_yData[i];
+		i++;
+	}
+
+	for (int c = 0; c<add.str_iLength; c++)
+		newString[i++] = add.str_yData[c];
+
+	newString[newLength] = '\0';
+
+	this->formString(newString,newLength - 1);
+}
 void NString::Delete()
 {
     if(!this->Null())
@@ -160,19 +173,15 @@ bool NString::chk_Number()
 }
 bool NString::Find(const NString* str_My)
 {
-	int trueCount=0;
 	int c=0;
 	for(int i=0; i<str_iLength;i++)
 	{
 		if(str_yData[i]==str_My->str_yData[0])
 	{
 		for(c; c<str_My->str_iLength;c++)
-			if(str_My->str_yData[c]==str_yData[i+c])
-				trueCount++;
-		if(trueCount==c)
-			return true;
-		else
-			return false;
+			if(str_My->str_yData[c]!=str_yData[i+c])
+				return false;
+        return true;
 	}
 	}
 	return false;
@@ -197,7 +206,7 @@ bool NString::Find(const char* charMy)
 
 NString NobelLib::NString::Normalize()
 {
-	this->Replace("\n", "");
+	this->Replace("\n", (char*)str_yEmpty);
 	return *this;
 }
 
@@ -300,8 +309,6 @@ Array<NString>& NString::splitString(NString Splitter)
 	NString* strSafe = new NString(*this);
 	Array<NString> arrayOffset(2);
 
-	arrayOffset[0] = NString(); arrayOffset[1] = NString();
-
 	int entrypoint = 0;
 	int exitpoint = 0;
 
@@ -329,7 +336,7 @@ Array<NString>& NString::splitString(NString Splitter)
 }
 
 
-Array<NString>& NString::Split(NString& Splitter)
+Array<NString>& NString::Split(NString Splitter)
 {
     return this->splitString(Splitter);
 }
@@ -405,8 +412,7 @@ NString NString::operator =(const char* newChar)
 NString NString::operator =(char newChar)
 {
 	this->Clear();
-	this->str_yData= (byte*)newChar;
-	this->str_iLength=1;
+	this->newString((byte*)newChar);
 	return *this;
 }
 
@@ -419,30 +425,34 @@ NString NString::operator =(NString& strCopy)
 }
 NString NString::operator+=(const char addMe)
 {
-	formString(addString(addMe));
+	addString((byte*)addMe);
 	return *this;
 }
 
 NString NString::operator+=(const char* addMe)
 {
-	formString(addString(addMe));
+	addString((byte*)addMe);
 	return *this;
 }
 
 NString NString::operator+=(const NString& addMe)
 {
-    formString(addString(addMe));
+    addString(addMe);
 	return *this;
 }
 
 NString NString::operator+(const char* addMe)
 {
-	return addString(addMe);
+    NString offString(*this);
+    offString.addString(addMe);
+	return offString;
 }
 
 NString NString::operator+(const NString& addMe)
 {
-	return addString(addMe);
+    NString offString(*this);
+    offString.addString(addMe);
+	return offString;
 }
 
 char NString::operator[](int index)
