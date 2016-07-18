@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Array.h"
+#include "List.h"
 #include "def.h"
 
 #define STR_LIMIT 256
@@ -16,8 +16,6 @@ namespace NobelLib
 		void newString(const byte* data);
 
 		bool Equal(const char* Compare);
-
-		Array<NString>& splitString(NString Splitter);
 
         void formString(const byte* newstr, int newlen);
 		void formString(const NString& copystr);
@@ -46,9 +44,8 @@ namespace NobelLib
 
 		bool chk_Number(); //this string is a number?
 
-		Array<NString>& Split(NString Splitter);
-		Array<NString>& Split(const char* Splitter);
-		Array<NString>& Split(const char Splitter);
+		void Split(const char* Splitter, List<NString>* output);
+		void Split(const char Splitter, List<NString>* output);
 		bool Find(const NString* strMy);
 		bool Find(const char* charMy);
 		NString Sub(int IndexStart);

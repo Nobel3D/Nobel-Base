@@ -304,13 +304,10 @@ NString NString::Sub(int IndexStart, int IndexLen)
 	return Exit;
 }
 
-Array<NString>& NString::splitString(NString Splitter)
-{
-	NString* strSafe = new NString(*this);
-	Array<NString> arrayOffset(2);
 
-	int entrypoint = 0;
-	int exitpoint = 0;
+void NString::Split(const char* Splitter, List<NString>* output)
+{
+    NString* strSafe = new NString(*this);
 
 	int c = 0;
 
@@ -318,36 +315,26 @@ Array<NString>& NString::splitString(NString Splitter)
 	{
 		if(str_yData[i] == Splitter[0])
         {
-            for(c; c < Splitter.getLength(); c++)
-                if(Splitter[c] != this->str_yData[i+c])
-                    break;
-            if(c == Splitter.getLength())
+            if(strSafe->Sub(i,i+byteSize(Splitter))==Splitter)
             {
-                entrypoint = i;
-                exitpoint = i+c;
-                break;
+                output->addItem(strSafe->Sub(c,i));
+                c = i+byteSize(Splitter);
             }
         }
 	}
-	arrayOffset[0] = strSafe->Sub(0,entrypoint);
-	arrayOffset[1] = strSafe->Sub(exitpoint);
-
-	return arrayOffset;
 }
-
-
-Array<NString>& NString::Split(NString Splitter)
+void NString::Split(const char Splitter, List<NString>* output)
 {
-    return this->splitString(Splitter);
-}
+    NString* strSafe = new NString(*this);
 
-Array<NString>& NString::Split(const char* Splitter)
-{
-    return this->splitString(NString(Splitter));
-}
-Array<NString>& NString::Split(const char Splitter)
-{
-    return this->splitString(NString(Splitter));
+	int c = 0;
+
+	for(int i=0; i<this->str_iLength;i++)
+		if(str_yData[i] == Splitter)
+        {
+            output->addItem(strSafe->Sub(c,i));
+            c = i+1;
+        }
 }
 
 NString NString::toLower()

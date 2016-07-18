@@ -50,15 +50,11 @@ namespace NobelLib
             return arrayOffset;
 		}
 
-		Type* copyArray(const Type* copyArray)
+		Type* copyArray(const Type* copyArray, int copyElements)
         {
-            if(!copyArray)
-                return NULL;
-
-            int lengthArray = arraySize(copyArray);
-            Type* arrayOffset = newArray(lengthArray);
-            while(lengthArray--)
-                arrayOffset[lengthArray] = copyArray[lengthArray];
+            Type* arrayOffset = newArray(copyElements);
+            while(copyElements--)
+                arrayOffset[copyElements] = copyArray[copyElements];
 
             return arrayOffset;
 		}
@@ -87,6 +83,10 @@ namespace NobelLib
 		Array(Array<Type> &Other)
 		{
 			Copy(Other);
+		}
+		Array(Array<Type>* Other)
+		{
+			Copy(*Other);
 		}
 		Array(const Type* Other)
 		{
@@ -138,7 +138,7 @@ namespace NobelLib
             this->Delete();
 
 			array_iCount = copylength;
-			array_cData = copyArray(MyArray);
+			array_cData = copyArray(MyArray, copylength);
 
 		}
 
