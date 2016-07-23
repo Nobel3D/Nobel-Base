@@ -79,12 +79,11 @@ namespace NobelLib
 		{
 			this->New(index);
 		}
-
-		Array(Array<Type> &Other)
+		Array(const Array<Type> &Other)
 		{
 			Copy(Other);
 		}
-		Array(Array<Type>* Other)
+		Array(const Array<Type>* Other)
 		{
 			Copy(*Other);
 		}
@@ -142,7 +141,7 @@ namespace NobelLib
 
 		}
 
-		void Copy(Array<Type> &MyArray)
+		void Copy(const Array<Type> &MyArray)
         {
             if(!MyArray.Exist())
                 return;
@@ -159,12 +158,6 @@ namespace NobelLib
 		/* Operators */
 		Type& operator[] (int Index)
 		{
-			//if (Index >= 0 && Index < array_iCount)
-				return array_cData[Index];
-		}
-
-		const Type& operator[] (int Index)const
-		{
 			if (Index >= 0 && Index < array_iCount)
 				return array_cData[Index];
 		}
@@ -176,8 +169,8 @@ namespace NobelLib
         /* Operators */
 
         /* Getters and Setters */
-		bool Exist() { return array_iCount > 1; }
-		int Size() { return array_iCount; }
+		bool Exist() const { return array_iCount > 1; }
+		int Size() const { return array_iCount; }
 		void setArray(Type Element, int Position) { if (Exist()) array_cData[Position] = Element; }
 		/* Getters and Setters */
 

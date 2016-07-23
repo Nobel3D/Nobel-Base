@@ -17,3 +17,21 @@
 
 1461935634 /mnt/programming/Git/NBL/def.h
 
+1469293476 source:/mnt/programming/proj/Nobel-Base/src/NString.cpp
+	"NString.h"
+	<stdio.h>
+	<cstdlib>
+	<ctype.h>
+
+1469292133 /mnt/programming/proj/Nobel-Base/src/NString.h
+	"List.h"
+	"def.h"
+
+1469021982 /mnt/programming/proj/Nobel-Base/src/Array.h
+	<cstddef>
+
+1468975530 /mnt/programming/proj/Nobel-Base/src/def.h
+
+1469290761 /mnt/programming/proj/Nobel-Base/src/List.h
+	"Array.h"
+

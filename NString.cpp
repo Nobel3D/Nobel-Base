@@ -5,7 +5,7 @@
 
 using namespace NobelLib;
 
-byte* NString::str_yEmpty = (byte*)"";
+byte* NString::str_yEmpty = (byte*)"\0";
 
 NString::NString()
 {
@@ -33,6 +33,10 @@ NString::NString(const NString& CopyCC)
 {
 	newString(CopyCC.str_yData);
 }
+NString::NString(const NString* CopyCC)
+{
+	newString(CopyCC->str_yData);
+}
 
 NString::~NString()
 {
@@ -43,7 +47,7 @@ NString::~NString()
 	}
 }
 
-int NString::byteSize(const byte* array)
+int NString::byteSize(const byte* array) const
 {
     int i = 0;
 
@@ -52,7 +56,7 @@ int NString::byteSize(const byte* array)
     return i;
 }
 
-int NString::byteSize(const char* array)
+int NString::byteSize(const char* array) const
 {
     int i = 0;
 
@@ -60,6 +64,7 @@ int NString::byteSize(const char* array)
 
     return i;
 }
+
 void NString::formString(const byte* newstr, int newlen)
 {
     this->Clear();
@@ -80,11 +85,21 @@ void NString::newString(const byte* data)
 
 	int i = this->str_iLength;
     while(i--)
-	{
-    this->str_yData[i] = data[i];
-	}
+        this->str_yData[i] = data[i];
 
 	this->str_yData[this->str_iLength]= '\0';
+}
+void NString::newString(const NString& data)
+{
+    this->Clear();
+	this->str_iLength = data.str_iLength;
+	this->str_yData = new byte[this->str_iLength + 1];
+
+	int i = data.str_iLength;
+    while(i--)
+        this->str_yData[i] = data.str_yData[i];
+
+	this->str_yData[data.str_iLength]= '\0';
 }
 
 void NString::addString(const byte* add)
@@ -135,7 +150,7 @@ void NString::Delete()
         delete[] this->str_yData;
 
         this->str_iLength = NULL;
-        this->str_yData = str_yEmpty;
+        this->str_yData = NULL;
 }
 
 void NString::Clear()
@@ -143,7 +158,7 @@ void NString::Clear()
     this->Delete();
     this->newString(this->str_yEmpty);
 }
-bool NString::Null()
+bool NString::Null() const
 {
 	return this->str_yData == str_yEmpty;
 }
@@ -152,10 +167,9 @@ bool NString::Null(const char* IsEmpty)
 {
 	return IsEmpty == "";
 }
-
-NString NString::Zero()
+byte* NString::Zero()
 {
-	return NString(str_yEmpty);
+	return str_yEmpty;
 }
 
 bool NString::chk_Number()
@@ -171,7 +185,7 @@ bool NString::chk_Number()
 	}
 	return true;
 }
-bool NString::Find(const NString* str_My)
+bool NString::Find(const NString* str_My) const
 {
 	int c=0;
 	for(int i=0; i<str_iLength;i++)
@@ -187,7 +201,7 @@ bool NString::Find(const NString* str_My)
 	return false;
 }
 
-bool NString::Find(const char* charMy)
+bool NString::Find(const char* charMy) const
 {
 	int lengthof=byteSize(charMy);
 	int c=0;
@@ -204,16 +218,18 @@ bool NString::Find(const char* charMy)
 	}
 }
 
-NString NobelLib::NString::Normalize()
+NString& NString::Normalize() const
 {
-	this->Replace("\n", (char*)str_yEmpty);
-	return *this;
+    NString* strOffset = new NString(this);
+	strOffset->Replace("\n", (char*)str_yEmpty);
+	return *strOffset;
 }
 
-NString NString::Trim()
+NString& NString::Trim() const
 {
+    NString* strOffset = new NString;
     if(Null())
-        return *this;
+        return *strOffset;
 
     int c = 0;
     int i = this->str_iLength - 1;
@@ -226,31 +242,27 @@ NString NString::Trim()
 			break;
 
     if(i == c)
-        return NString("");
+    {
+        return *strOffset;
+    }
 
     int strlen = i - c + 1;
-    byte* stroffset = new byte[strlen];
-
-    for (int d = 0; d < strlen; d++)
-    {
-		stroffset[d] = this->str_yData[c];
-		c++;
-    }
-	return NString(stroffset);
+    strOffset->formString(this->str_yData, strlen);
+	return *strOffset;
 }
 
-NString NString::Replace(const char* strNative, const char* strReplace)
+NString& NString::Replace(const char* strNative, const char* strReplace) const
 {
-	NString strChangeble (this->str_yData);
-	for (int i = 0; i < this->getLength();i++)
-	if (strChangeble[i]==strNative[0])
+	NString* strOutput = new NString(this->str_yData);
+	for (int i = 0; i < strOutput->str_iLength;i++)
+	if (strOutput->str_yData[i]==strNative[0])
 	{
-		if (strChangeble.Sub(i, byteSize(strNative)) == strNative)
+		if (strOutput->Sub(i, byteSize(strNative)) == strNative)
 		{
-			strChangeble = strChangeble.Sub(0, i) + strReplace + strChangeble.Sub( i + byteSize(strNative) );
+			strOutput->newString(strOutput->Sub(0, i) + strReplace + strOutput->Sub( i + byteSize(strNative) ));
 		}
 	}
-	return strChangeble;
+	return *strOutput;
 }
 
 double NString::toDouble()
@@ -286,97 +298,104 @@ NString NString::fromDouble(double Convert)
 	return NString();
 	//TODO
 }
-NString NString::Sub(int IndexStart)
+NString& NString::Sub(int IndexStart) const
 {
+    NString* strOffset = new NString;
 	if (IndexStart<0 || IndexStart>this->getLength())
-		return *this;
-    NString strOffset(this->str_yData + IndexStart);
-	return strOffset;
+		return *strOffset;
+
+    strOffset->newString(this->str_yData + IndexStart);
+	return *strOffset;
 }
-NString NString::Sub(int IndexStart, int IndexLen)
+NString& NString::Sub(int IndexStart, int IndexLen) const
 {
-	NString Exit(this->str_yData+IndexStart);
+    NString* strOffset = new NString;
+    if(IndexStart > this->getLength() || IndexStart < 0)
+        return *strOffset;
 
-	if (IndexLen > Exit.getLength())
-		return Sub(IndexStart);
+    strOffset->newString(this->str_yData + IndexStart);
 
-	Exit.str_yData[IndexLen] = '\0';
-	return Exit;
+	if(IndexLen > strOffset->getLength())
+        return *strOffset;
+
+	strOffset->str_yData[IndexLen] = '\0';
+	strOffset->str_iLength = IndexLen;
+	return *strOffset;
 }
 
 
-void NString::Split(const char* Splitter, List<NString>* output)
+List<NString>* NString::Split(const char* Splitter) const
 {
-    NString* strSafe = new NString(*this);
-
+    List<NString>* output = new List<NString>;
 	int c = 0;
+	int lenSplit = byteSize(Splitter);
 
 	for(int i=0; i<this->str_iLength;i++)
 	{
 		if(str_yData[i] == Splitter[0])
         {
-            if(strSafe->Sub(i,i+byteSize(Splitter))==Splitter)
+            if(this->Sub(i,lenSplit)==Splitter)
             {
-                output->addItem(strSafe->Sub(c,i));
-                c = i+byteSize(Splitter);
+                output->addItem(this->Sub(c,i));
+                c = i+lenSplit;
             }
         }
 	}
+	output->addItem(this->Sub(c));
+    return output;
 }
-void NString::Split(const char Splitter, List<NString>* output)
+
+List<NString>* NString::Split(const char Splitter) const
 {
-    NString* strSafe = new NString(*this);
+    NString* strOutput = new NString(*this);
+    List<NString>* output = new List<NString>;
 
 	int c = 0;
 
 	for(int i=0; i<this->str_iLength;i++)
 		if(str_yData[i] == Splitter)
         {
-            output->addItem(strSafe->Sub(c,i));
+            output->addItem(strOutput->Sub(c,i));
             c = i+1;
         }
+    output->addItem(this->Sub(c));
+
+    return output;
 }
 
-NString NString::toLower()
+NString& NString::toLower() const
 {
-  byte* s = this->str_yData;
+  NString* strOutput = new NString(*this);
 
-  while (*s) {
-     *s = tolower(*s);
-      s++;
-  }
+  for (int i=0; i < strOutput->str_iLength; i++)
+     strOutput->str_yData[i] = tolower(strOutput->str_yData[i]);
 
-  return *this;
+  return *strOutput;
 }
-NString NString::toUpper()
+NString& NString::toUpper() const
 {
-	  byte* s = this->str_yData;
+  NString* strOutput = new NString(*this);
 
-  while (*s) {
-     *s = toupper(*s);
-      s++;
-  }
+  for (int i=0; i < strOutput->str_iLength; i++)
+     strOutput->str_yData[i] = toupper(strOutput->str_yData[i]);
 
-  return *this;
+  return *strOutput;
 }
 
-NString NString::toReverse()
+NString& NString::toReverse() const
 {
-    byte*  s = this->str_yData;
-    int    p = this->str_iLength - 1;
-    byte*  q = new byte[p + 1];
-    int    r = 0;
+    NString* strOutput = new NString(*this);
+    int tempLength = this->str_iLength;
+    int tempCounter = 0;
 
-    //SPQR?
-
-    while (p+1) {
-        q[r]  = s[p];
-        r++;
-        p--;
+    for (tempCounter; tempCounter < strOutput->str_iLength; tempCounter++)
+    {
+        strOutput->str_yData[tempCounter] =  strOutput->str_yData[tempLength];
+        tempLength--;
     }
-    q[r] = '\0';
+  strOutput->str_yData[tempCounter+1] = '\0';
 
-  return NString(q);
+  return *strOutput;
 }
 
 NString::operator const char *()
@@ -389,57 +408,57 @@ NString::operator const char *() const
   return (char*)this->str_yData;
 }
 
-NString NString::operator =(const char* newChar)
+NString& NString::operator =(const char* newChar)
 {
 	this->Clear();
 	newString((byte*)newChar);
 	return *this;
 }
 
-NString NString::operator =(char newChar)
+NString& NString::operator =(char newChar)
 {
 	this->Clear();
 	this->newString((byte*)newChar);
 	return *this;
 }
 
-NString NString::operator =(NString& strCopy)
+NString& NString::operator =(NString& strCopy)
 {
 	this->Clear();
 	newString((byte*)strCopy.str_yData);
 
 	return *this;
 }
-NString NString::operator+=(const char addMe)
+NString& NString::operator+=(const char addMe)
 {
 	addString((byte*)addMe);
 	return *this;
 }
 
-NString NString::operator+=(const char* addMe)
+NString& NString::operator+=(const char* addMe)
 {
 	addString((byte*)addMe);
 	return *this;
 }
 
-NString NString::operator+=(const NString& addMe)
+NString& NString::operator+=(const NString& addMe)
 {
     addString(addMe);
 	return *this;
 }
 
-NString NString::operator+(const char* addMe)
+NString& NString::operator+(const char* addMe)
 {
-    NString offString(*this);
-    offString.addString(addMe);
-	return offString;
+    NString* strOffset = new NString(*this);
+    strOffset->addString(addMe);
+	return *strOffset;
 }
 
-NString NString::operator+(const NString& addMe)
+NString& NString::operator+(const NString& addMe)
 {
-    NString offString(*this);
-    offString.addString(addMe);
-	return offString;
+    NString* strOffset = new NString(*this);
+    strOffset->addString(addMe);
+	return *strOffset;
 }
 
 char NString::operator[](int index)
@@ -484,4 +503,4 @@ bool NString::operator !=(const char* equal)
 }
 
 
-int NString::getLength(){ return this->str_iLength; }
+int NString::getLength() const { return this->str_iLength; }

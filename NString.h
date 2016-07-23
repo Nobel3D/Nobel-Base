@@ -14,14 +14,15 @@ namespace NobelLib
 		void addString(const byte* add);
 		void addString(const NString &add);
 		void newString(const byte* data);
+		void newString(const NString &data);
 
 		bool Equal(const char* Compare);
 
         void formString(const byte* newstr, int newlen);
 		void formString(const NString& copystr);
 
-        int byteSize(const byte* array);
-		int byteSize(const char* array);
+        int byteSize(const byte* array) const;
+		int byteSize(const char* array) const;
 
 		byte* str_yData;
 		int str_iLength;
@@ -35,28 +36,29 @@ namespace NobelLib
 		inline NString(const byte* Const);
 		inline NString(const char* Const);
 		inline NString(const NString& CopyCC);
+		inline NString(const NString* CopyCC);
 
         void Delete();
 		void Clear();
-		bool Null();
+		bool Null() const;
 		static bool Null(const char*  IsEmpty);
-		static NString Zero();
+		static byte* Zero();
 
 		bool chk_Number(); //this string is a number?
 
-		void Split(const char* Splitter, List<NString>* output);
-		void Split(const char Splitter, List<NString>* output);
-		bool Find(const NString* strMy);
-		bool Find(const char* charMy);
-		NString Sub(int IndexStart);
-		NString Sub(int IndexStart, int IndexLen);
+		List<NString>* Split(const char* Splitter) const;
+		List<NString>* Split(const char Splitter) const;
+		bool Find(const NString* strMy) const;
+		bool Find(const char* charMy) const;
+		NString& Sub(int IndexStart) const;
+		NString& Sub(int IndexStart, int IndexLen) const;
 
-		NString Normalize();
-		NString Trim();
-		NString Replace(const char* strNative, const char* strReplace);
-		NString toLower();
-		NString toUpper();
-		NString toReverse();
+		NString& Normalize() const;
+		NString& Trim() const;
+		NString& Replace(const char* strNative, const char* strReplace) const;
+		NString& toLower() const;
+		NString& toUpper() const;
+		NString& toReverse() const;
 		int toInt();
 		double toDouble();
 		static NString toHex(int Decimal);
@@ -64,20 +66,20 @@ namespace NobelLib
 		static NString fromInt(int IntToString);
 		static NString fromDouble(double Convert);
 
-		int getLength();
+		int getLength() const;
 
 		operator const char* ();
 		operator const char*() const;
 
-		NString operator=(const char* newChar);
-		NString operator=(NString& strCopy);
-		NString operator=(char newChar);
-		NString operator+=(const char* addMe);
-		NString operator+=(const char addMe);
-		NString operator+=(const NString& addMe);
-		NString operator+(const char* addMe);
-		NString operator+(const NString& addMe);
-		friend NString operator+(char* addMe, NString str)
+		NString& operator=(const char* newChar);
+		NString& operator=(NString& strCopy);
+		NString& operator=(char newChar);
+		NString& operator+=(const char* addMe);
+		NString& operator+=(const char addMe);
+		NString& operator+=(const NString& addMe);
+		NString& operator+(const char* addMe);
+		NString& operator+(const NString& addMe);
+		friend NString& operator+(char* addMe, NString str)
 		{
 			return NString(addMe) + str;
 		}

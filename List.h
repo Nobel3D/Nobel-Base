@@ -27,7 +27,7 @@ namespace NobelLib
 			addItem(ptrType);
 		}
 
-		void addItem(Type ptrType)
+		void addItem(Type& ptrType)
 		{
 			Node<Type>* n = new Node<Type>();
 			n->list_lData = ptrType;
@@ -36,14 +36,14 @@ namespace NobelLib
 			list_lHead = n;
 		}
 
-		Node<Type>* findByObject(const Type& Object)
+		Node<Type>* findByObject(const Type& Object) const
 		{
 			Node<Type>* temp = list_lHead;
 			while (temp->list_lData != Object)
 				temp = temp->list_lNext;
 			return temp;
 		}
-		Node<Type>* findByIndex(int needle)
+		Node<Type>* findByIndex(int needle) const
 		{
 			if (needle >= list_iTot)
 				return nullptr;
@@ -53,14 +53,15 @@ namespace NobelLib
 			return temp;
 		}
 
-		Array<Type>* toArray()
+		Array<Type> toArray() const
 		{
-			Array<Type>* arrayRet = new Array<Type>(this->getLength());
-			for (int i = 0; i < arrayRet->Size(); i++)
+			Array<Type> output(this->getLength());
+
+			for (int i = 0; i < output.Size(); i++)
 			{
-				(*arrayRet)[i] = this->findByIndex(i)->list_lData;
+				output[i] = this->findByIndex(i)->list_lData;
 			}
-			return arrayRet;
+			return output;
 		}
 
 		List<Type> Clear()
@@ -97,7 +98,7 @@ namespace NobelLib
 			return &findByIndex(Index)->list_lData;
 		}
 
-		int getLength() { return list_iTot; }
+		int getLength() const { return list_iTot; }
 
 	};
 	template<typename Type>

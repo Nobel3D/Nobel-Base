@@ -7,9 +7,9 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/NBL" prefix_auto="1" extension_auto="1" />
+				<Option output="../bin/Debug/NBL" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="" />
-				<Option object_output="obj/Debug/" />
+				<Option object_output="../bin/Debug/" />
 				<Option type="2" />
 				<Option compiler="gcc" />
 				<Option createDefFile="1" />
@@ -42,6 +42,7 @@
 			<Add option="-m32" />
 		</Linker>
 		<Unit filename="Array.h" />
+		<Unit filename="List.h" />
 		<Unit filename="NBL.h" />
 		<Unit filename="NString.cpp" />
 		<Unit filename="NString.h" />
