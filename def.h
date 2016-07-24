@@ -1,4 +1,10 @@
+#pragma once
 
+#include <cstddef>
+
+#define NL_NAMESTART namespace NobelLib {
+#define NL_NAMECLOSE }
+#define NL_NAMEUSING using namespace NobelLib;
 typedef unsigned char byte;
 typedef unsigned int uint;
 typedef long long int llint;

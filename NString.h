@@ -61,10 +61,10 @@ namespace NobelLib
 		NString& toReverse() const;
 		int toInt();
 		double toDouble();
-		static NString toHex(int Decimal);
-		static NString toBinary(int Decimal);
-		static NString fromInt(int IntToString);
-		static NString fromDouble(double Convert);
+		static NString& toHex(int Decimal);
+		static NString& toBinary(int Decimal);
+		static NString& fromInt(int IntToString);
+		static NString& fromDouble(double Convert);
 
 		int getLength() const;
 

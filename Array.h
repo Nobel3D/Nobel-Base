@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstddef>
+#include "def.h"
 
 namespace NobelLib
 {
@@ -9,8 +9,8 @@ namespace NobelLib
 	{
 	private:
 		Type* array_cData;
-		int array_iCount;
-
+		llint array_iCount;
+        bool array_bStart;
 		int arraySize(const Type* array)
         {
             int i = 0;
@@ -20,29 +20,26 @@ namespace NobelLib
             return i;
         }
 
-		void expArray(int NewIndex)
+		void expArray(int arrayIndex)
 		{
-			if (Exist() && NewIndex>array_iCount);
-			if (array_iCount == 0) {
-				this->New(NewIndex);
+			if (arrayIndex<array_iCount)
+                return;
+			if (!Exist()) {
+				this->New(arrayIndex);
 				return;
 			}
-			else
-			{
-                Type* secondArray = new Type[NewIndex + 1];
 
-				for (int i = 0; i<array_iCount; i++)
-					secondArray[i] = array_cData[i];
+			Type* arrayOffset = new Type[arrayIndex];
+            for(int i=0; i < this->array_iCount; i++)
+                arrayOffset[i] = array_cData[i];
 
-
-
-				array_iCount = NewIndex;
-				array_cData = secondArray;
-			}
+            this->Clear();
+            this->array_cData = arrayOffset;
+            this->array_iCount = arrayIndex;
 		}
 		Type* newArray(int Index)
         {
-            Type* arrayOffset = new Type[Index + 1];
+            Type* arrayOffset = new Type[Index];
 
             for(int i = 0; i<Index; i++)
                 arrayOffset[i] = Type();
@@ -65,6 +62,7 @@ namespace NobelLib
 				delete[] array_cData;
             array_cData = NULL;
             array_iCount = 0;
+            array_bStart = false;
 		}
 
 	public:
@@ -75,7 +73,7 @@ namespace NobelLib
 			array_cData = NULL;
 		}
 
-		Array(int index)
+		Array(llint index)
 		{
 			this->New(index);
 		}
@@ -108,17 +106,20 @@ namespace NobelLib
 				{
 				    int index = array_iCount;
 				    deleteArray();
-				    array_iCount = index;
-                    array_cData = newArray(index);
+				    New(index);
 				}
 		}
 
-		void New(int Index)
+		void New(llint Index)
         {
 			if (!Exist())
 			{
+			    array_bStart = true;
 			    array_iCount = Index;
-				array_cData = newArray(Index);
+                array_cData = new Type[array_iCount];
+
+                for(int i = 0; i<array_iCount; i++)
+                    array_cData[i] = Type();
 			}
 		}
         void Expand(int newIndex)
@@ -130,14 +131,17 @@ namespace NobelLib
         {
             if(!MyArray)
                 return;
-            int copylength = arraySize(MyArray);
-            if(copylength > this->Size())
-                return;
+            int arrayLength = arraySize(MyArray);
 
-            this->Delete();
+            if(Exist())
+            {
+                if(arrayLength > this->array_iCount)
+                    return;
+                this->Clear();
+            }
+			for(int i=0; i < arrayLength; i++)
+                array_cData[i] = MyArray[i];
 
-			array_iCount = copylength;
-			array_cData = copyArray(MyArray, copylength);
 
 		}
 
@@ -145,20 +149,22 @@ namespace NobelLib
         {
             if(!MyArray.Exist())
                 return;
-            if(MyArray.Size() > this->Size())
-                return;
 
-            this->Delete();
-
-			array_iCount = MyArray.array_iCount;
-			array_cData = MyArray.array_cData;
+            if(Exist())
+            {
+                if(MyArray.array_iCount > this->array_iCount)
+                    return;
+                this->Clear();
+            }
+            for(int i=0; i < MyArray.array_iCount; i++)
+                array_cData[i] = MyArray.array_cData[i];
 
 		}
 
 		/* Operators */
 		Type& operator[] (int Index)
 		{
-			if (Index >= 0 && Index < array_iCount)
+			if (Index >= 0 && Index < array_iCount && Exist())
 				return array_cData[Index];
 		}
 
@@ -169,7 +175,7 @@ namespace NobelLib
         /* Operators */
 
         /* Getters and Setters */
-		bool Exist() const { return array_iCount > 1; }
+		bool Exist() const { return array_bStart; }
 		int Size() const { return array_iCount; }
 		void setArray(Type Element, int Position) { if (Exist()) array_cData[Position] = Element; }
 		/* Getters and Setters */

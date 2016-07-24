@@ -1,4 +1,5 @@
 #include "NString.h"
+#include "Math.h"
 #include <stdio.h>
 #include <cstdlib>
 #include <ctype.h>
@@ -193,7 +194,7 @@ bool NString::Find(const NString* str_My) const
 		if(str_yData[i]==str_My->str_yData[0])
 	{
 		for(c; c<str_My->str_iLength;c++)
-			if(str_My->str_yData[c]!=str_yData[i+c])
+			if(str_My->str_yData[c]!=this->str_yData[i+c])
 				return false;
         return true;
 	}
@@ -274,28 +275,26 @@ int NString::toInt()
 {
 	return atoi((char*)this->str_yData);
 }
-NString NString::toBinary(int Decimal)
+NString& NString::toBinary(int Decimal)
 {
-	char buffer[STR_LIMIT];
-	snprintf(buffer,STR_LIMIT, "%b", Decimal);
-	return NString(buffer);
+	NString* strOffset = new NString(Math::int2base(Decimal, 2));
+	return *strOffset;
 }
-NString NString::toHex(int Decimal)
+NString& NString::toHex(int Decimal)
 {
-	char buffer[STR_LIMIT];
-	snprintf(buffer,STR_LIMIT,"%h", Decimal);
-	return NString(buffer);
+    NString* strOffset = new NString(Math::int2base(Decimal, 16));
+	return *strOffset;
 }
-NString NString::fromInt(int IntToString)
+NString& NString::fromInt(int IntToString)
 {
-	char buffer[STR_LIMIT];
-	snprintf(buffer, STR_LIMIT ,"%d", IntToString);
-	return NString(buffer);
+    NString* strOffset = new NString(Math::int2base(IntToString, 10));
+	return *strOffset;
 }
-NString NString::fromDouble(double Convert)
+NString& NString::fromDouble(double Convert)
 {
 	char buffer[STR_LIMIT];
-	return NString();
+    NString* strOffset = new NString(buffer);
+	return *strOffset;
 	//TODO
 }
 NString& NString::Sub(int IndexStart) const
