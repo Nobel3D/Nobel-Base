@@ -16,6 +16,8 @@
 				<Compiler>
 					<Add option="-Wall" />
 					<Add option="-g" />
+					<Add directory="Management" />
+					<Add directory="Stream" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -28,6 +30,8 @@
 				<Compiler>
 					<Add option="-Wall" />
 					<Add option="-O2" />
+					<Add directory="Management" />
+					<Add directory="Stream" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -37,17 +41,26 @@
 		<Compiler>
 			<Add option="-std=c++11" />
 			<Add option="-m32" />
+			<Add directory="/mnt/programming/proj/Nobel-Base/src/" />
 		</Compiler>
 		<Linker>
 			<Add option="-m32" />
 		</Linker>
-		<Unit filename="Array.h" />
-		<Unit filename="List.h" />
-		<Unit filename="Math.cpp" />
-		<Unit filename="Math.h" />
+		<Unit filename="Data/Array.h" />
+		<Unit filename="Data/List.h" />
+		<Unit filename="Data/NString.cpp" />
+		<Unit filename="Data/NString.h" />
+		<Unit filename="Management/Log.cpp" />
+		<Unit filename="Management/Log.h" />
+		<Unit filename="Management/NException.cpp" />
+		<Unit filename="Management/NException.h" />
+		<Unit filename="Math/Math.cpp" />
+		<Unit filename="Math/Math.h" />
 		<Unit filename="NBL.h" />
-		<Unit filename="NString.cpp" />
-		<Unit filename="NString.h" />
+		<Unit filename="Stream/NFile.cpp" />
+		<Unit filename="Stream/NFile.h" />
+		<Unit filename="Stream/NStream.cpp" />
+		<Unit filename="Stream/NStream.h" />
 		<Unit filename="def.h" />
 		<Extensions>
 			<envvars />
