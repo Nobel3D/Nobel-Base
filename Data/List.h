@@ -27,7 +27,7 @@ namespace NobelLib
 			addItem(ptrType);
 		}
 
-		void addItem(Type& ptrType)
+		void addItem(Type ptrType)
 		{
 			Node<Type>* n = new Node<Type>();
 			n->list_lData = ptrType;
@@ -57,27 +57,21 @@ namespace NobelLib
 			return temp;
 		}
 
-		Array<Type> toArray() const
+		Array<Type>* toArray() const
 		{
-			Array<Type> output(this->getLength());
+			Array<Type>* output = new Array<Type>(this->getLength());
 
-			for (int i = 0; i < output.Size(); i++)
+			for (int i = 0; i < output->Size(); i++)
 			{
-				output[i] = this->findByIndex(i)->list_lData;
+				(*output)[i] = this->findByIndex(i)->list_lData;
 			}
 			return output;
 		}
 
-		List<Type> Clear()
+		void Clear()
 		{
-			int i = 0;
-			for (i; i < getLength(); i++)
-			{
-				findByIndex(i)->list_lData.~Type();
-				findByIndex(i)->list_iIndex = 0;
-				findByIndex(i)->list_lNext = nullptr;
-			}
-			return *this;
+			for (int i=0; i < getLength(); i++)
+				delete findByIndex(i);
 		}
 
 		void deleteItem(const Type& Compare)

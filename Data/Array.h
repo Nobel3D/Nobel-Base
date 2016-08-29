@@ -1,6 +1,6 @@
 #pragma once
 
-#include "def.h"
+#include <def.h>
 
 namespace NobelLib
 {
@@ -10,8 +10,9 @@ namespace NobelLib
 	private:
 		Type* array_cData;
 		llint array_iCount;
-        bool array_bStart;
-		int arraySize(const Type* array)
+        bool array_bStart = false;
+
+		llint arraySize(const Type* array)
         {
             int i = 0;
 
@@ -20,7 +21,7 @@ namespace NobelLib
             return i;
         }
 
-		void expArray(int arrayIndex)
+		void expArray(llint arrayIndex)
 		{
 			if (arrayIndex<array_iCount)
                 return;
@@ -37,7 +38,7 @@ namespace NobelLib
             this->array_cData = arrayOffset;
             this->array_iCount = arrayIndex;
 		}
-		Type* newArray(int Index)
+		Type* newArray(llint Index)
         {
             Type* arrayOffset = new Type[Index];
 
@@ -80,10 +81,6 @@ namespace NobelLib
 		Array(const Array<Type> &Other)
 		{
 			Copy(Other);
-		}
-		Array(const Array<Type>* Other)
-		{
-			Copy(*Other);
 		}
 		Array(const Type* Other)
 		{
@@ -161,8 +158,34 @@ namespace NobelLib
 
 		}
 
+		Type* toStd()
+        {
+            if(!this->Exist())
+                return nullptr;
+
+            Type* arrayOffset = new Type[this->array_iCount];
+
+            for(int i=0; i < this->array_iCount; i++)
+                arrayOffset[i] = this->array_cData[i];
+
+            return arrayOffset;
+		}
+
+        static Type* toStd(const Array<Type> &MyArray)
+        {
+            if(!MyArray.Exist())
+                return nullptr;
+
+            Type* arrayOffset = new Type[MyArray.array_iCount];
+
+            for(int i=0; i < MyArray.array_iCount; i++)
+                arrayOffset[i] = MyArray.array_cData[i];
+
+            return arrayOffset;
+		}
+
 		/* Operators */
-		Type& operator[] (int Index)
+		Type& operator[] (llint Index)
 		{
 			if (Index >= 0 && Index < array_iCount && Exist())
 				return array_cData[Index];
@@ -172,12 +195,12 @@ namespace NobelLib
 		{
 		    this->Copy(equal);
         }
-        /* Operators */
-
+		/* Operators */
         /* Getters and Setters */
 		bool Exist() const { return array_bStart; }
 		int Size() const { return array_iCount; }
 		void setArray(Type Element, int Position) { if (Exist()) array_cData[Position] = Element; }
+		Type* getArray() { return array_cData; }
 		/* Getters and Setters */
 
 	};

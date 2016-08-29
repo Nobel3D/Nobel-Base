@@ -126,6 +126,26 @@ void NString::addString(const byte* add)
 	this->formString(newString,newLength - 1);
 }
 
+void NString::addString(const char add)
+{
+	int newLength = this->str_iLength + 2;
+	byte* newString = new byte[newLength];
+
+	int i = 0;
+
+	while(i < this->str_iLength)
+	{
+		newString[i] = this->str_yData[i];
+		i++;
+	}
+
+	newString[newLength - 1] = add;
+	newString[newLength] = '\0';
+
+	this->formString(newString,newLength - 1);
+}
+
+
 void NString::addString(const NString &add)
 {
 	int newLength = this->str_iLength + add.str_iLength + 1;
@@ -146,6 +166,7 @@ void NString::addString(const NString &add)
 
 	this->formString(newString,newLength - 1);
 }
+
 void NString::Delete()
 {
     if(!this->Null())
@@ -310,7 +331,7 @@ NString& NString::fromAddress(void* value)
 }
 NString& NString::fromDouble(double Convert)
 {
-	char buffer[STR_LIMIT];
+	char buffer[11];
     NString* strOffset = new NString(buffer);
 	return *strOffset;
 	//TODO
@@ -448,7 +469,7 @@ NString& NString::operator =(NString& strCopy)
 }
 NString& NString::operator+=(const char addMe)
 {
-	addString((byte*)addMe);
+	addString(addMe);
 	return *this;
 }
 
@@ -464,19 +485,27 @@ NString& NString::operator+=(const NString& addMe)
 	return *this;
 }
 
-NString& NString::operator+(const char* addMe)
+NString& NString::operator+(const char* addMe) const
 {
     NString* strOffset = new NString(*this);
     strOffset->addString(addMe);
 	return *strOffset;
 }
 
-NString& NString::operator+(const NString& addMe)
+NString& NString::operator+(const NString& addMe) const
 {
     NString* strOffset = new NString(*this);
     strOffset->addString(addMe);
 	return *strOffset;
 }
+
+NString& NString::operator+(const char addMe) const
+{
+    NString* strOffset = new NString(*this);
+	strOffset->addString(addMe);
+	return *strOffset;
+}
+
 
 char NString::operator[](int index)
 {
@@ -520,4 +549,6 @@ bool NString::operator !=(const char* equal)
 }
 
 
-int NString::getLength() const { return this->str_iLength; }
+llint NString::getLength() const { return this->str_iLength; }
+byte* NString::getByte() const { return this->str_yData; }
+byte* NString::getByte() { return this->str_yData; }

@@ -1,9 +1,8 @@
 #pragma once
 
 #include "List.h"
+#include "Array.h"
 #include "def.h"
-
-#define STR_LIMIT 256
 
 namespace NobelLib
 {
@@ -13,6 +12,7 @@ namespace NobelLib
 	private:
 		void addString(const byte* add);
 		void addString(const NString &add);
+		void addString(const char add);
 		void newString(const byte* data);
 		void newString(const NString &data);
 
@@ -25,7 +25,7 @@ namespace NobelLib
 		int byteSize(const char* array) const;
 
 		byte* str_yData;
-		int str_iLength;
+		llint str_iLength;
 		static byte* str_yEmpty;
 
 		public:
@@ -37,6 +37,8 @@ namespace NobelLib
 		inline NString(const char* Const);
 		inline NString(const NString& CopyCC);
 		inline NString(const NString* CopyCC);
+
+
 
         void Delete();
 		void Clear();
@@ -69,7 +71,9 @@ namespace NobelLib
 		static NString& fromAddress(void* address);
 		static NString& fromDouble(double Convert);
 
-		int getLength() const;
+		llint getLength() const;
+        byte* getByte();
+		byte* getByte() const;
 
 		operator const char* ();
 		operator const char*() const;
@@ -80,8 +84,9 @@ namespace NobelLib
 		NString& operator+=(const char* addMe);
 		NString& operator+=(const char addMe);
 		NString& operator+=(const NString& addMe);
-		NString& operator+(const char* addMe);
-		NString& operator+(const NString& addMe);
+		NString& operator+(const char* addMe) const;
+		NString& operator+(const NString& addMe) const;
+		NString& operator+(const char addMe) const;
 		friend NString& operator+(char* addMe, NString str)
 		{
 			return NString(addMe) + str;

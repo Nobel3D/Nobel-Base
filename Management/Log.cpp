@@ -1,30 +1,30 @@
 #include "Log.h"
+#include <Stream/NFile.h>
 
 NL_NAMEUSING
 
 	Log::Log(NString path)
 	{
-	    if(path.Null())
-            txt_fLog = new NFile(NL_LOGPATH);
-		else
-            txt_fLog = new NFile(path);
+	    txt_sLog = path;
 	}
 
 	Log::~Log()
 	{
-	    txt_fLog->~NFile();
+	    txt_sLog.Delete();
 	}
 
-	void Log::Add(NString handler, NString text)
+	NString Log::Add(NString handler, NString text)
 	{
-        txt_fLog->Open(Append);
-		txt_fLog->WriteLine(NString("[") + handler + "] " + Time::NowTime() + " -> " + text);
-		txt_fLog->Close();
+	    NString strLog = "[" + handler + "] " + Time::NowTime() + " -> " + text;
+        NFile fileLog(txt_sLog);
+        fileLog.Open(Append);
+		fileLog.WriteLine(strLog);
+		fileLog.Close();
 	}
 
-	void Log::Add(NString handler, NString text, NString path)
+	NString Log::Add(NString handler, NString text, NString path)
 	{
-	    Log* log = new Log(path);
-	    log->Add(handler, path);
-	    log->~Log();
+	    Log log(path);
+	    log.Add(handler, path);
+	    log.~Log();
 	}

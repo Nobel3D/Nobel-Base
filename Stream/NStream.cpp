@@ -1,13 +1,15 @@
+#include "NStream.h"
 
 NL_NAMEUSING
-using namespace NobelLib::IO;
 
-NStream::NStream()
+NStream::NStream(const NString& path)
 {
+    stm_sPath = path;
 }
 
 NStream::~NStream()
 {
+    stm_sPath.Delete();
 	Close();
 }
 
@@ -30,39 +32,16 @@ int NStream::Write()
 {
 	return 1;
 }
-void NStream::WriteLine(const char* Send)
+void NStream::WriteLine(const NString& send)
 {
-	NString strSend = NString(Send) + "\n";
-	createBuffer(strSend);
+    stm_sData = send + '\n';
 	Write();
 }
 
-void NStream::WriteStr(const char* Send)
+void NStream::Write(const NString& send)
 {
-	createBuffer(Send);
+    stm_sData = send;
 	Write();
-}
-
-void NStream::WriteBin(Array<BYTE>* Send)
-{
-	createBuffer(Send);
-	Write();
-}
-
-void NStream::createBuffer(BYTE* sendBuffer)
-{
-	stmSize = sendBuffer->SizeArray();
-	stmBuffer = sendBuffer;
-}
-void NStream::createBuffer(const char* sendBuffer)
-{
-	stmSize = strlen(sendBuffer);
-	this->stmBufferASCII = new char[stmSize];
-
-	for (int i = 0; i<stmSize; i++)
-	{
-		stmBufferASCII[i] = sendBuffer[i];
-	}
 }
 
 NStream& NStream::operator<< (const char* str)
@@ -70,75 +49,56 @@ NStream& NStream::operator<< (const char* str)
 	WriteLine(str);
 	return *this;
 }
-NStream& NStream::operator<<(Array<BYTE>& str)
+NStream& NStream::operator<<(const NString& str)
 {
-	createBuffer(&str);
+	Write(str);
 	return *this;
 }
-NStream& NStream::operator>>(Array<BYTE>& str)
+NStream& NStream::operator >>(NString& str)
 {
-	createBuffer(&str);
-	return *this;
-}
-NStream& NStream::operator<<(NStream & str)
-{
-	Writing(str.Reading(stmSize));
-	return *this;
-}
-NStream& NStream::operator>>(NStream & str)
-{
-	str.Writing(Reading(stmSize));
-	return *this;
+    str = Format(ReadLine());
+    return *this;
 }
 bool NStream::isEoF()
 {
 	return stm_bEoF;
 }
-Array<BYTE>* NStream::Reading(LLINT sizePackage)
-{
-	Array<BYTE>* Package = new Array<BYTE>(sizePackage);
-	BYTE buffer = ' ';
-	int i = 0;
-	while(i < sizePackage && !stm_bEoF)
-	{
-		if (Read(&buffer, sizeof(BYTE)))
-		{
-			(*Package)[i] = buffer;
-			i++;
-		}
-	}
 
-	return Package;
-}
-int NStream::Writing(Array<BYTE>* Send)
+Array<byte>& NStream::ReadLine()
 {
-	createBuffer(Send);
-	return Write();
-}
-NString NStream::ReadLine()
-{
-	NString strRet = "";
-	char c='!';
+	List<byte> data;
+	byte buffer = ' ';
+
 	do
 	{
-		if (Read(&c, sizeof(char)))
-			strRet += c;
+		if (Read(&buffer, 1))
+			data.addItem(buffer);
 	}
-	while (c != '\n' && !stm_bEoF);
+	while (buffer != '\n' && !stm_bEoF);
 
-	return strRet;
+	Array<byte>* ret = data.toArray();
+
+	return *ret;
 }
-Array<BYTE>* NStream::ReadAll(void)
+Array<byte>& NStream::ReadAll(void)
 {
-	List<BYTE> ret;
-	BYTE buffer = ' ';
-	do
+	List<byte> data;
+	byte buffer = ' ';
+
+	while(true)
 	{
-		if (Read(&buffer, sizeof(BYTE)))
-			ret.addItem(buffer);
+		if (Read(&buffer, 1))
+			data.addItem(buffer);
 		else
 			break;
-	} while (true);
+	}
+    Array<byte>* ret = data.toArray();
 
-	return ret.toArray();
+	return *ret;
+}
+
+NString& NStream::Format(Array<byte>& byte2str)
+{
+    NString* strOffset = new NString(byte2str.getArray());
+    return *strOffset;
 }

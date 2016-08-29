@@ -2,16 +2,13 @@
 
 
 NL_NAMEUSING
-using namespace NobelLib::IO;
 
-NFile::NFile(NString Path)
+NFile::NFile(const NString& path) : NStream::NStream(&path)
 {
-	txt_sPath = Path;
 }
 
 NFile::~NFile()
 {
-    txt_sPath.Delete();
 }
 
 bool NFile::Open(OpenMode OMode, bool isBinary)
@@ -19,17 +16,17 @@ bool NFile::Open(OpenMode OMode, bool isBinary)
     try
     {
         res_bBinary = isBinary;
-        if(IsStarted())
-            throw NException("bool NFile::Open(OpenMode OMode, bool isBinary)", "if(IsStarted())", "File is already started.",
-                             "where OMode = " + getModeOpen(OMode) + "; isBinary = " + NString::fromBool(isBinary));
-        else if (!CanLoad())
+        if(txt_bStart)
+            throw NException("bool NFile::Open(OpenMode OMode, bool isBinary)", "if(txt_bStart)", "File is already txt_bStarted.",
+                             "OMode = " + getModeOpen(OMode) + "; isBinary = " + NString::fromBool(isBinary));
+        if (OMode == Reading && !CanLoad())
             throw NException("bool NFile::Open(OpenMode OMode, bool isBinary)", "else if (!CanLoad())", "File isn't loadble.",
-                            "where this->txt_sPath = " + txt_sPath + "; OMode = " + getModeOpen(OMode) + "; isBinary = " + NString::fromBool(isBinary));
+                            "this->stm_sPath = " + stm_sPath + "; OMode = " + getModeOpen(OMode) + "; isBinary = " + NString::fromBool(isBinary));
         else
         {
-            LinkFile = fopen(txt_sPath, getModeOpen(OMode));
+            LinkFile = fopen(stm_sPath, getModeOpen(OMode));
             Mode = OMode;
-            Start = true;
+            txt_bStart = true;
             return true;
         }
     }
@@ -40,7 +37,7 @@ bool NFile::Open(OpenMode OMode, bool isBinary)
 }
 bool NFile::CanLoad()
 {
-	if (FILE *file = fopen(txt_sPath, "r")) {
+	if (FILE *file = fopen(stm_sPath, "r")) {
 		fclose(file);
 		return true;
 	}
@@ -50,7 +47,7 @@ bool NFile::CanLoad()
 }
 bool NFile::IsStarted()
 {
-	return Start;
+	return txt_bStart;
 }
 
 llint NFile::getLenght()
@@ -82,13 +79,13 @@ NString NFile::getModeOpen(OpenMode _Mode)
 
 int NFile::Close()
 {
-	if (IsStarted())
+	if (txt_bStart)
 		return fclose(LinkFile);
 }
 
 int NFile::Write()
 {
-	return fwrite(stmBuffer, 1, stmSize, LinkFile);
+	return fwrite(stm_sData, 1, stm_sData.getLength() + 1, LinkFile);
 }
 
 llint NFile::Read(void* vpGet, llint length, llint count)
@@ -97,7 +94,7 @@ llint NFile::Read(void* vpGet, llint length, llint count)
     {
         if (Mode != OpenMode::Reading)
             throw NException("llint NFile::Read(void* vpGet, llint length, llint count)", "if (Mode != OpenMode::Reading)","You are tring to read in a writing.",
-                             "where vpGet = ");
+                             "vpGet = " + NString::fromAddress(vpGet) + "; length = " + NString::fromInt(length) + "; count = " + NString::fromInt(count) );
 
         llint result = 0;
         if (!res_bBinary)
@@ -123,23 +120,13 @@ llint NFile::Read(void* vpGet, llint length, llint count)
 			}
 		}
 	}
-    }
-    //TODO catch
+    catch(NException ex)
 	{
-		vpGet = NULL;
+
 	}
 }
 
-
-
-void NFile::Write(BYTE* bin)
+void NFile::Write(byte* bin)
 {
-	if (res_bBinary)
-	{
 		fwrite(bin, sizeof(bin), 1, LinkFile);
-	}
-	else
-	{
-		Error("NobelLib::IO::NFile::Write(BinaryFile) Impossible use binary stream in text stream!", 20, false);
-	}
 }
