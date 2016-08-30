@@ -5,9 +5,17 @@ namespace NobelLib
 {
 	template<typename Type>
 	struct Node {
-		Type list_lData;
+		Type* list_lData;
+		bool list_bStart = false;
 		int list_iIndex;
 		Node* list_lNext;
+		Node* nodeClear()
+		{
+		    delete[] list_lData;
+		    list_bStart = false;
+		    list_iIndex = 0;
+		    return list_lNext;
+		}
 	};
 	template<typename Type>
 	class List
@@ -27,32 +35,31 @@ namespace NobelLib
 			addItem(ptrType);
 		}
 
-		void addItem(Type ptrType)
+		void addItem(Type& ptrType)
 		{
 			Node<Type>* n = new Node<Type>();
-			n->list_lData = ptrType;
+			n->list_lData = new Type(ptrType);
 			n->list_lNext = list_lHead;
 			n->list_iIndex = list_iTot++;
+			n->list_bStart = true;
 			list_lHead = n;
 		}
 
-		Node<Type>* findByObject(const Type& object) const
+        Type& findByObject(const Type& object) const
 		{
 			Node<Type>* temp = list_lHead;
-			while (temp->list_lData != object)
+			while (*temp->list_lData != object)
             {
-                if(temp->list_lNext == nullptr)
-                    return nullptr;
 				temp = temp->list_lNext;
             }
-			return temp;
+			return *temp->list_lData;
 		}
 		Node<Type>* findByIndex(int needle) const
 		{
 			if (needle >= list_iTot)
 				return nullptr;
 			Node<Type>* temp = list_lHead;
-			while (temp->list_iIndex != needle && temp->list_lNext != nullptr)
+			while (temp->list_iIndex != needle && temp->list_bStart)
 				temp = temp->list_lNext;
 			return temp;
 		}
@@ -63,7 +70,7 @@ namespace NobelLib
 
 			for (int i = 0; i < output->Size(); i++)
 			{
-				(*output)[i] = this->findByIndex(i)->list_lData;
+				(*output)[i] = *this->findByIndex(i)->list_lData;
 			}
 			return output;
 		}
@@ -71,7 +78,7 @@ namespace NobelLib
 		void Clear()
 		{
 			for (int i=0; i < getLength(); i++)
-				delete findByIndex(i);
+				findByIndex(i)->nodeClear();
 		}
 
 		void deleteItem(const Type& Compare)
@@ -84,6 +91,7 @@ namespace NobelLib
 				temp = temp->list_lNext;
             }
 			temp->list_lNext->list_lData.~Type();
+			temp->list_lNext->list_bStart = false;
 			int lastIndex = temp->list_lNext->list_iIndex;
 			temp->list_lNext = temp->list_lNext->list_lNext;
 			list_iTot--;
@@ -97,7 +105,7 @@ namespace NobelLib
 		Type& operator[] (int Index)
 		{
 		    Node<Type>* temp = findByIndex(Index);
-			return temp->list_lData; //TODO MANAGE EXCEPTION!!!!
+			return *temp->list_lData; //TODO MANAGE EXCEPTION!!!!
 		}
 
 		int getLength() const { return list_iTot; }
