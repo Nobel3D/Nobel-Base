@@ -35,7 +35,7 @@ namespace NobelLib
 			addItem(ptrType);
 		}
 
-		void addItem(Type& ptrType)
+		void addItem(const Type& ptrType)
 		{
 			Node<Type>* n = new Node<Type>();
 			n->list_lData = new Type(ptrType);

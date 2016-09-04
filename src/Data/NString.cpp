@@ -297,22 +297,22 @@ int NString::toInt()
 {
 	return atoi((char*)this->str_yData);
 }
-NString& NString::toBinary(llint Decimal)
+NString& NString::toBinary(index Decimal)
 {
 	NString* strOffset = new NString(Math::int2base(Decimal, 2));
 	return *strOffset;
 }
-NString& NString::toHex(llint Decimal)
+NString& NString::toHex(index Decimal)
 {
     NString* strOffset = new NString(Math::int2base(Decimal, 16));
 	return *strOffset;
 }
-NString& NString::toOct(llint Decimal)
+NString& NString::toOct(index Decimal)
 {
     NString* strOffset = new NString(Math::int2base(Decimal, 8));
 	return *strOffset;
 }
-NString& NString::fromInt(llint IntToString)
+NString& NString::fromInt(index IntToString)
 {
     NString* strOffset = new NString(Math::int2base(IntToString, 10));
 	return *strOffset;
@@ -549,6 +549,6 @@ bool NString::operator !=(const char* equal)
 }
 
 
-llint NString::getLength() const { return this->str_iLength; }
+index NString::getLength() const { return this->str_iLength; }
 byte* NString::getByte() const { return this->str_yData; }
 byte* NString::getByte() { return this->str_yData; }

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="NBL" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/NBL" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="bin/Debug/" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-std=c++11" />
+					<Add option="-g" />
+					<Add directory="/home/luca/Programmazione/proj/Nobel-Base/src/" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/NBL" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj/Release/" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-O2" />
+					<Add directory="Management" />
+					<Add directory="Stream" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-std=c++11" />
+		</Compiler>
+		<Unit filename="LICENSE.md">
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="README.md">
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="TODO">
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="VARRULE">
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src/Data/Array.h" />
+		<Unit filename="src/Data/List.h" />
+		<Unit filename="src/Data/NString.cpp" />
+		<Unit filename="src/Data/NString.h" />
+		<Unit filename="src/Data/Time.cpp" />
+		<Unit filename="src/Data/Time.h" />
+		<Unit filename="src/Data/Translate.h" />
+		<Unit filename="src/Management/Log.cpp" />
+		<Unit filename="src/Management/Log.h" />
+		<Unit filename="src/Management/NException.cpp" />
+		<Unit filename="src/Management/NException.h" />
+		<Unit filename="src/Math/Math.cpp" />
+		<Unit filename="src/Math/Math.h" />
+		<Unit filename="src/NBL.h" />
+		<Unit filename="src/Stream/NFile.cpp" />
+		<Unit filename="src/Stream/NFile.h" />
+		<Unit filename="src/Stream/NStream.cpp" />
+		<Unit filename="src/Stream/NStream.h" />
+		<Unit filename="src/def.h" />
+		<Extensions>
+			<envvars />
+			<code_completion />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

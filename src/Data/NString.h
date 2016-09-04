@@ -25,7 +25,7 @@ namespace NobelLib
 		int byteSize(const char* array) const;
 
 		byte* str_yData;
-		llint str_iLength;
+		index str_iLength;
 		static byte* str_yEmpty;
 
 		public:
@@ -63,15 +63,15 @@ namespace NobelLib
 		NString& toReverse() const;
 		int toInt();
 		double toDouble();
-		static NString& toHex(llint Decimal);
-		static NString& toOct(llint Decimal);
-		static NString& toBinary(llint Decimal);
-		static NString& fromInt(llint IntToString);
+		static NString& toHex(index Decimal);
+		static NString& toOct(index Decimal);
+		static NString& toBinary(index Decimal);
+		static NString& fromInt(index IntToString);
 		static NString& fromBool(bool value);
 		static NString& fromAddress(void* address);
 		static NString& fromDouble(double Convert);
 
-		llint getLength() const;
+		index getLength() const;
         byte* getByte();
 		byte* getByte() const;
 

@@ -50,7 +50,7 @@ bool NFile::IsStarted()
 	return txt_bStart;
 }
 
-llint NFile::getLenght()
+index NFile::getLenght()
 {
 	return ftell(LinkFile);
 }
@@ -88,15 +88,15 @@ int NFile::Write()
 	return fwrite(stm_sData, 1, stm_sData.getLength() + 1, LinkFile);
 }
 
-llint NFile::Read(void* vpGet, llint length, llint count)
+index NFile::Read(void* vpGet, index length, index count)
 {
     try
     {
         if (Mode != OpenMode::Reading)
-            throw NException("llint NFile::Read(void* vpGet, llint length, llint count)", "if (Mode != OpenMode::Reading)","You are tring to read in a writing.",
+            throw NException("index NFile::Read(void* vpGet, index length, index count)", "if (Mode != OpenMode::Reading)","You are tring to read in a writing.",
                              "vpGet = " + NString::fromAddress(vpGet) + "; length = " + NString::fromInt(length) + "; count = " + NString::fromInt(count) );
 
-        llint result = 0;
+        index result = 0;
         if (!res_bBinary)
 		{
 			result = fread(vpGet, count, length, LinkFile);

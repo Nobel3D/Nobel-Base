@@ -26,10 +26,10 @@ NL_NAMESTART
 			int Close();
 
 			bool IsStarted();
-			llint getLenght();
+			index getLenght();
 
 			int Write();
-			llint Read(void* vpGet, llint length, llint count = 1);
+			index Read(void* vpGet, index length, index count = 1);
 			void Write(byte* bin);
 		};
 

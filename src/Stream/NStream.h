@@ -28,7 +28,7 @@ NL_NAMESTART
 			void Write(const NString& send);
 
 			virtual int Write() = 0;
-			virtual llint Read(void* vpGet, llint length, llint count = 1) = 0;
+			virtual index Read(void* vpGet, index length, index count = 1) = 0;
 
 			Array<byte>& ReadLine();
 			Array<byte>& ReadAll();

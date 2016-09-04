@@ -11,7 +11,7 @@
 
 typedef unsigned char byte;
 typedef unsigned int uint;
-typedef long long int llint;
+typedef long long int index;
 
 template<class Type>
 inline Type Max(Type X, Type Y) { return X < Y ? Y : X; }

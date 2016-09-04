@@ -9,10 +9,10 @@ namespace NobelLib
 	{
 	private:
 		Type* array_cData;
-		llint array_iCount;
+		index array_iCount;
         bool array_bStart = false;
 
-		llint arraySize(const Type* array)
+		index arraySize(const Type* array)
         {
             int i = 0;
 
@@ -21,7 +21,7 @@ namespace NobelLib
             return i;
         }
 
-		void expArray(llint arrayIndex)
+		void expArray(index arrayIndex)
 		{
 			if (arrayIndex<array_iCount)
                 return;
@@ -38,7 +38,7 @@ namespace NobelLib
             this->array_cData = arrayOffset;
             this->array_iCount = arrayIndex;
 		}
-		Type* newArray(llint Index)
+		Type* newArray(index Index)
         {
             Type* arrayOffset = new Type[Index];
 
@@ -74,7 +74,7 @@ namespace NobelLib
 			array_cData = NULL;
 		}
 
-		Array(llint index)
+		Array(index index)
 		{
 			this->New(index);
 		}
@@ -107,7 +107,7 @@ namespace NobelLib
 				}
 		}
 
-		void New(llint Index)
+		void New(index Index)
         {
 			if (!Exist())
 			{
@@ -119,6 +119,7 @@ namespace NobelLib
                     array_cData[i] = Type();
 			}
 		}
+
         void Expand(int newIndex)
         {
             expArray(newIndex);
@@ -185,7 +186,7 @@ namespace NobelLib
 		}
 
 		/* Operators */
-		Type& operator[] (llint Index)
+		Type& operator[] (index Index)
 		{
 			if (Index >= 0 && Index < array_iCount && Exist())
 				return array_cData[Index];
