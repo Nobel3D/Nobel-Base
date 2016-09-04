@@ -62,7 +62,7 @@ Destination& Translate<Source,Destination>::FindBySource(const Source& src_key)
             return trs_tDst[i];
         i++;
     }
-    throw NException("Destination& Translate<Source,Destination>::FindBySource(const Source& src_key)","while (i < trs_iUsed)",
+    throw NException("Destination& Translate<Source,Destination>::FindBySource(const Destination& src_key)","while (i < trs_iUsed)",
                          "src_key not found in trs_tSrc");
 }
 

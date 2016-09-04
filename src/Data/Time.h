@@ -2,43 +2,40 @@
 
 #include <def.h>
 #include "NString.h"
+#include <ctime>
 
 NL_NAMESTART
 		class Time
 		{
 		private:
-			int second;
-			int Minute;
-			int Hour;
-			int Day;
-			int Month;
-			int Year;
-
-			int daysOnMonth(int _Month);
-			Time& addDate(const Time* addme);
+			time_t tm_iEpoch = 0;
 
 		public:
-			/*NOW TIME*/
 			Time();
-			Time(int _Day, int _Month, int _Year);
-			Time(int _second, int _Minute, int _Hour, int _Day, int _Month, int _Year);
+			Time(time_t epoch);
+			Time(int second, int minute, int hour, int day, int month, int year);
+			Time(const Time& tm);
 
-			static NString& NowTime();
+			Time& Add(time_t add_epoch);
+			Time& Refresh();
+			Time& fromHuman(int second, int minute, int hour, int day, int month, int year);
+			tm& toHuman();
 
-			void addSecond(int addme);
-			void addMinute(int addme);
-			void addHour(int addme);
-			void addDay(int addme);
-			void addMonth(int addme);
-			void addYear(int addme);
+			NString& Print();
+			static NString& Print(time_t epoch);
+			static time_t Now();
 
-			int getSecond();
-			int getMinute();
-			int getHour();
-			int getDay();
-			int getMonth();
-			int getYear();
 
-			Time& operator+ (Time date_arg);
+            int getSecond();
+            int getMinute();
+            int getHour();
+            int getDay();
+            int getMonth();
+            int getYear();
+
+			Time& operator+ (time_t add_epoch);
+			Time& operator- (time_t add_epoch);
+			Time& operator+= (time_t add_epoch);
+			Time& operator-= (time_t add_epoch);
 		};
 NL_NAMECLOSE

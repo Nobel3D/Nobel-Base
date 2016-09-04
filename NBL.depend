@@ -166,7 +166,7 @@
 	<Data/Time.h>
 	<Stream/NFile.h>
 
-1472950520 source:/home/luca/Programmazione/proj/Nobel-Base/src/Data/NString.cpp
+1472976692 source:/home/luca/Programmazione/proj/Nobel-Base/src/Data/NString.cpp
 	"NString.h"
 	<Math/Math.h>
 	<stdio.h>
@@ -174,7 +174,7 @@
 	<cstdint>
 	<ctype.h>
 
-1472955760 /home/luca/Programmazione/proj/Nobel-Base/src/Data/NString.h
+1472976692 /home/luca/Programmazione/proj/Nobel-Base/src/Data/NString.h
 	"List.h"
 	"Array.h"
 	"def.h"
@@ -185,19 +185,19 @@
 1472960987 /home/luca/Programmazione/proj/Nobel-Base/src/Data/Array.h
 	<def.h>
 
-1469784962 source:/home/luca/Programmazione/proj/Nobel-Base/src/Data/Time.cpp
+1472975977 source:/home/luca/Programmazione/proj/Nobel-Base/src/Data/Time.cpp
 	"Time.h"
-	<ctime>
 
-1469784962 /home/luca/Programmazione/proj/Nobel-Base/src/Data/Time.h
+1472969035 /home/luca/Programmazione/proj/Nobel-Base/src/Data/Time.h
 	<def.h>
 	"NString.h"
+	<ctime>
 
-1472428367 source:/home/luca/Programmazione/proj/Nobel-Base/src/Management/Log.cpp
+1472970018 source:/home/luca/Programmazione/proj/Nobel-Base/src/Management/Log.cpp
 	"Log.h"
 	<Stream/NFile.h>
 
-1472428367 /home/luca/Programmazione/proj/Nobel-Base/src/Management/Log.h
+1472969702 /home/luca/Programmazione/proj/Nobel-Base/src/Management/Log.h
 	<def.h>
 	<Data/Time.h>
 
@@ -219,13 +219,13 @@
 1470585873 /home/luca/Programmazione/proj/Nobel-Base/src/def.h
 	<cstddef>
 
-1472950520 /home/luca/Programmazione/proj/Nobel-Base/src//def.h
+1472967313 /home/luca/Programmazione/proj/Nobel-Base/src//def.h
 	<cstddef>
 
 1472950520 /home/luca/Programmazione/proj/Nobel-Base/src//Math/Math.h
 	"def.h"
 
-1472955760 /home/luca/Programmazione/proj/Nobel-Base/src//Data/NString.h
+1472976692 /home/luca/Programmazione/proj/Nobel-Base/src//Data/NString.h
 	"List.h"
 	"Array.h"
 	"def.h"
@@ -236,9 +236,10 @@
 1472960987 /home/luca/Programmazione/proj/Nobel-Base/src//Data/Array.h
 	<def.h>
 
-1469784962 /home/luca/Programmazione/proj/Nobel-Base/src//Data/Time.h
+1472969035 /home/luca/Programmazione/proj/Nobel-Base/src//Data/Time.h
 	<def.h>
 	"NString.h"
+	<ctime>
 
 1472950520 /home/luca/Programmazione/proj/Nobel-Base/src//Stream/NFile.h
 	<def.h>
@@ -252,7 +253,7 @@
 	<Data/NString.h>
 	"Log.h"
 
-1472428367 /home/luca/Programmazione/proj/Nobel-Base/src//Management/Log.h
+1472969702 /home/luca/Programmazione/proj/Nobel-Base/src//Management/Log.h
 	<def.h>
 	<Data/Time.h>
 

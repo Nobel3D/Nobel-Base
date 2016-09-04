@@ -3,7 +3,7 @@
 
 NL_NAMEUSING
 
-	Log::Log(NString path)
+	Log::Log(const NString& path)
 	{
 	    txt_sLog = path;
 	}
@@ -13,18 +13,18 @@ NL_NAMEUSING
 	    txt_sLog.Delete();
 	}
 
-	NString Log::Add(NString handler, NString text)
+	NString Log::Add(const NString& handler, const NString& text)
 	{
-	    NString strLog = "[" + handler + "] " + Time::NowTime() + " -> " + text;
+        NString strLog = "[" + handler + "] " + Time::Print(Time::Now()) + " -> " + text;
         NFile fileLog(txt_sLog);
         fileLog.Open(Append);
 		fileLog.WriteLine(strLog);
 		fileLog.Close();
+		return strLog;
 	}
 
-	NString Log::Add(NString handler, NString text, NString path)
+	NString Log::Add(const NString& handler, const NString& text, const NString& path)
 	{
 	    Log log(path);
-	    log.Add(handler, path);
-	    log.~Log();
+	    return log.Add(handler, text);
 	}

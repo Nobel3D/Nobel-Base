@@ -10,10 +10,10 @@ NL_NAMESTART
     private:
         NString txt_sLog;
     public:
-        Log(NString path);
+        Log(const NString& path);
         ~Log();
-        NString Add(NString handler, NString text);
-        static NString Add(NString handler, NString text, NString path);
+        NString Add(const NString& handler, const NString& text);
+        static NString Add(const NString& handler, const NString& text, const NString& path);
     };
 
 NL_NAMECLOSE

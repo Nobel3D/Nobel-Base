@@ -8,6 +8,7 @@
 
 #define NL_LOGPATH "nobel.log"
 #define NL_STREAMSIZE 1024
+#define NL_TIMESTAMP 80
 
 typedef unsigned char byte;
 typedef unsigned int uint;

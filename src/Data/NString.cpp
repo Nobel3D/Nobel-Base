@@ -162,7 +162,7 @@ void NString::addString(const NString &add)
 	for (int c = 0; c<add.str_iLength; c++)
 		newString[i++] = add.str_yData[c];
 
-	newString[newLength] = '\0';
+	newString[newLength - 1] = '\0';
 
 	this->formString(newString,newLength - 1);
 }
@@ -436,7 +436,7 @@ NString& NString::toReverse() const
   return *strOutput;
 }
 
-NString::operator const char *()
+NString::operator char *()
 {
   return (char*)this->str_yData;
 }

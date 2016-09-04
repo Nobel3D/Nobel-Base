@@ -75,7 +75,7 @@ namespace NobelLib
         byte* getByte();
 		byte* getByte() const;
 
-		operator const char* ();
+		operator char* ();
 		operator const char*() const;
 
 		NString& operator=(const char* newChar);
