@@ -15,7 +15,7 @@ NL_NAMEUSING
 
 	NString Log::Add(const NString& handler, const NString& text)
 	{
-        NString strLog = "[" + handler + "] " + Time::Print(Time::Now()) + " -> " + text;
+        NString strLog = "[" + handler + "] " + Time::Print(Time::Now()) + " -> " + text + '\n';
         NFile fileLog(txt_sLog);
         fileLog.Open(Append);
 		fileLog.WriteLine(strLog);

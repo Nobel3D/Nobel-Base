@@ -40,14 +40,6 @@ NString::NString(const NString* CopyCC)
 	newString(CopyCC->str_yData);
 }
 
-NString::~NString()
-{
-	if (!this->Null())
-	{
-		delete[] str_yData;
-		str_iLength = -1;
-	}
-}
 
 int NString::byteSize(const byte* array) const
 {
@@ -297,22 +289,22 @@ int NString::toInt()
 {
 	return atoi((char*)this->str_yData);
 }
-NString& NString::toBinary(index Decimal)
+NString& NString::toBinary(INDEX Decimal)
 {
 	NString* strOffset = new NString(Math::int2base(Decimal, 2));
 	return *strOffset;
 }
-NString& NString::toHex(index Decimal)
+NString& NString::toHex(INDEX Decimal)
 {
     NString* strOffset = new NString(Math::int2base(Decimal, 16));
 	return *strOffset;
 }
-NString& NString::toOct(index Decimal)
+NString& NString::toOct(INDEX Decimal)
 {
     NString* strOffset = new NString(Math::int2base(Decimal, 8));
 	return *strOffset;
 }
-NString& NString::fromInt(index IntToString)
+NString& NString::fromInt(INDEX IntToString)
 {
     NString* strOffset = new NString(Math::int2base(IntToString, 10));
 	return *strOffset;
@@ -336,28 +328,28 @@ NString& NString::fromDouble(double Convert)
 	return *strOffset;
 	//TODO
 }
-NString& NString::Sub(int IndexStart) const
+NString& NString::Sub(int INDEXStart) const
 {
     NString* strOffset = new NString;
-	if (IndexStart<0 || IndexStart>this->getLength())
+	if (INDEXStart<0 || INDEXStart>this->getLength())
 		return *strOffset;
 
-    strOffset->newString(this->str_yData + IndexStart);
+    strOffset->newString(this->str_yData + INDEXStart);
 	return *strOffset;
 }
-NString& NString::Sub(int IndexStart, int IndexLen) const
+NString& NString::Sub(int INDEXStart, int INDEXLen) const
 {
     NString* strOffset = new NString;
-    if(IndexStart > this->getLength() || IndexStart < 0)
+    if(INDEXStart > this->getLength() || INDEXStart < 0)
         return *strOffset;
 
-    strOffset->newString(this->str_yData + IndexStart);
+    strOffset->newString(this->str_yData + INDEXStart);
 
-	if(IndexLen > strOffset->getLength())
+	if(INDEXLen > strOffset->getLength())
         return *strOffset;
 
-	strOffset->str_yData[IndexLen] = '\0';
-	strOffset->str_iLength = IndexLen;
+	strOffset->str_yData[INDEXLen] = '\0';
+	strOffset->str_iLength = INDEXLen;
 	return *strOffset;
 }
 
@@ -507,10 +499,10 @@ NString& NString::operator+(const char addMe) const
 }
 
 
-char NString::operator[](int index)
+char NString::operator[](int INDEX)
 {
-	if(index>=0 && index<=str_iLength)
-	return str_yData[index];
+	if(INDEX>=0 && INDEX<=str_iLength)
+	return str_yData[INDEX];
 
 }
 
@@ -549,6 +541,6 @@ bool NString::operator !=(const char* equal)
 }
 
 
-index NString::getLength() const { return this->str_iLength; }
+INDEX NString::getLength() const { return this->str_iLength; }
 byte* NString::getByte() const { return this->str_yData; }
 byte* NString::getByte() { return this->str_yData; }

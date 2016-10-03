@@ -99,6 +99,6 @@ Array<byte>& NStream::ReadAll(void)
 
 NString& NStream::Format(Array<byte>& byte2str)
 {
-    NString* strOffset = new NString(byte2str.getArray());
-    return *strOffset;
+//    NString* strOffset = new NString(byte2str.getArray());
+//    return *strOffset;
 }

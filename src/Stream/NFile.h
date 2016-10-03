@@ -10,6 +10,18 @@ NL_NAMESTART
 
 		class NFile : public NStream
 		{
+		public:
+			NFile(const NString& path);
+			~NFile();
+			bool Open(OpenMode OMode,bool isBinary = false);
+			int Close();
+
+			bool IsStarted();
+			INDEX getLenght();
+
+			int Write();
+			INDEX Read(void* vpGet, INDEX length, INDEX count = 1);
+			void Write(byte* bin);
 		private:
 			FILE* LinkFile;
 			OpenMode Mode;
@@ -18,19 +30,6 @@ NL_NAMESTART
 
 			bool CanLoad();
 			NString getModeOpen(OpenMode _Mode);
-
-		public:
-			NFile(const NString& path);
-			~NFile();
-			bool Open(OpenMode OMode,bool isBinary = false);
-			int Close();
-
-			bool IsStarted();
-			index getLenght();
-
-			int Write();
-			index Read(void* vpGet, index length, index count = 1);
-			void Write(byte* bin);
 		};
 
 NL_NAMECLOSE

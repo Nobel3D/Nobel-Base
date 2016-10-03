@@ -7,13 +7,13 @@ NL_NAMESTART
 
     class Log
     {
-    private:
-        NString txt_sLog;
     public:
         Log(const NString& path);
         ~Log();
         NString Add(const NString& handler, const NString& text);
         static NString Add(const NString& handler, const NString& text, const NString& path);
+    private:
+        NString txt_sLog;
     };
 
 NL_NAMECLOSE

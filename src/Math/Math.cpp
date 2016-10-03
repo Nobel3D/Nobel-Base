@@ -6,9 +6,9 @@ namespace Math
 
 char mapHex[]{'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 
-index power(index base, index exponent)
+INDEX power(INDEX base, INDEX exponent)
 {
-    index intOffset = 1;
+    INDEX intOffset = 1;
     if(exponent == 0)
         return intOffset;
     for(int i = 0; i < exponent; i++)
@@ -16,10 +16,10 @@ index power(index base, index exponent)
     return intOffset;
 }
 
-char* int2base(index value, index base)
+char* int2base(INDEX value, INDEX base)
 {
-    index intExpo = 0;
-    index intCheck = 0;
+    INDEX intExpo = 0;
+    INDEX intCheck = 0;
     while(value / power(base,intExpo) > base)
         intExpo++;
 

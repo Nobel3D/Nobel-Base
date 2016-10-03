@@ -5,8 +5,8 @@
 NL_NAMESTART
 namespace Math
 {
-index power(index base, index exponent);
-char* int2base(index value, index base);
-char* double2base(index value);
+INDEX power(INDEX base, INDEX exponent);
+char* int2base(INDEX value, INDEX base);
+char* double2base(INDEX value);
 }
 NL_NAMECLOSE

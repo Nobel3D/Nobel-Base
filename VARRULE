@@ -27,7 +27,7 @@ trs (translate)
 
 Type Return:
 b (bool)
-i (int or index)
+i (int or INDEX)
 f (float)
 s (string)
 t (prototype class)
@@ -36,7 +36,7 @@ e (exception)
 n (enumeration)
 a (array)
 l (list)
-m (matrix)
+m (memory stack)
 // t (time) //?epoch? > int
 p (point)
 x (input)

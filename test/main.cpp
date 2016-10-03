@@ -10,7 +10,7 @@ using namespace NobelLib;
 int numFails = 0;
 int numTests = 0;
 
-void checkup(char* checkname, bool expression)
+static void checkup(char* checkname, bool expression)
 {
     numTests++;
     if(expression)
@@ -21,7 +21,6 @@ void checkup(char* checkname, bool expression)
         numFails++;
     }
 }
-
 void result()
 {
     cout << endl << endl;
@@ -36,14 +35,54 @@ void result()
 int main()
 {
 #if DEBUG == 1
+    Memory mem_int(4,100);
+    int* test = (int*)mem_int.getPointer();
+    for (int i=0; i< 100; i++) test[i] = i;
+    for (int i=0; i< 100; i++) cout << test[i]<<endl;
+
+    cout << mem_int.getSize() << endl << Memory::getUsed() << endl;
+
+    Memory pNew(4,200);
+    int* pInt = (int*)pNew.getPointer();
+    int i = 100;
+    int c = 0;
+    while (c < 100) pInt[c++] = i--;
+
+    mem_int.Copy(pNew);
+
+    mem_int.Zero();
+
+    //for (int i=0; i< 100; i++) cout << test[i]<<endl;
+
+    int x = 100;
+    for (int i=0; i < 100; i++) {
+        mem_int >> &x;
+        cout << x << endl;
+    }
+    for (int i=0; i< 100; i++) cout << test[i]<<endl;
+
+    cout << mem_int.getSize() << endl << Memory::getUsed() << endl;
+
+    mem_int.Free();
+
+    for(int i=0; i< 100; i++) cout << pInt[i] << endl;
+
+    cout << mem_int.getSize() << endl << Memory::getUsed() << endl;
+
+    pNew.Free();
+
+    cout << mem_int.getSize() << endl << Memory::getUsed() << endl;
+
+
+
     Array<int> numbers(10);
     for(int i = 0; i < 10 ; i++)
-        numbers[i] = i;
+        numbers.Add(i);
     checkup("Array allocation", numbers[0] == 0 && numbers[5] == 5 && numbers[9] == 9);
 
     numbers.Expand(12);
-    numbers[10] = 10;
-    numbers[11] = 11;
+    numbers.Add(10);
+    numbers.Add(11);
     checkup("Array adding", numbers[10] == 10 && numbers[11] == 11);
 
     numbers[1] = 99;
@@ -55,8 +94,21 @@ int main()
     int* othernumber = new int[10];
     for(int i = 0; i < 10 ; i++)
         othernumber[i] = i + 10;
-    numbers.Copy(othernumber);
+    numbers.Copy(othernumber,10);
     checkup("Array copying", numbers[3] == 13);
+    Array<NString> strings(10);
+    strings.Add("ciao");
+    strings.Add("bello");
+    strings.Add("mondo");
+    strings.Add("hey");
+    strings.Add("xd");
+    strings.Add("lol");
+
+    checkup("Array push stack", strings[0] == "ciao" && strings[1] == "bello" && strings[2] == "mondo" && strings[3] == "hey" && strings[4] == "xd" && strings[5] == "lol");
+
+    cout << Memory::getUsed();
+
+
     List<int> listed;
     for(int i = 0; i < 10 ; i++)
         listed.addItem(i);
@@ -121,6 +173,7 @@ int main()
 
     result();
     return 0;
+
 #else // DEBUG
 
     Translate<NString,int> voti(10);

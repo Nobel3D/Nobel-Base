@@ -7,9 +7,6 @@
 NL_NAMESTART
 		class Time
 		{
-		private:
-			time_t tm_iEpoch = 0;
-
 		public:
 			Time();
 			Time(time_t epoch);
@@ -37,5 +34,9 @@ NL_NAMESTART
 			Time& operator- (time_t add_epoch);
 			Time& operator+= (time_t add_epoch);
 			Time& operator-= (time_t add_epoch);
+
+        private:
+			time_t tm_iEpoch = 0;
+
 		};
 NL_NAMECLOSE

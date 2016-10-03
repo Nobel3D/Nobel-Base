@@ -68,7 +68,7 @@ namespace NobelLib
 		{
 			Array<Type>* output = new Array<Type>(this->getLength());
 
-			for (int i = 0; i < output->Size(); i++)
+			for (int i = 0; i < output->getSize(); i++)
 			{
 				(*output)[i] = *this->findByIndex(i)->list_lData;
 			}

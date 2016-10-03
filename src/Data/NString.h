@@ -9,28 +9,7 @@ namespace NobelLib
 
 	class NString
 	{
-	private:
-		void addString(const byte* add);
-		void addString(const NString &add);
-		void addString(const char add);
-		void newString(const byte* data);
-		void newString(const NString &data);
-
-		bool Equal(const char* Compare);
-
-        void formString(const byte* newstr, int newlen);
-		void formString(const NString& copystr);
-
-        int byteSize(const byte* array) const;
-		int byteSize(const char* array) const;
-
-		byte* str_yData;
-		index str_iLength;
-		static byte* str_yEmpty;
-
-		public:
-
-		inline ~NString();
+    public:
 		inline NString();
 		inline NString(const char Const);
 		inline NString(const byte* Const);
@@ -52,8 +31,8 @@ namespace NobelLib
 		List<NString>* Split(const char Splitter) const;
 		bool Find(const NString* strMy) const;
 		bool Find(const char* charMy) const;
-		NString& Sub(int IndexStart) const;
-		NString& Sub(int IndexStart, int IndexLen) const;
+		NString& Sub(int INDEXStart) const;
+		NString& Sub(int INDEXStart, int INDEXLen) const;
 
 		NString& Normalize() const;
 		NString& Trim() const;
@@ -63,15 +42,15 @@ namespace NobelLib
 		NString& toReverse() const;
 		int toInt();
 		double toDouble();
-		static NString& toHex(index Decimal);
-		static NString& toOct(index Decimal);
-		static NString& toBinary(index Decimal);
-		static NString& fromInt(index IntToString);
+		static NString& toHex(INDEX Decimal);
+		static NString& toOct(INDEX Decimal);
+		static NString& toBinary(INDEX Decimal);
+		static NString& fromInt(INDEX IntToString);
 		static NString& fromBool(bool value);
 		static NString& fromAddress(void* address);
 		static NString& fromDouble(double Convert);
 
-		index getLength() const;
+		INDEX getLength() const;
         byte* getByte();
 		byte* getByte() const;
 
@@ -92,11 +71,30 @@ namespace NobelLib
 			return NString(addMe) + str;
 		}
 
-		char operator[](int index);
+		char operator[](int INDEX);
 
 		bool operator==(const char* equal);
 		bool operator!=(const char* equal);
 		bool operator==(const NString& equal);
 		bool operator!=(const NString& equal);
+	private:
+		void addString(const byte* add);
+		void addString(const NString &add);
+		void addString(const char add);
+		void newString(const byte* data);
+		void newString(const NString &data);
+
+		bool Equal(const char* Compare);
+
+        void formString(const byte* newstr, int newlen);
+		void formString(const NString& copystr);
+
+        int byteSize(const byte* array) const;
+		int byteSize(const char* array) const;
+
+		byte* str_yData;
+		INDEX str_iLength;
+		static byte* str_yEmpty;
+
 	};
 }

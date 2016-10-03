@@ -1,209 +1,174 @@
 #pragma once
 
-#include <def.h>
+#include "Memory.h"
 
-namespace NobelLib
-{
-	template < class Type >
+NL_NAMESTART
+
+	template <class type>
 	class Array
 	{
-	private:
-		Type* array_cData;
-		index array_iCount;
-        bool array_bStart = false;
-
-		index arraySize(const Type* array)
-        {
-            int i = 0;
-
-            while(*array++) i++;
-
-            return i;
-        }
-
-		void expArray(index arrayIndex)
-		{
-			if (arrayIndex<array_iCount)
-                return;
-			if (!Exist()) {
-				this->New(arrayIndex);
-				return;
-			}
-
-			Type* arrayOffset = new Type[arrayIndex];
-            for(int i=0; i < this->array_iCount; i++)
-                arrayOffset[i] = array_cData[i];
-
-            this->Clear();
-            this->array_cData = arrayOffset;
-            this->array_iCount = arrayIndex;
-		}
-		Type* newArray(index Index)
-        {
-            Type* arrayOffset = new Type[Index];
-
-            for(int i = 0; i<Index; i++)
-                arrayOffset[i] = Type();
-
-            return arrayOffset;
-		}
-
-		Type* copyArray(const Type* copyArray, int copyElements)
-        {
-            Type* arrayOffset = newArray(copyElements);
-            while(copyElements--)
-                arrayOffset[copyElements] = copyArray[copyElements];
-
-            return arrayOffset;
-		}
-
-		void deleteArray()
-		{
-			if (Exist())
-				delete[] array_cData;
-            array_cData = NULL;
-            array_iCount = 0;
-            array_bStart = false;
-		}
-
+    private:
+		Memory* array_mStack;
+		INDEX array_iCount  = 0;
+		INDEX array_iUsed   = 0;
+        bool array_bStart   = false;
+        static int array_iStack;
 	public:
-		/* Constructor and Destructor*/
-		Array()
-        {
-			array_iCount = NULL;
-			array_cData = NULL;
-		}
+	    Array(){};
+		Array(INDEX size);
+		Array(Array<type> &copy);
+		Array(const type* copy, INDEX size);
+		~Array();
 
-		Array(index index)
-		{
-			this->New(index);
-		}
-		Array(const Array<Type> &Other)
-		{
-			Copy(Other);
-		}
-		Array(const Type* Other)
-		{
-			Copy(Other);
-		}
+		void Add();
+		void Add(const type& item);
+        void Delete();
+		void Clear();
+		void New(INDEX index, bool force=false);
 
-		~Array()
-		{
-		    deleteArray();
-        }
-        /* Constructor and Destructor*/
-        void Delete()
-        {
-            deleteArray();
-        }
+        void Expand(INDEX size);
 
-		void Clear()
-		{
-			if (Exist())
-				{
-				    int index = array_iCount;
-				    deleteArray();
-				    New(index);
-				}
-		}
+		void Copy(const type* copy, INDEX size);
+		void Copy(Array<type> &copy);
 
-		void New(index Index)
-        {
-			if (!Exist())
-			{
-			    array_bStart = true;
-			    array_iCount = Index;
-                array_cData = new Type[array_iCount];
+		type& operator[] (INDEX index) const;
+		void operator= (const Array<type> &equal);
 
-                for(int i = 0; i<array_iCount; i++)
-                    array_cData[i] = Type();
-			}
-		}
-
-        void Expand(int newIndex)
-        {
-            expArray(newIndex);
-        }
-
-		void Copy(const Type* MyArray)
-        {
-            if(!MyArray)
-                return;
-            int arrayLength = arraySize(MyArray);
-
-            if(Exist())
-            {
-                if(arrayLength > this->array_iCount)
-                    return;
-                this->Clear();
-            }
-			for(int i=0; i < arrayLength; i++)
-                array_cData[i] = MyArray[i];
-
-
-		}
-
-		void Copy(const Array<Type> &MyArray)
-        {
-            if(!MyArray.Exist())
-                return;
-
-            if(Exist())
-            {
-                if(MyArray.array_iCount > this->array_iCount)
-                    return;
-                this->Clear();
-            }
-            for(int i=0; i < MyArray.array_iCount; i++)
-                array_cData[i] = MyArray.array_cData[i];
-
-		}
-
-		Type* toStd()
-        {
-            if(!this->Exist())
-                return nullptr;
-
-            Type* arrayOffset = new Type[this->array_iCount];
-
-            for(int i=0; i < this->array_iCount; i++)
-                arrayOffset[i] = this->array_cData[i];
-
-            return arrayOffset;
-		}
-
-        static Type* toStd(const Array<Type> &MyArray)
-        {
-            if(!MyArray.Exist())
-                return nullptr;
-
-            Type* arrayOffset = new Type[MyArray.array_iCount];
-
-            for(int i=0; i < MyArray.array_iCount; i++)
-                arrayOffset[i] = MyArray.array_cData[i];
-
-            return arrayOffset;
-		}
-
-		/* Operators */
-		Type& operator[] (index Index)
-		{
-			if (Index >= 0 && Index < array_iCount && Exist())
-				return array_cData[Index];
-		}
-
-		void operator= (Type* equal)
-		{
-		    this->Copy(equal);
-        }
-		/* Operators */
-        /* Getters and Setters */
-		bool Exist() const { return array_bStart; }
-		int Size() const { return array_iCount; }
-		void setArray(Type Element, int Position) { if (Exist()) array_cData[Position] = Element; }
-		Type* getArray() { return array_cData; }
-		/* Getters and Setters */
-
+		bool Exist() const;
+		int getSize() const;
+		static void setStack(int _stack);
 	};
+
+template <class type>
+int Array<type>::array_iStack = 16;
+
+template <class type>
+Array<type>::Array(INDEX size)
+{
+    New(size);
+}
+template <class type>
+Array<type>::Array(Array<type> &copy)
+{
+    if(copy.array_bStart)
+    {
+        array_mStack = new Memory(copy.array_mStack);
+        array_iCount = copy.array_iCount;
+        INDEX array_iUsed = copy.array_iUsed;
+        bool array_bStart = true;
+    }
+}
+template <class type>
+Array<type>::Array(const type* copy, INDEX size)
+{
+	Copy(copy,size);
+}
+template <class type>
+Array<type>::~Array()
+{
+	Delete();
 }
 
+template <class type>
+void Array<type>::New(INDEX size, bool force)
+{
+    ASSERT(size > 0);
+
+    array_mStack = new Memory(sizeof(type),size);
+
+    if(array_bStart)
+    {
+        if(force)
+            Clear();
+        else
+            return;
+    }
+
+    array_iCount = size;
+    array_bStart = true;
+}
+template <class type>
+void Array<type>::Add()
+{
+    if(array_iCount <= array_iUsed++)
+        Expand(array_iStack);
+
+    array_mStack->Push();
+}
+
+template <class type>
+void Array<type>::Add(const type& item)
+{
+    if(array_iCount <= array_iUsed++)
+        Expand(array_iStack);
+
+    array_mStack->Push(&item,sizeof(item));
+}
+
+template <class type>
+void Array<type>::Copy(Array<type> &copy)
+{
+    if(!copy.array_bStart)
+        return;
+
+    array_mStack->Copy(copy.array_mStack);
+    array_iCount = copy.array_iCount;
+}
+template <class type>
+void Array<type>::Copy(const type* copy, INDEX size)
+{
+    ASSERT(copy != nullptr);
+
+    array_mStack->Copy(copy,size);
+
+    array_iCount = size;
+}
+template <class type>
+void Array<type>::Expand(INDEX size)
+{
+    if (!array_bStart)
+    {
+        New(size);
+        return;
+    }
+    ASSERT(size>array_iCount);
+
+    array_mStack->Reallocate(size);
+
+    this->array_iCount = size;
+}
+template <class type>
+void Array<type>::Delete()
+{
+    if(!array_bStart)
+        return;
+    array_mStack->Free();
+    array_iCount = 0;
+    array_bStart = false;
+}
+template <class type>
+void Array<type>::Clear()
+{
+	if (!array_bStart)
+        return;
+    array_mStack->Zero();
+}
+template <class type>
+type& Array<type>::operator[] (INDEX index) const
+{
+    ASSERT(index >= 0 && index < array_iCount && array_bStart);
+    return ((type*)array_mStack->getPointer())[index];
+}
+template <class type>
+void Array<type>::operator= (const Array<type>& equal)
+{
+	Copy(equal);
+}
+template <class type>
+bool Array<type>::Exist() const { return array_bStart; }
+template <class type>
+int Array<type>::getSize() const { return array_iCount; }
+template <class type>
+void Array<type>::setStack(int _stack) { array_iStack = _stack; }
+
+NL_NAMECLOSE

@@ -1,2 +1,4 @@
--Review array class
----sizeArray compatibility to std class (like string)
+-Check file stream
+-def.h ASSERT log in file
+-review list class with Memory operator
+-Add Socket and WinSock
