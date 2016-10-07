@@ -1,116 +1,122 @@
 #pragma once
+
 #include "Array.h"
 
-namespace NobelLib
-{
-	template<typename Type>
-	struct Node {
-		Type* list_lData;
-		bool list_bStart = false;
-		int list_iIndex;
+NL_NAMESTART
+
+	class Node
+	{
+    private:
+		void* list_lData;
 		Node* list_lNext;
-		Node* nodeClear()
-		{
-		    delete[] list_lData;
-		    list_bStart = false;
-		    list_iIndex = 0;
-		    return list_lNext;
-		}
+		llint list_iSize;
+		static Memory* list_mManager;
+		static INDEX list_iStack;
+    public:
+        Node(const void* _item, llint _size, Node* _next);
+
+		void* getData(llint& _lenght);
+		Node* getNext() const;
+		void setData(const void* _data);
+
+		void Clear();
+
+		static void Init(int _stackSize);
+		static Memory* getMemory();
+
 	};
-	template<typename Type>
-	class List
+
+	class ListManager
 	{
 	private:
-		Node<Type>* list_lHead;
-		static int list_iTot;
+		Node* list_lHead= nullptr;
+		INDEX list_iTot = 0;
 	public:
-		List()
-		{
-			list_lHead = nullptr;
-			list_iTot = 0;
-		}
+		ListManager(int _stackSize = 1024);
 
-		List(const Type& ptrType)
-		{
-			addItem(ptrType);
-		}
 
-		void addItem(const Type& ptrType)
-		{
-			Node<Type>* n = new Node<Type>();
-			n->list_lData = new Type(ptrType);
-			n->list_lNext = list_lHead;
-			n->list_iIndex = list_iTot++;
-			n->list_bStart = true;
-			list_lHead = n;
-		}
+		void addItem(const void* _item, llint _size);
+		void addItem(const Memory& _memory);
+		void editItem(INDEX _index, const void* _data);
 
-        Type& findByObject(const Type& object) const
-		{
-			Node<Type>* temp = list_lHead;
-			while (*temp->list_lData != object)
-            {
-				temp = temp->list_lNext;
-            }
-			return *temp->list_lData;
-		}
-		Node<Type>* findByIndex(int needle) const
-		{
-			if (needle >= list_iTot)
-				return nullptr;
-			Node<Type>* temp = list_lHead;
-			while (temp->list_iIndex != needle && temp->list_bStart)
-				temp = temp->list_lNext;
-			return temp;
-		}
+		Node* findByIndex(INDEX needle) const;
 
-		Array<Type>* toArray() const
-		{
-			Array<Type>* output = new Array<Type>(this->getLength());
+		Memory* toStack() const;
 
-			for (int i = 0; i < output->getSize(); i++)
-			{
-				(*output)[i] = *this->findByIndex(i)->list_lData;
-			}
-			return output;
-		}
+        void Cut();
+		void Clear();
+		void deleteItem(INDEX needle);
 
-		void Clear()
-		{
-			for (int i=0; i < getLength(); i++)
-				findByIndex(i)->nodeClear();
-		}
-
-		void deleteItem(const Type& Compare)
-		{
-			Node<Type>* temp = list_lHead;
-			while (temp->list_lNext->list_lData != Compare)
-            {
-                if(temp->list_lNext == NULL)
-                    return; //TODO MANAGE EXCEPTION!!!
-				temp = temp->list_lNext;
-            }
-			temp->list_lNext->list_lData.~Type();
-			temp->list_lNext->list_bStart = false;
-			int lastIndex = temp->list_lNext->list_iIndex;
-			temp->list_lNext = temp->list_lNext->list_lNext;
-			list_iTot--;
-			for (lastIndex; lastIndex < list_iTot; lastIndex++)
-			{
-				temp = list_lHead;
-				temp->list_iIndex = lastIndex;
-			}
-
-		}
-		Type& operator[] (int Index)
-		{
-		    Node<Type>* temp = findByIndex(Index);
-			return *temp->list_lData; //TODO MANAGE EXCEPTION!!!!
-		}
-
-		int getLength() const { return list_iTot; }
+		INDEX getLength() const;
 
 	};
-	template<typename Type>
-	int List<Type>::list_iTot;
-}
+
+
+
+    template <class type>
+    class List
+    {
+    public:
+
+        ListManager list_lManager;
+
+        List();
+
+        void addItem(const type& _add);
+        void deleteItem(INDEX _index);
+        void editItem(INDEX _index, const type& _data);
+
+        void Clear();
+
+        Array<type>* toArray();
+
+        type& operator[](INDEX _index) const;
+
+        INDEX getLength() const;
+    };
+
+    template <class type>
+    List<type>::List(){}
+
+    template <class type>
+    void List<type>::addItem(const type& _add)
+    {
+        list_lManager.addItem(&_add, sizeof(_add));
+    }
+
+    template <class type>
+    void List<type>::deleteItem(INDEX _index)
+    {
+        list_lManager.deleteItem(_index);
+    }
+
+    template <class type>
+    void List<type>::editItem(INDEX _index, const type& _data)
+    {
+        list_lManager.editItem(_index,&_data);
+    }
+
+    template <class type>
+    void List<type>::Clear()
+    {
+        list_lManager.Clear();
+    }
+
+    template <class type>
+    Array<type>* List<type>::toArray()
+    {
+        Array<type>* output = new Array<type>(*list_lManager.toStack());
+        return output;
+    }
+
+    template <class type>
+    type& List<type>::operator[](INDEX _index) const
+    {
+        llint typeLength = sizeof(type);
+        return *(type*)list_lManager.findByIndex(_index)->getData(typeLength);
+    }
+
+    template <class type>
+    INDEX List<type>::getLength() const { return list_lManager.getLength(); }
+
+NL_NAMECLOSE

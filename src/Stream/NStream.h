@@ -24,10 +24,8 @@ NL_NAMESTART
 			virtual int Write() = 0;
 			virtual INDEX Read(void* vpGet, INDEX length, INDEX count = 1) = 0;
 
-			Array<byte>& ReadLine();
-			Array<byte>& ReadAll();
-
-			NString& Format(Array<byte>& byte2str);
+			NString& ReadLine();
+			NString& ReadAll();
 
 			NStream& operator <<(const char* str);
 			NStream& operator <<(const NString& str);

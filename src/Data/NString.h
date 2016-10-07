@@ -16,7 +16,7 @@ namespace NobelLib
 		inline NString(const char* Const);
 		inline NString(const NString& CopyCC);
 		inline NString(const NString* CopyCC);
-
+        NString(const Memory& _copy);
 
 
         void Delete();

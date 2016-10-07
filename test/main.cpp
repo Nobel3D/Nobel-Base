@@ -106,26 +106,26 @@ int main()
 
     checkup("Array push stack", strings[0] == "ciao" && strings[1] == "bello" && strings[2] == "mondo" && strings[3] == "hey" && strings[4] == "xd" && strings[5] == "lol");
 
-    cout << Memory::getUsed();
-
-
     List<int> listed;
     for(int i = 0; i < 10 ; i++)
         listed.addItem(i);
     checkup("List allocation", listed[9] == 9);
 
-    listed[9] = 99;
+    listed.editItem(9,99);
     checkup("List modify", listed[9] == 99);
 
     checkup("List get length", listed.getLength() == 10);
 
-    checkup("List find by object", listed.findByObject(6) == 6);
+    checkup("List find by object", listed[6] == 6);
+
+    cout << Memory::getUsed() << endl;
+
 
     Array<int>* listarray = listed.toArray();
     checkup("List to array", (*listarray)[6] = 6);
 
     listed.Clear();
-    checkup("List cleaning", listed[0] != 0);
+    checkup("List cleaning", listed[6] == 0);
 
     NString hello = "Hello";
     checkup("NString allocation", hello=="Hello");
@@ -170,7 +170,7 @@ int main()
     checkup("NFile write/read operations", reading == "somethings happened :D");
 
     Log::Add("user", "checking log", NL_LOGPATH);
-
+    cout << sizeof(mem_int) << endl;
     result();
     return 0;
 

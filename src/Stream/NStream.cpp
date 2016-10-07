@@ -56,7 +56,7 @@ NStream& NStream::operator<<(const NString& str)
 }
 NStream& NStream::operator >>(NString& str)
 {
-    str = Format(ReadLine());
+    str = ReadLine();
     return *this;
 }
 bool NStream::isEoF()
@@ -64,7 +64,7 @@ bool NStream::isEoF()
 	return stm_bEoF;
 }
 
-Array<byte>& NStream::ReadLine()
+NString& NStream::ReadLine()
 {
 	List<byte> data;
 	byte buffer = ' ';
@@ -75,30 +75,26 @@ Array<byte>& NStream::ReadLine()
 			data.addItem(buffer);
 	}
 	while (buffer != '\n' && !stm_bEoF);
+    data.list_lManager.Cut();
+	NString* strOffset = new NString(*data.list_lManager.toStack());
 
-	Array<byte>* ret = data.toArray();
-
-	return *ret;
+	return *strOffset;
 }
-Array<byte>& NStream::ReadAll(void)
+NString& NStream::ReadAll(void)
 {
 	List<byte> data;
 	byte buffer = ' ';
-
 	while(true)
 	{
 		if (Read(&buffer, 1))
+        {
 			data.addItem(buffer);
+        }
 		else
 			break;
 	}
-    Array<byte>* ret = data.toArray();
+	data.list_lManager.Cut();
+    NString* strOffset = new NString(*data.list_lManager.toStack());
 
-	return *ret;
-}
-
-NString& NStream::Format(Array<byte>& byte2str)
-{
-//    NString* strOffset = new NString(byte2str.getArray());
-//    return *strOffset;
+	return *strOffset;
 }

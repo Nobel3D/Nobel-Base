@@ -35,17 +35,20 @@ Memory::Memory(const Memory& copy)
 }
 
 
-void Memory::Push()
+void* Memory::Push()
 {
     memset(pMemory + iPushed, 0, iObject);
     iPushed += iObject;
+    return pMemory + iPushed;
 }
 
-void Memory::Push(const void* _data, llint _size)
+void* Memory::Push(const void* _data, llint _size)
 {
     ASSERT(_data != nullptr && iMemory > _size);
-    memcpy(pMemory + iPushed,_data, _size);
+    void* pData = pMemory + iPushed;
+    memcpy(pData,_data, _size);
     iPushed += _size;
+    return pData;
 }
 
 void Memory::Pull(void* _override, llint _size)
@@ -79,10 +82,16 @@ void Memory::Copy(const Memory& _memory)
     }
 }
 
-void Memory::Zero(INDEX _number)
+void Memory::Zero(void* _where, llint _size)
+{
+    ASSERT(_where != nullptr);
+    memset(_where, 0, _size);
+}
+
+void Memory::Zero(llint _size)
 {
     ASSERT(pMemory != nullptr && iMemory > 0);
-    memset(pMemory, 0, iObject * _number);
+    memset(pMemory, 0, _size);
 }
 void Memory::Zero()
 {
@@ -94,6 +103,15 @@ void Memory::Free()
     free(pMemory);
     usedMemory -= iMemory;
     iMemory = 0;
+}
+
+void Memory::Cut(llint _newsize)
+{
+    Zero(pMemory + _newsize, (iMemory - _newsize ));
+    usedMemory -= (iMemory - _newsize );
+    iMemory = _newsize;
+    iPushed = 0;
+    iPulled = 0;
 }
 
 void Memory::Reallocate(INDEX _number,bool _override)
@@ -136,6 +154,19 @@ void Memory::Reallocate(size_t _object, INDEX _number, bool _override)
     }
 }
 
+void* Memory::Read(const void* _where, llint _size)
+{
+    void* output = malloc(_size);
+    memcpy(output, _where, _size);
+    return output;
+}
+
+void Memory::Write(void* _where, const void* _data, llint _size)
+{
+    ASSERT(_where != nullptr && _data != nullptr);
+    memcpy(_where, _data, _size);
+}
+
 void Memory::operator<<(const void* _data)
 {
     Push(_data,iObject);
@@ -146,6 +177,7 @@ void Memory::operator>>(void* _override)
 }
 
 llint Memory::getSize() const { return iMemory; }
+size_t Memory::getType() const { return iObject; }
 void* Memory::getPointer() const { return pMemory; }
 llint Memory::getUsed() { return usedMemory; }
 llint Memory::usedMemory = 0;

@@ -17,6 +17,7 @@ NL_NAMESTART
 	    Array(){};
 		Array(INDEX size);
 		Array(Array<type> &copy);
+		Array(const Memory& _memory);
 		Array(const type* copy, INDEX size);
 		~Array();
 
@@ -58,10 +59,21 @@ Array<type>::Array(Array<type> &copy)
         bool array_bStart = true;
     }
 }
+
+template <class type>
+Array<type>::Array(const Memory& _memory)
+{
+    array_iCount = _memory.getSize() / sizeof(type);
+    array_mStack = new Memory(_memory);
+    array_bStart = true;
+}
+
 template <class type>
 Array<type>::Array(const type* copy, INDEX size)
 {
-	Copy(copy,size);
+    array_iCount = size;
+	array_mStack = new Memory((void*)copy,size);
+	array_bStart = true;
 }
 template <class type>
 Array<type>::~Array()

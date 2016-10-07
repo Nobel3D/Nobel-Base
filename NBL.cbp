@@ -54,6 +54,7 @@
 			<Option target="Release" />
 		</Unit>
 		<Unit filename="src/Data/Array.h" />
+		<Unit filename="src/Data/List.cpp" />
 		<Unit filename="src/Data/List.h" />
 		<Unit filename="src/Data/Memory.cpp" />
 		<Unit filename="src/Data/Memory.h" />

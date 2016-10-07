@@ -40,6 +40,21 @@ NString::NString(const NString* CopyCC)
 	newString(CopyCC->str_yData);
 }
 
+NString::NString(const Memory& _copy)
+{
+    llint newLength = _copy.getSize() + 1;
+
+    byte* newString = new byte[newLength];
+
+    for(int i=0; i< newLength; i++)
+        newString[i] = ((byte*)_copy.getPointer())[i];
+
+    newString[newLength] = '\0';
+
+    this->str_yData = newString;
+    this->str_iLength = newLength - 1;
+
+}
 
 int NString::byteSize(const byte* array) const
 {
