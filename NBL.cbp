@@ -54,6 +54,8 @@
 			<Option target="Release" />
 		</Unit>
 		<Unit filename="src/Data/Array.h" />
+		<Unit filename="src/Data/Float.cpp" />
+		<Unit filename="src/Data/Float.h" />
 		<Unit filename="src/Data/List.cpp" />
 		<Unit filename="src/Data/List.h" />
 		<Unit filename="src/Data/Memory.cpp" />
@@ -67,6 +69,8 @@
 		<Unit filename="src/Management/Log.h" />
 		<Unit filename="src/Management/NException.cpp" />
 		<Unit filename="src/Management/NException.h" />
+		<Unit filename="src/Management/Program.cpp" />
+		<Unit filename="src/Management/Program.h" />
 		<Unit filename="src/Math/Math.cpp" />
 		<Unit filename="src/Math/Math.h" />
 		<Unit filename="src/NBL.h" />

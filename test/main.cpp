@@ -7,6 +7,9 @@
 using namespace std;
 using namespace NobelLib;
 
+#define PROGRAM_NAME "testing"
+#define PROGRAM_VERSION "0.11"
+
 int numFails = 0;
 int numTests = 0;
 
@@ -14,10 +17,10 @@ static void checkup(char* checkname, bool expression)
 {
     numTests++;
     if(expression)
-        cout << checkname << " test: [OK]\n";
+        cout << "[OK] "<< checkname << " test\n";
     else
     {
-        cout << checkname << " test: [FAILS]\n";
+        cout << "[FAILS]" << checkname << " test\n";
         numFails++;
     }
 }
@@ -32,15 +35,25 @@ void result()
 }
 
 
-int main()
+int main(int argc, char** argv)
 {
 #if DEBUG == 1
+    bool btest = true;
+
+    Program program(PROGRAM_NAME, PROGRAM_VERSION, argc, argv);
+
+    checkup("Program init", program.getName() == PROGRAM_NAME && program.getVersion() == PROGRAM_VERSION);
+
+    ResourceUsage usage(Self);
+    checkup("Resource Manager",btest);
+
     Memory mem_int(4,100);
     int* test = (int*)mem_int.getPointer();
     for (int i=0; i< 100; i++) test[i] = i;
-    for (int i=0; i< 100; i++) cout << test[i]<<endl;
+    for (int i=0; i< 100 || !btest; i++)  btest = test[i] == i;
+    checkup("Memory allocation",btest);
 
-    cout << mem_int.getSize() << endl << Memory::getUsed() << endl;
+    checkup("Memory space count" , mem_int.getSize() == 4*100 && Memory::getUsed() == 400 + argc * sizeof(NString));
 
     Memory pNew(4,200);
     int* pInt = (int*)pNew.getPointer();
@@ -49,31 +62,26 @@ int main()
     while (c < 100) pInt[c++] = i--;
 
     mem_int.Copy(pNew);
+    test = (int*)mem_int.getPointer();
+    for (int i=0; i< 100 || !btest; i++)  btest = test[i] == c--;
+    checkup("Memory copy", btest);
 
     mem_int.Zero();
 
-    //for (int i=0; i< 100; i++) cout << test[i]<<endl;
+    for (int i=0; i< 100 || !btest; i++)  btest = test[i] == 0;
+    checkup("Memory zero", btest);
 
     int x = 100;
     for (int i=0; i < 100; i++) {
         mem_int >> &x;
-        cout << x << endl;
+        btest = x == 0;
     }
-    for (int i=0; i< 100; i++) cout << test[i]<<endl;
-
-    cout << mem_int.getSize() << endl << Memory::getUsed() << endl;
+    checkup("Memory stream", btest);
 
     mem_int.Free();
-
-    for(int i=0; i< 100; i++) cout << pInt[i] << endl;
-
-    cout << mem_int.getSize() << endl << Memory::getUsed() << endl;
-
     pNew.Free();
 
-    cout << mem_int.getSize() << endl << Memory::getUsed() << endl;
-
-
+    checkup("Memory clear", mem_int.getSize() == 0 && Memory::getUsed() == argc * sizeof(NString));
 
     Array<int> numbers(10);
     for(int i = 0; i < 10 ; i++)
@@ -117,9 +125,6 @@ int main()
     checkup("List get length", listed.getLength() == 10);
 
     checkup("List find by object", listed[6] == 6);
-
-    cout << Memory::getUsed() << endl;
-
 
     Array<int>* listarray = listed.toArray();
     checkup("List to array", (*listarray)[6] = 6);
@@ -170,7 +175,8 @@ int main()
     checkup("NFile write/read operations", reading == "somethings happened :D");
 
     Log::Add("user", "checking log", NL_LOGPATH);
-    cout << sizeof(mem_int) << endl;
+
+
     result();
     return 0;
 

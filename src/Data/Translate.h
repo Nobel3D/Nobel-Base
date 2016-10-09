@@ -1,4 +1,5 @@
 #pragma once
+
 #include <def.h>
 #include <Data/Array.h>
 #include <Management/NException.h>

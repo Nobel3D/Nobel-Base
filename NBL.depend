@@ -234,7 +234,7 @@
 1475825826 /home/luca/Programmazione/proj/Nobel-Base/src//Data/List.h
 	"Array.h"
 
-1475822457 /home/luca/Programmazione/proj/Nobel-Base/src//Data/Array.h
+1475871703 /home/luca/Programmazione/proj/Nobel-Base/src//Data/Array.h
 	"Memory.h"
 
 1473415694 /home/luca/Programmazione/proj/Nobel-Base/src//Data/Time.h
@@ -316,7 +316,7 @@
 1475825826 /mnt/data/luca/Programmazione/proj/Nobel-Base/src/Data/List.h
 	"Array.h"
 
-1475822457 /mnt/data/luca/Programmazione/proj/Nobel-Base/src/Data/Array.h
+1475871703 /mnt/data/luca/Programmazione/proj/Nobel-Base/src/Data/Array.h
 	"Memory.h"
 
 1473415694 source:/mnt/data/luca/Programmazione/proj/Nobel-Base/src/Data/Time.cpp
@@ -367,7 +367,7 @@
 1475824024 source:/mnt/data/luca/Programmazione/proj/Nobel-Base/src/Stream/NStream.cpp
 	"NStream.h"
 
-1475822470 source:/mnt/data/luca/Programmazione/proj/Nobel-Base/src/Data/Memory.cpp
+1475884007 source:/mnt/data/luca/Programmazione/proj/Nobel-Base/src/Data/Memory.cpp
 	<stdlib.h>
 	<string.h>
 	"Memory.h"
@@ -383,4 +383,22 @@
 
 1475825500 source:/mnt/data/luca/Programmazione/proj/Nobel-Base/src/Data/List.cpp
 	"List.h"
+
+1475975140 source:/mnt/data/luca/Programmazione/proj/Nobel-Base/src/Management/Program.cpp
+	"Program.h"
+	<sys/time.h>
+	<sys/resource.h>
+
+1475974286 /mnt/data/luca/Programmazione/proj/Nobel-Base/src/Management/Program.h
+	<Data/NString.h>
+	<Data/Array.h>
+	<Data/Time.h>
+
+1475988023 source:/mnt/data/luca/Programmazione/proj/Nobel-Base/src/Data/Float.cpp
+	"Float.h"
+	<cmath>
+
+1475988023 /mnt/data/luca/Programmazione/proj/Nobel-Base/src/Data/Float.h
+	<Data/NString.h>
+	<def.h>
 

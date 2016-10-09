@@ -32,7 +32,7 @@ NL_NAMESTART
 		void Copy(const type* copy, INDEX size);
 		void Copy(Array<type> &copy);
 
-		type& operator[] (INDEX index) const;
+		type& operator[] (INDEX index);
 		void operator= (const Array<type> &equal);
 
 		bool Exist() const;
@@ -166,7 +166,7 @@ void Array<type>::Clear()
     array_mStack->Zero();
 }
 template <class type>
-type& Array<type>::operator[] (INDEX index) const
+type& Array<type>::operator[] (INDEX index)
 {
     ASSERT(index >= 0 && index < array_iCount && array_bStart);
     return ((type*)array_mStack->getPointer())[index];
