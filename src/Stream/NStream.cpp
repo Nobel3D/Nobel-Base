@@ -1,4 +1,5 @@
 #include "NStream.h"
+#include <stdio.h>
 
 NL_NAMEUSING
 
@@ -7,25 +8,10 @@ NStream::NStream(const NString& path)
     stm_sPath = path;
 }
 
-NStream::~NStream()
-{
-    stm_sPath.Delete();
-	Close();
-}
-
 int NStream::Close()
 {
-	return 1;
-}
+    stm_sPath.Delete();
 
-bool NStream::CanLoad()
-{
-	return false;
-}
-
-bool NStream::Open(OpenMode Mode)
-{
-	return CanLoad();
 }
 
 int NStream::Write()
@@ -64,7 +50,7 @@ bool NStream::isEoF()
 	return stm_bEoF;
 }
 
-NString& NStream::ReadLine()
+NString NStream::ReadLine()
 {
 	List<byte> data;
 	byte buffer = ' ';
@@ -80,21 +66,16 @@ NString& NStream::ReadLine()
 
 	return *strOffset;
 }
-NString& NStream::ReadAll(void)
+NString NStream::ReadAll()
 {
-	List<byte> data;
-	byte buffer = ' ';
-	while(true)
-	{
-		if (Read(&buffer, 1))
-        {
-			data.addItem(buffer);
-        }
-		else
-			break;
-	}
-	data.list_lManager.Cut();
-    NString* strOffset = new NString(*data.list_lManager.toStack());
+	INDEX _size;
+    fseek ((FILE*)stm_using , 0 , SEEK_END);
+    _size = ftell ((FILE*)stm_using);
+    rewind ((FILE*)stm_using);
 
-	return *strOffset;
+    byte* buffer = new byte[_size];
+
+    Read(buffer,_size);
+
+	return NString(buffer);
 }

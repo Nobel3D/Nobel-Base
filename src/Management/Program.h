@@ -11,22 +11,18 @@ NL_NAMESTART
     private:
         static NString gen_sProgram;
         static NString gen_sVersion;
-        static Array<NString>* gen_aArg;
-        static char** gen_pArg;
-        static int gen_iArg;
+        static Array<NString*>* gen_aArg;
 
     public:
         Program(const NString& _name, const NString& _version, int _argc, char** _argv);
         static NString getName();
         static NString getVersion();
         static NString getArgument(int _number);
-        static char** getArgument();
-        static int* getNumberArg();
     };
 
     class unixrusage;
 
-    enum Who {Self = 0, Thread = 1, Children = -1};
+    enum Who {useSelf = 0, useThread = 1, useChildren = -1};
     class ResourceUsage
     {
     public:

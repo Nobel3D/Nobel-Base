@@ -64,6 +64,8 @@
 		<Unit filename="src/Data/NString.h" />
 		<Unit filename="src/Data/Time.cpp" />
 		<Unit filename="src/Data/Time.h" />
+		<Unit filename="src/Data/Timer.cpp" />
+		<Unit filename="src/Data/Timer.h" />
 		<Unit filename="src/Data/Translate.h" />
 		<Unit filename="src/Management/Log.cpp" />
 		<Unit filename="src/Management/Log.h" />
@@ -71,6 +73,8 @@
 		<Unit filename="src/Management/NException.h" />
 		<Unit filename="src/Management/Program.cpp" />
 		<Unit filename="src/Management/Program.h" />
+		<Unit filename="src/Management/Thread.cpp" />
+		<Unit filename="src/Management/Thread.h" />
 		<Unit filename="src/Math/Math.cpp" />
 		<Unit filename="src/Math/Math.h" />
 		<Unit filename="src/NBL.h" />

@@ -11,10 +11,17 @@
 #define NL_STREAMSIZE 1024
 #define NL_TIMESTAMP 80
 
+#define NL_OK 1
+#define NL_FAIL 0
+#define NL_DEBUG 1
+#define NL_ENDLINE "\n"
+
+
 typedef unsigned char byte;
 typedef unsigned int uint;
 typedef long long int INDEX;
 typedef long long int llint;
+typedef void* STREAM;
 
 template<class Type>
 inline Type Max(Type X, Type Y) { return X < Y ? Y : X; }

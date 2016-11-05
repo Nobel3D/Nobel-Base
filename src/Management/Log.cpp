@@ -1,5 +1,6 @@
 #include "Log.h"
 #include <Stream/NFile.h>
+#include <stdio.h>
 
 NL_NAMEUSING
 
@@ -13,18 +14,16 @@ NL_NAMEUSING
 	    txt_sLog.Delete();
 	}
 
-	NString Log::Add(const NString& handler, const NString& text)
+	void Log::Add(const NString& handler, const NString& text)
 	{
-        NString strLog = "[" + handler + "] " + Time::Print(Time::Now()) + " -> " + text + '\n';
-        NFile fileLog(txt_sLog);
-        fileLog.Open(Append);
-		fileLog.WriteLine(strLog);
-		fileLog.Close();
-		return strLog;
+        NString strLog = "[" + handler + "] " + Time::Print(Time::Now()) + ":" + text + '\n';
+        FILE* fileLog = fopen(txt_sLog,"a");
+        fwrite(strLog, strLog.getLength(), 1, fileLog);
+        fclose(fileLog);
 	}
 
-	NString Log::Add(const NString& handler, const NString& text, const NString& path)
+	void Log::Add(const NString& handler, const NString& text, const NString& path)
 	{
 	    Log log(path);
-	    return log.Add(handler, text);
-	}
+	    log.Add(handler, text);
+    }

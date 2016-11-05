@@ -6,10 +6,12 @@
     #include "Data/Translate.h"
     #include "Data/Time.h"
     #include "Data/Float.h"
+    #include "Data/Timer.h"
 //MANAGEMENT LIBRARY
     #include "Management/Program.h"
     #include "Management/Log.h"
     #include "Management/NException.h"
+    #include "Management/Thread.h"
 //MATH LIBRARY
     #include "Math/Math.h"
 //STREAM LIBRARY

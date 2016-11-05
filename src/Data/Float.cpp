@@ -54,6 +54,12 @@ int Float::toInt()
 {
     return (int)n;
 }
+
+Float::operator const float()
+{
+    return this->getNative();
+}
+
 void Float::operator*=(Float addMe)
 {
 	this->n = this->getNative() * addMe.getNative();
@@ -166,4 +172,12 @@ bool Float::operator==(Float addMe)
 bool Float::operator==(float addMe)
 {
 	return this->getNative() == addMe;
+}
+bool Float::operator!=(Float addMe)
+{
+    return this->getNative() != addMe.getNative();
+}
+bool Float::operator!=(float addMe)
+{
+    return this->getNative() != addMe;
 }

@@ -7,25 +7,20 @@ NL_NAMESTART
 
     NString Program::gen_sProgram;
     NString Program::gen_sVersion;
-    Array<NString>* Program::gen_aArg;
-    char** Program::gen_pArg;
-    int Program::gen_iArg;
+    Array<NString*>* Program::gen_aArg;
+
     Program::Program(const NString& _name,const NString& _version, int _argc, char** _argv)
     {
         gen_sProgram = _name;
         gen_sVersion = _version;
-        gen_aArg = new Array<NString>(_argc);
-        gen_pArg = _argv;
-        gen_iArg = _argc;
-        for(int i=0; i< gen_iArg; i++)
-            (*gen_aArg)[i] = NString(gen_pArg[i]);
+        gen_aArg = new Array<NString*>(_argc);
+        for(int i=0; i < _argc; i++)
+            (*gen_aArg)[i] = new NString(_argv[i]);
     }
 
     NString Program::getName() { return gen_sProgram; }
     NString Program::getVersion() { return gen_sVersion; }
     NString Program::getArgument(int _number) { ASSERT(gen_aArg->getSize() > _number); return (*gen_aArg)[_number]; }
-    char** Program::getArgument() { return gen_pArg; }
-    int* Program::getNumberArg() { return &gen_iArg; }
 
     class unixrusage : public rusage {
 

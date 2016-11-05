@@ -13,9 +13,7 @@ NL_NAMESTART
 		{
 		public:
 			NStream(const NString& path);
-            ~NStream();
 
-			virtual bool Open(OpenMode OpenFile);
 			virtual int Close();
 
 			void WriteLine(const NString& send);
@@ -24,8 +22,8 @@ NL_NAMESTART
 			virtual int Write() = 0;
 			virtual INDEX Read(void* vpGet, INDEX length, INDEX count = 1) = 0;
 
-			NString& ReadLine();
-			NString& ReadAll();
+			NString ReadLine();
+			NString ReadAll();
 
 			NStream& operator <<(const char* str);
 			NStream& operator <<(const NString& str);
@@ -36,7 +34,8 @@ NL_NAMESTART
 		    NString stm_sPath;
 			NString stm_sData;
 
+			STREAM stm_using;
+
 			bool stm_bEoF = false;
-			virtual bool CanLoad();
 		};
 NL_NAMECLOSE

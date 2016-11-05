@@ -219,14 +219,14 @@
 1470585873 /home/luca/Programmazione/proj/Nobel-Base/src/def.h
 	<cstddef>
 
-1475504246 /home/luca/Programmazione/proj/Nobel-Base/src//def.h
+1478306599 /home/luca/Programmazione/proj/Nobel-Base/src//def.h
 	<cstddef>
 	<assert.h>
 
 1475446796 /home/luca/Programmazione/proj/Nobel-Base/src//Math/Math.h
 	"def.h"
 
-1475824086 /home/luca/Programmazione/proj/Nobel-Base/src//Data/NString.h
+1478188138 /home/luca/Programmazione/proj/Nobel-Base/src//Data/NString.h
 	"List.h"
 	"Array.h"
 	"def.h"
@@ -234,7 +234,7 @@
 1475825826 /home/luca/Programmazione/proj/Nobel-Base/src//Data/List.h
 	"Array.h"
 
-1475871703 /home/luca/Programmazione/proj/Nobel-Base/src//Data/Array.h
+1477720982 /home/luca/Programmazione/proj/Nobel-Base/src//Data/Array.h
 	"Memory.h"
 
 1473415694 /home/luca/Programmazione/proj/Nobel-Base/src//Data/Time.h
@@ -242,23 +242,22 @@
 	"NString.h"
 	<ctime>
 
-1475446796 /home/luca/Programmazione/proj/Nobel-Base/src//Stream/NFile.h
+1478234199 /home/luca/Programmazione/proj/Nobel-Base/src//Stream/NFile.h
 	<def.h>
 	<Data/NString.h>
 	<Management/NException.h>
 	"NStream.h"
-	<stdio.h>
 
 1473415694 /home/luca/Programmazione/proj/Nobel-Base/src//Management/NException.h
 	<def.h>
 	<Data/NString.h>
 	"Log.h"
 
-1473415694 /home/luca/Programmazione/proj/Nobel-Base/src//Management/Log.h
+1478305617 /home/luca/Programmazione/proj/Nobel-Base/src//Management/Log.h
 	<def.h>
 	<Data/Time.h>
 
-1475822540 /home/luca/Programmazione/proj/Nobel-Base/src//Stream/NStream.h
+1478236589 /home/luca/Programmazione/proj/Nobel-Base/src//Stream/NStream.h
 	<def.h>
 	<Data/NString.h>
 
@@ -308,7 +307,7 @@
 	<cstdint>
 	<ctype.h>
 
-1475824086 /mnt/data/luca/Programmazione/proj/Nobel-Base/src/Data/NString.h
+1478188138 /mnt/data/luca/Programmazione/proj/Nobel-Base/src/Data/NString.h
 	"List.h"
 	"Array.h"
 	"def.h"
@@ -316,7 +315,7 @@
 1475825826 /mnt/data/luca/Programmazione/proj/Nobel-Base/src/Data/List.h
 	"Array.h"
 
-1475871703 /mnt/data/luca/Programmazione/proj/Nobel-Base/src/Data/Array.h
+1477720982 /mnt/data/luca/Programmazione/proj/Nobel-Base/src/Data/Array.h
 	"Memory.h"
 
 1473415694 source:/mnt/data/luca/Programmazione/proj/Nobel-Base/src/Data/Time.cpp
@@ -327,15 +326,16 @@
 	"NString.h"
 	<ctime>
 
-1473415694 source:/mnt/data/luca/Programmazione/proj/Nobel-Base/src/Management/Log.cpp
+1478306589 source:/mnt/data/luca/Programmazione/proj/Nobel-Base/src/Management/Log.cpp
 	"Log.h"
 	<Stream/NFile.h>
+	<stdio.h>
 
-1473415694 /mnt/data/luca/Programmazione/proj/Nobel-Base/src/Management/Log.h
+1478305617 /mnt/data/luca/Programmazione/proj/Nobel-Base/src/Management/Log.h
 	<def.h>
 	<Data/Time.h>
 
-1473415694 source:/mnt/data/luca/Programmazione/proj/Nobel-Base/src/Management/NException.cpp
+1478305500 source:/mnt/data/luca/Programmazione/proj/Nobel-Base/src/Management/NException.cpp
 	"NException.h"
 	<cstdlib>
 
@@ -350,22 +350,23 @@
 1475446796 /mnt/data/luca/Programmazione/proj/Nobel-Base/src/Math/Math.h
 	"def.h"
 
-1475446796 source:/mnt/data/luca/Programmazione/proj/Nobel-Base/src/Stream/NFile.cpp
+1478236589 source:/mnt/data/luca/Programmazione/proj/Nobel-Base/src/Stream/NFile.cpp
 	"NFile.h"
+	<stdio.h>
 
-1475446796 /mnt/data/luca/Programmazione/proj/Nobel-Base/src/Stream/NFile.h
+1478234199 /mnt/data/luca/Programmazione/proj/Nobel-Base/src/Stream/NFile.h
 	<def.h>
 	<Data/NString.h>
 	<Management/NException.h>
 	"NStream.h"
-	<stdio.h>
 
-1475822540 /mnt/data/luca/Programmazione/proj/Nobel-Base/src/Stream/NStream.h
+1478236589 /mnt/data/luca/Programmazione/proj/Nobel-Base/src/Stream/NStream.h
 	<def.h>
 	<Data/NString.h>
 
-1475824024 source:/mnt/data/luca/Programmazione/proj/Nobel-Base/src/Stream/NStream.cpp
+1478236589 source:/mnt/data/luca/Programmazione/proj/Nobel-Base/src/Stream/NStream.cpp
 	"NStream.h"
+	<stdio.h>
 
 1475884007 source:/mnt/data/luca/Programmazione/proj/Nobel-Base/src/Data/Memory.cpp
 	<stdlib.h>
@@ -384,21 +385,40 @@
 1475825500 source:/mnt/data/luca/Programmazione/proj/Nobel-Base/src/Data/List.cpp
 	"List.h"
 
-1475975140 source:/mnt/data/luca/Programmazione/proj/Nobel-Base/src/Management/Program.cpp
+1478151054 source:/mnt/data/luca/Programmazione/proj/Nobel-Base/src/Management/Program.cpp
 	"Program.h"
 	<sys/time.h>
 	<sys/resource.h>
 
-1475974286 /mnt/data/luca/Programmazione/proj/Nobel-Base/src/Management/Program.h
+1478151035 /mnt/data/luca/Programmazione/proj/Nobel-Base/src/Management/Program.h
 	<Data/NString.h>
 	<Data/Array.h>
 	<Data/Time.h>
 
-1475988023 source:/mnt/data/luca/Programmazione/proj/Nobel-Base/src/Data/Float.cpp
+1476075837 source:/mnt/data/luca/Programmazione/proj/Nobel-Base/src/Data/Float.cpp
 	"Float.h"
 	<cmath>
 
-1475988023 /mnt/data/luca/Programmazione/proj/Nobel-Base/src/Data/Float.h
+1476075837 /mnt/data/luca/Programmazione/proj/Nobel-Base/src/Data/Float.h
 	<Data/NString.h>
+	<def.h>
+
+1476886269 source:/mnt/data/luca/Programmazione/proj/Nobel-Base/src/Data/Timer.cpp
+	"Timer.h"
+	<time.h>
+	<unistd.h>
+
+1476884959 source:/mnt/data/luca/Programmazione/proj/Nobel-Base/src/Management/Thread.cpp
+	"Thread.h"
+	<pthread.h>
+
+1476884960 /mnt/data/luca/Programmazione/proj/Nobel-Base/src/Management/Thread.h
+	<def.h>
+
+1476886269 /mnt/data/luca/Programmazione/proj/Nobel-Base/src/Data/Timer.h
+	<def.h>
+	<Management/Thread.h>
+
+1476884960 /home/luca/Programmazione/proj/Nobel-Base/src//Management/Thread.h
 	<def.h>
 

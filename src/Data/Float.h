@@ -22,6 +22,8 @@ NL_NAMESTART
 			float getDecimal();
 			int toInt();
 
+			operator const float();
+
 			void operator*=(Float addMe);
 			void operator*=(float addMe);
 			void operator/=(Float addMe);
@@ -51,6 +53,8 @@ NL_NAMESTART
 			bool operator>=(float addMe);
 			bool operator==(Float addMe);
 			bool operator==(float addMe);
+			bool operator!=(Float addMe);
+			bool operator!=(float addMe);
 		};
 
 NL_NAMECLOSE
