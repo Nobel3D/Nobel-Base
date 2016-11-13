@@ -11,7 +11,7 @@ NL_NAMESTART
     private:
         static NString gen_sProgram;
         static NString gen_sVersion;
-        static Array<NString*>* gen_aArg;
+        static Array<NString>* gen_aArg;
 
     public:
         Program(const NString& _name, const NString& _version, int _argc, char** _argv);

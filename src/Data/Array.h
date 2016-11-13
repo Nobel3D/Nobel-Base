@@ -72,7 +72,7 @@ template <class type>
 Array<type>::Array(const type* copy, INDEX size)
 {
     array_iCount = size;
-	array_mStack = new Memory((void*)copy,size);
+	array_mStack = new Memory((void*)copy, sizeof(type), size);
 	array_bStart = true;
 }
 template <class type>
@@ -86,8 +86,6 @@ void Array<type>::New(INDEX size, bool force)
 {
     ASSERT(size > 0);
 
-    array_mStack = new Memory(sizeof(type),size);
-
     if(array_bStart)
     {
         if(force)
@@ -96,25 +94,29 @@ void Array<type>::New(INDEX size, bool force)
             return;
     }
 
+    array_mStack = new Memory(sizeof(type),size);
+
     array_iCount = size;
     array_bStart = true;
 }
 template <class type>
 void Array<type>::Add()
 {
-    if(array_iCount <= array_iUsed++)
+    if(array_iCount <= array_iUsed)
         Expand(array_iStack);
 
-    array_mStack->Push();
+    array_mStack->Zero(array_iUsed);
+    array_iUsed++;
 }
 
 template <class type>
 void Array<type>::Add(const type& item)
 {
-    if(array_iCount <= array_iUsed++)
+    if(array_iCount <= array_iUsed)
         Expand(array_iStack);
 
-    array_mStack->Push(&item,sizeof(item));
+    array_mStack->Push(&item,array_iUsed);
+    array_iUsed++;
 }
 
 template <class type>

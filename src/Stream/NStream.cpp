@@ -8,6 +8,11 @@ NStream::NStream(const NString& path)
     stm_sPath = path;
 }
 
+NStream::NStream()
+{
+
+}
+
 int NStream::Close()
 {
     stm_sPath.Delete();
@@ -61,8 +66,9 @@ NString NStream::ReadLine()
 			data.addItem(buffer);
 	}
 	while (buffer != '\n' && !stm_bEoF);
-    data.list_lManager.Cut();
-	NString* strOffset = new NString(*data.list_lManager.toStack());
+	Memory* stack = data.toStack();
+	stack->Cut(data.getLength() + 1);
+	NString* strOffset = new NString(*stack);
 
 	return *strOffset;
 }

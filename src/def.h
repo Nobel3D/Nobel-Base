@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <assert.h>
+#include <stdint-gcc.h>
 
 #define NL_NAMESTART namespace NobelLib {
 #define NL_NAMECLOSE }
@@ -15,12 +16,14 @@
 #define NL_FAIL 0
 #define NL_DEBUG 1
 #define NL_ENDLINE "\n"
-
+#define NL_EMPTY (byte*)"\0"
 
 typedef unsigned char byte;
 typedef unsigned int uint;
-typedef long long int INDEX;
-typedef long long int llint;
+typedef int8_t  SHORT;
+typedef int32_t INDEX;
+typedef int16_t SIZE;
+typedef int64_t llint;
 typedef void* STREAM;
 
 template<class Type>

@@ -21,17 +21,16 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/Release/NBL" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/NBL" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="" />
 				<Option object_output="obj/Release/" />
 				<Option type="2" />
 				<Option compiler="gcc" />
 				<Option createDefFile="1" />
 				<Compiler>
-					<Add option="-Wall" />
 					<Add option="-O2" />
-					<Add directory="Management" />
-					<Add directory="Stream" />
+					<Add option="-Wall" />
+					<Add option="-std=c++11" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -78,6 +77,8 @@
 		<Unit filename="src/Math/Math.cpp" />
 		<Unit filename="src/Math/Math.h" />
 		<Unit filename="src/NBL.h" />
+		<Unit filename="src/Stream/Console.cpp" />
+		<Unit filename="src/Stream/Console.h" />
 		<Unit filename="src/Stream/NFile.cpp" />
 		<Unit filename="src/Stream/NFile.h" />
 		<Unit filename="src/Stream/NStream.cpp" />

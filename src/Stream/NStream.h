@@ -13,6 +13,7 @@ NL_NAMESTART
 		{
 		public:
 			NStream(const NString& path);
+			NStream();
 
 			virtual int Close();
 

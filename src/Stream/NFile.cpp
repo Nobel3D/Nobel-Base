@@ -3,7 +3,7 @@
 
 NL_NAMEUSING
 
-NFile::NFile(const NString& path) : NStream::NStream(&path)
+NFile::NFile(const NString& path) : NStream::NStream(path)
 {
 }
 
@@ -15,7 +15,6 @@ bool NFile::Open(OpenMode OMode, bool isBinary)
 {
     res_bBinary = isBinary;
     ASSERT(!txt_bStart)
-    ASSERT(CanLoad())
 
     stm_using = fopen(stm_sPath, getModeOpen(OMode));
     Mode = OMode;
@@ -70,7 +69,7 @@ int NFile::Close()
 
 int NFile::Write()
 {
-	return fwrite(stm_sData, 1, stm_sData.getLength() + 1, (FILE*)stm_using);
+	return fwrite(stm_sData, 1, stm_sData.getLength(), (FILE*)stm_using);
 }
 
 INDEX NFile::Read(void* vpGet, INDEX length, INDEX count)

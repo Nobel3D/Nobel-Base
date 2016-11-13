@@ -2,20 +2,38 @@
 
 #include "List.h"
 #include "Array.h"
+#include "Memory.h"
 #include "def.h"
 
-namespace NobelLib
-{
+NL_NAMESTART
 
 	class NString
 	{
+    private:
+		Memory* memData = nullptr;
+
+		void addString(const byte* add);
+		void addString(const NString& add);
+		void addString(const byte& add);
+
+        void newString(const byte* data, INDEX _index);
+		void newString(const byte* data);
+		void newString(const NString& data);
+		void newString(const Memory& data);
+		void newString(const byte& data);
+
+		bool Equal(const char* charCompare);
+		bool Equal(const NString& strCompare);
+
+        int byteSize(const byte* array) const;
+		int byteSize(const char* array) const;
+
     public:
-		inline NString();
-		inline NString(const char Const);
-		inline NString(const byte* Const);
-		inline NString(const char* Const);
-		inline NString(const NString& CopyCC);
-		inline NString(const NString* CopyCC);
+		NString();
+		NString(const char& Const);
+		NString(const byte* Const);
+		NString(const char* Const);
+		NString(const NString& _copy);
         NString(const Memory& _copy);
 
 
@@ -35,7 +53,7 @@ namespace NobelLib
 		NString& Sub(int INDEXStart, int INDEXLen) const;
 
 		NString& Normalize() const;
-		NString& Trim() const;
+		NString Trim() const;
 		NString& Replace(const char* strNative, const char* strReplace) const;
 		NString& toLower() const;
 		NString& toUpper() const;
@@ -51,15 +69,13 @@ namespace NobelLib
 		static NString& fromDouble(double Convert);
 
 		INDEX getLength() const;
-        byte* getByte();
-		byte* getByte() const;
 
 		operator char* ();
 		operator const char*() const;
 
 		NString& operator=(const char* newChar);
-		NString& operator=(NString& strCopy);
-		NString& operator=(char newChar);
+		NString& operator=(const NString& strCopy);
+		NString& operator=(const char& newChar);
 		NString& operator+=(const char* addMe);
 		NString& operator+=(const char addMe);
 		NString& operator+=(const NString& addMe);
@@ -71,30 +87,14 @@ namespace NobelLib
 			return NString(addMe) + str;
 		}
 
-		char operator[](int INDEX);
+		char operator[](INDEX _index);
 
 		bool operator==(const char* equal);
 		bool operator!=(const char* equal);
 		bool operator==(const NString& equal);
 		bool operator!=(const NString& equal);
-	private:
-		void addString(const byte* add);
-		void addString(const NString &add);
-		void addString(const char add);
-		void newString(const byte* data);
-		void newString(const NString &data);
 
-		bool Equal(const char* Compare);
-
-        void formString(const byte* newstr, int newlen);
-		void formString(const NString& copystr);
-
-        int byteSize(const byte* array) const;
-		int byteSize(const char* array) const;
-
-		byte* str_yData;
-		INDEX str_iLength;
-		static byte* str_yEmpty;
-
+		void setChar(INDEX _index, char _char);
 	};
-}
+
+NL_NAMECLOSE
