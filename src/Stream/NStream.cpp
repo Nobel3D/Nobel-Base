@@ -3,37 +3,15 @@
 
 NL_NAMEUSING
 
-NStream::NStream(const NString& path)
-{
-    stm_sPath = path;
-}
-
 NStream::NStream()
 {
-
 }
 
-int NStream::Close()
-{
-    stm_sPath.Delete();
-
-}
-
-int NStream::Write()
-{
-	return 1;
-}
 void NStream::WriteLine(const NString& send)
 {
-    stm_sData = send + '\n';
-	Write();
+	Write(send + '\n');
 }
 
-void NStream::Write(const NString& send)
-{
-    stm_sData = send;
-	Write();
-}
 
 NStream& NStream::operator<< (const char* str)
 {
@@ -52,7 +30,7 @@ NStream& NStream::operator >>(NString& str)
 }
 bool NStream::isEoF()
 {
-	return stm_bEoF;
+	return bEoF;
 }
 
 NString NStream::ReadLine()
@@ -65,7 +43,7 @@ NString NStream::ReadLine()
 		if (Read(&buffer, 1))
 			data.addItem(buffer);
 	}
-	while (buffer != '\n' && !stm_bEoF);
+	while (buffer != '\n' && !bEoF);
 	Memory* stack = data.toStack();
 	stack->Cut(data.getLength() + 1);
 	NString* strOffset = new NString(*stack);
@@ -74,14 +52,14 @@ NString NStream::ReadLine()
 }
 NString NStream::ReadAll()
 {
-	INDEX _size;
-    fseek ((FILE*)stm_using , 0 , SEEK_END);
-    _size = ftell ((FILE*)stm_using);
-    rewind ((FILE*)stm_using);
-
-    byte* buffer = new byte[_size];
-
-    Read(buffer,_size);
+    List<byte> data;
+	byte buffer = ' ';
+	do
+	{
+		if (Read(&buffer, 1))
+			data.addItem(buffer);
+	}
+	while (!bEoF);
 
 	return NString(buffer);
 }

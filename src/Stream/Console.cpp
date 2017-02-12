@@ -5,15 +5,19 @@ NL_NAMEUSING
 
 Console::Console()
 {
-
 }
 
 INDEX Console::Read(void* vpGet, INDEX length, INDEX count)
 {
-    fread(vpGet, length, count, stdin);
+    return fread(vpGet, length, count, stdin);
 }
 
-int Console::Write()
+int Console::Write(NString _string)
 {
-    fwrite(stm_sData,stm_sData.getLength(),1, stdout);
+    return fwrite(_string, _string.getLength(),1, stdout);
+}
+
+int Console::Write(byte* bin, INDEX length)
+{
+    return fwrite(bin, length, 1, stdout);
 }

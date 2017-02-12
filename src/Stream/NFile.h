@@ -9,6 +9,13 @@ NL_NAMESTART
 
 		class NFile : public NStream
 		{
+		private:
+		    NString sFile;
+			OpenMode Mode;
+			bool bStart = false;
+
+			bool CanLoad();
+			NString getModeOpen(OpenMode _Mode);
 		public:
 			NFile(const NString& path);
 			~NFile();
@@ -18,18 +25,12 @@ NL_NAMESTART
 			bool IsStarted();
 			INDEX getLenght();
 
-			int Write();
 			INDEX Read(void* vpGet, INDEX length, INDEX count = 1);
-			void Write(byte* bin);
+
+			int Write(NString _string);
+			int Write(byte* bin, INDEX length);
 
 			NString getName() const;
-		private:
-			OpenMode Mode;
-			bool txt_bStart = false;
-			bool res_bBinary;
-
-			bool CanLoad();
-			NString getModeOpen(OpenMode _Mode);
 		};
 
 NL_NAMECLOSE

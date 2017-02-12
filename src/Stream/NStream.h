@@ -11,16 +11,20 @@ NL_NAMESTART
 
 		class NStream
 		{
+		protected:
+			STREAM pStream;
+
+			bool bEoF = false;
+			bool bBinary = false;
 		public:
-			NStream(const NString& path);
 			NStream();
 
-			virtual int Close();
+			virtual int Close() = 0;
 
 			void WriteLine(const NString& send);
-			void Write(const NString& send);
 
-			virtual int Write() = 0;
+			virtual int Write(NString _string) = 0;
+			virtual int Write(byte* bin, INDEX length) = 0;
 			virtual INDEX Read(void* vpGet, INDEX length, INDEX count = 1) = 0;
 
 			NString ReadLine();
@@ -31,12 +35,5 @@ NL_NAMESTART
 			NStream& operator >>(NString& str);
 
 			bool isEoF();
-		protected:
-		    NString stm_sPath;
-			NString stm_sData;
-
-			STREAM stm_using;
-
-			bool stm_bEoF = false;
 		};
 NL_NAMECLOSE

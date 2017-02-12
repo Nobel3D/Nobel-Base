@@ -3,8 +3,9 @@
 
 NL_NAMEUSING
 
-NFile::NFile(const NString& path) : NStream::NStream(path)
+NFile::NFile(const NString& path)
 {
+    sFile = path;
 }
 
 NFile::~NFile()
@@ -13,18 +14,22 @@ NFile::~NFile()
 
 bool NFile::Open(OpenMode OMode, bool isBinary)
 {
-    res_bBinary = isBinary;
-    ASSERT(!txt_bStart)
+    bBinary = isBinary;
 
-    stm_using = fopen(stm_sPath, getModeOpen(OMode));
-    Mode = OMode;
-    txt_bStart = true;
-    return true;
+    if(!bStart)
+    {
+        pStream = fopen(sFile, getModeOpen(OMode));
+        Mode = OMode;
+        bStart = true;
+        return true;
+    }
+
+    return false;
 }
 
 bool NFile::CanLoad()
 {
-	if (FILE *file = fopen(stm_sPath, "r")) {
+	if (FILE *file = fopen(sFile, "r")) {
 		fclose(file);
 		return true;
 	}
@@ -35,12 +40,12 @@ bool NFile::CanLoad()
 
 bool NFile::IsStarted()
 {
-	return txt_bStart;
+	return bStart;
 }
 
 INDEX NFile::getLenght()
 {
-	return ftell((FILE*)stm_using);
+	return ftell((FILE*)pStream);
 }
 
 NString NFile::getModeOpen(OpenMode _Mode)
@@ -63,13 +68,13 @@ NString NFile::getModeOpen(OpenMode _Mode)
 
 int NFile::Close()
 {
-	if (txt_bStart)
-		return fclose((FILE*)stm_using);
+	if (bStart)
+		return fclose((FILE*)pStream);
 }
 
-int NFile::Write()
+int NFile::Write(NString _string)
 {
-	return fwrite(stm_sData, 1, stm_sData.getLength(), (FILE*)stm_using);
+	return fwrite(_string, 1, _string.getLength(), (FILE*)pStream);
 }
 
 INDEX NFile::Read(void* vpGet, INDEX length, INDEX count)
@@ -78,21 +83,21 @@ INDEX NFile::Read(void* vpGet, INDEX length, INDEX count)
     ASSERT (Mode == OpenMode::Reading)
     INDEX result = 0;
 
-    result = fread(vpGet, count, length, (FILE*)stm_using);
+    result = fread(vpGet, count, length, (FILE*)pStream);
     if (result == length)
         return length;
     else
-		stm_bEoF = true;
+		bEoF = true;
 
     return 0;
 }
 
-void NFile::Write(byte* bin)
+int NFile::Write(byte* bin, INDEX length)
 {
-		fwrite(bin, sizeof(bin), 1, (FILE*)stm_using);
+    fwrite(bin, length, 1, (FILE*)pStream);
 }
 
 NString NFile::getName() const
 {
-    return stm_sPath;
+    return sFile;
 }

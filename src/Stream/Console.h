@@ -11,7 +11,8 @@ NL_NAMESTART
     public:
         Console();
         INDEX Read(void* vpGet, INDEX length, INDEX count = 1);
-        int Write();
+        int Write(NString _string);
+        int Write(byte* bin, INDEX length);
     };
 
 NL_NAMECLOSE

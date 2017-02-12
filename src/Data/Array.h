@@ -38,6 +38,10 @@ NL_NAMESTART
 		bool Exist() const;
 		int getSize() const;
 		static void setStack(int _stack);
+		SIZE typeSizeof();
+		INDEX memorySize();
+		void* getPointer();
+
 	};
 
 template <class type>
@@ -185,5 +189,10 @@ template <class type>
 int Array<type>::getSize() const { return array_iCount; }
 template <class type>
 void Array<type>::setStack(int _stack) { array_iStack = _stack; }
-
+template <class type>
+SIZE Array<type>::typeSizeof() { return array_mStack->getType(); }
+template <class type>
+INDEX Array<type>::memorySize() { return array_mStack->getSize(); }
+template <class type>
+void* Array<type>::getPointer() { return array_mStack->getPointer(); }
 NL_NAMECLOSE
