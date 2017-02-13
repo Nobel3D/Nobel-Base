@@ -89,7 +89,9 @@ void NString::newString(const byte& data)
 {
     if(memData != nullptr)
         Delete();
-    memData = new Memory(&data,1, 2);
+
+    byte tmp[] = {data, '\0'};
+    memData = new Memory(tmp,1, 2);
 }
 void NString::addString(const byte* add)
 {
@@ -287,8 +289,11 @@ NString& NString::fromDouble(double Convert)
 NString& NString::Sub(INDEX _index) const
 {
     NString* strOffset = new NString;
-	if (_index < 0 || _index >= getLength())
-		return *strOffset;
+
+    if (_index < 0 || _index >= getLength())
+        return *strOffset;
+
+    //TODO: Seems useless declaration...
 
     strOffset->newString((byte*)memData->Read(_index, (getLength() + 1) - _index));
 	return *strOffset;
@@ -345,6 +350,35 @@ List<NString>* NString::Split(const char Splitter) const
     return output;
 }
 
+
+NString& NString::Cut(const char Splitter)
+{
+    NString* strOutput = new NString(*this);
+    for(int i = 0; i < strOutput->getLength(); i++)
+    {
+        if(strOutput[i] == Splitter)
+        {
+            strOutput->Sub(i);
+            break;
+        }
+    }
+
+    return *strOutput;
+}
+
+NString& NString::Cut(int length)
+{
+    if(length > getLength())
+        return *this;
+
+    Memory* memOut = new Memory(this->memData->getPointer(), 1, length + 1);
+
+    memOut->Write(NL_EMPTY, length + 1);
+
+    NString* strOutput = new NString(*memOut);
+
+    return *strOutput;
+}
 NString& NString::toLower() const
 {
   NString* strOutput = new NString(*this);

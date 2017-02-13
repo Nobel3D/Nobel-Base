@@ -17,6 +17,7 @@
 #define NL_DEBUG 1
 #define NL_ENDLINE "\n"
 #define NL_EMPTY (byte*)"\0"
+#define NL_CHAR_PATH '/'
 
 typedef unsigned char byte;
 typedef unsigned int uint;

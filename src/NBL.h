@@ -16,5 +16,8 @@
     #include "Math/Math.h"
 //STREAM LIBRARY
     #include "Stream/NStream.h"
+    #include "Stream/Filename.h"
     #include "Stream/NFile.h"
+    #include "Stream/Console.h"
+
 

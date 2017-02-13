@@ -51,6 +51,8 @@ NL_NAMESTART
 		bool Find(const char* charMy) const;
 		NString& Sub(int INDEXStart) const;
 		NString& Sub(int INDEXStart, int INDEXLen) const;
+		NString& Cut(const char Splitter);
+        NString& Cut(int length);
 
 		NString& Normalize() const;
 		NString Trim() const;

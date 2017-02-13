@@ -4,33 +4,36 @@
 #include <Data/NString.h>
 #include <Management/NException.h>
 #include "NStream.h"
+#include "Filename.h"
 
 NL_NAMESTART
 
 		class NFile : public NStream
 		{
 		private:
-		    NString sFile;
-			OpenMode Mode;
+            Filename* file;
+            OpenMode mode;
 			bool bStart = false;
 
 			bool CanLoad();
-			NString getModeOpen(OpenMode _Mode);
+            NString getModeOpen(OpenMode _mode);
 		public:
-			NFile(const NString& path);
+            NFile(const Filename& _file);
 			~NFile();
-			bool Open(OpenMode OMode,bool isBinary = false);
+            void Destroy();
+
+            bool Open(OpenMode _mode, bool isBinary = false);
 			int Close();
 
 			bool IsStarted();
 			INDEX getLenght();
 
-			INDEX Read(void* vpGet, INDEX length, INDEX count = 1);
+            INDEX Read(void* vp, INDEX length, INDEX count = 1);
 
 			int Write(NString _string);
 			int Write(byte* bin, INDEX length);
 
-			NString getName() const;
+            Filename& getName() const;
 		};
 
 NL_NAMECLOSE

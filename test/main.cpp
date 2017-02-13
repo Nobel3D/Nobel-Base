@@ -220,7 +220,13 @@ void testTranslate()
     checkup("Translate get destination", voti[read[0]] == 0 && voti.FindBySource(read[9]) == 9);
     checkup("Translate get source", voti.FindByDestination(0) == read[0] && voti.FindByDestination(9) == read[9]);
 }
-
+void testFilename()
+{
+    Filename file("/home/luca/Programmazione/codeblocks.conf");
+    checkup("Filename get Path", file.getPath() == "/home/luca/Programmazione/");
+    checkup("Filename get Name", file.getName() == "codeblocks.conf");
+    checkup("Filename get Extension", file.getExt() == ".conf");
+}
 void testFile()
 {
     NFile writefile("file.txt");
@@ -256,6 +262,7 @@ int main(int argc, char** argv)
     testList();
     testString();
     testTranslate();
+    testFilename();
     testFile();
     testLog();
 

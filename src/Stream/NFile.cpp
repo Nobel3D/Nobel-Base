@@ -3,23 +3,24 @@
 
 NL_NAMEUSING
 
-NFile::NFile(const NString& path)
+NFile::NFile(const Filename& _file)
 {
-    sFile = path;
+    file = new Filename(_file);
 }
 
 NFile::~NFile()
 {
+    delete[] file;
 }
 
-bool NFile::Open(OpenMode OMode, bool isBinary)
+bool NFile::Open(OpenMode _mode, bool isBinary)
 {
     bBinary = isBinary;
 
     if(!bStart)
     {
-        pStream = fopen(sFile, getModeOpen(OMode));
-        Mode = OMode;
+        pStream = fopen(file->getAll(), getModeOpen(_mode));
+        mode = _mode;
         bStart = true;
         return true;
     }
@@ -29,8 +30,8 @@ bool NFile::Open(OpenMode OMode, bool isBinary)
 
 bool NFile::CanLoad()
 {
-	if (FILE *file = fopen(sFile, "r")) {
-		fclose(file);
+        if (FILE* _file = fopen(file->getAll(), "r")) {
+                fclose(_file);
 		return true;
 	}
 	else {
@@ -48,28 +49,30 @@ INDEX NFile::getLenght()
 	return ftell((FILE*)pStream);
 }
 
-NString NFile::getModeOpen(OpenMode _Mode)
+NString NFile::getModeOpen(OpenMode _mode)
 {
-	NString TypeOpen = NString();
-	if (_Mode == OpenMode::Reading)
+        NString type = NString();
+        if (_mode == OpenMode::Reading)
 	{
-		TypeOpen += "r";
+                type += "r";
 	}
-	if (_Mode == OpenMode::Writing)
+        if (_mode == OpenMode::Writing)
 	{
-		TypeOpen += "w";
+                type += "w";
 	}
-	if (_Mode == OpenMode::Append)
+        if (_mode == OpenMode::Append)
 	{
-		TypeOpen += "a";
+                type += "a";
 	}
-	return TypeOpen;
+        return type;
 }
 
 int NFile::Close()
 {
 	if (bStart)
 		return fclose((FILE*)pStream);
+    else
+        return -1;
 }
 
 int NFile::Write(NString _string)
@@ -80,7 +83,7 @@ int NFile::Write(NString _string)
 INDEX NFile::Read(void* vpGet, INDEX length, INDEX count)
 {
 
-    ASSERT (Mode == OpenMode::Reading)
+    ASSERT (mode == OpenMode::Reading)
     INDEX result = 0;
 
     result = fread(vpGet, count, length, (FILE*)pStream);
@@ -94,10 +97,11 @@ INDEX NFile::Read(void* vpGet, INDEX length, INDEX count)
 
 int NFile::Write(byte* bin, INDEX length)
 {
-    fwrite(bin, length, 1, (FILE*)pStream);
+    return fwrite(bin, length, 1, (FILE*)pStream);
 }
 
-NString NFile::getName() const
+Filename& NFile::getName() const
 {
-    return sFile;
+    Filename* out = new Filename(*file);
+    return *out;
 }
