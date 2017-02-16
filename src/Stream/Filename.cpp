@@ -35,7 +35,7 @@ NString& Filename::getPath() const
 
 NString& Filename::getName() const
 {
-    NString* strOutput = new NString;
+    NString* strOutput = new NString(*this->sFile); //File can't have no Name
 
     int length = sFile->getLength();
     for (int i = length; i > 0; i--)

@@ -17,15 +17,23 @@ bool NFile::Open(OpenMode _mode, bool isBinary)
 {
     bBinary = isBinary;
 
-    if(!bStart)
+    if(bStart)
     {
-        pStream = fopen(file->getAll(), getModeOpen(_mode));
-        mode = _mode;
-        bStart = true;
-        return true;
+        NL_LOG("FILE", file->getAll() + " is already opened. Ignoring")
+        return false;
     }
 
-    return false;
+    pStream = fopen(file->getAll(), getModeOpen(_mode));
+
+    if(pStream == 0)
+    {
+        NL_LOG("FILE", file->getAll() + " cannot be open")
+        return false;
+    }
+
+    mode = _mode;
+    bStart = true;
+    return true;
 }
 
 bool NFile::CanLoad()

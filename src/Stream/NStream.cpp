@@ -61,5 +61,5 @@ NString NStream::ReadAll()
 	}
 	while (!bEoF);
 
-	return NString(buffer);
+        return NString((byte*)data.toStack()->getPointer());
 }

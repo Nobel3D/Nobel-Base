@@ -1,5 +1,4 @@
 #include "Log.h"
-#include <Stream/NFile.h>
 #include <stdio.h>
 
 NL_NAMEUSING
