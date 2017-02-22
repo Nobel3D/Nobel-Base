@@ -49,8 +49,9 @@ NL_NAMESTART
 		List<NString>* Split(const char Splitter) const;
 		bool Find(const NString* strMy) const;
 		bool Find(const char* charMy) const;
-		NString& Sub(int INDEXStart) const;
-		NString& Sub(int INDEXStart, int INDEXLen) const;
+        NString& Sub(INDEX _index) const;
+        NString& Sub(char _start) const;
+        NString& Sub(INDEX _index, INDEX _length) const;
 		NString& Cut(const char Splitter);
         NString& Cut(int length);
 

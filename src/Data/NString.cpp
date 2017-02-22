@@ -204,7 +204,7 @@ NString NString::Trim() const
         return *this;
 
     int c = 0;
-    int i = getLength() - 1;
+    int i = getLength();
 
 	while ((*this)[c] == ' ')
 		c++;
@@ -299,6 +299,27 @@ NString& NString::Sub(INDEX _index) const
 	return *strOffset;
 }
 
+NString& NString::Sub(char _start) const
+{
+    NString* strOffset = new NString;
+
+    int iIndex = -1;
+
+    for(int i = 0; i < getLength(); i++)
+        if((*this)[i] == _start)
+        {
+            iIndex = i + 1;
+            break;
+        }
+    if(iIndex == -1)
+        return *strOffset;
+
+    //TODO: Seems useless declaration...
+
+    strOffset->newString((byte*)memData->Read(iIndex, getLength() - iIndex));
+    return *strOffset;
+}
+
 NString& NString::Sub(INDEX _index, INDEX _length) const
 {
     NString* strOffset = new NString;
@@ -353,12 +374,12 @@ List<NString>* NString::Split(const char Splitter) const
 
 NString& NString::Cut(const char Splitter)
 {
-    NString* strOutput = new NString(*this);
-    for(int i = 0; i < strOutput->getLength(); i++)
+    NString* strOutput = new NString;
+    for(int i = 0; i < getLength(); i++)
     {
-        if(strOutput[i] == Splitter)
+        if((*this)[i] == Splitter)
         {
-            strOutput->Sub(i);
+            *strOutput = Cut(i);
             break;
         }
     }

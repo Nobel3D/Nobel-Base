@@ -6,7 +6,7 @@
 
 QT       -= core gui
 
-TARGET = Nobel-Base
+TARGET = Nobel
 TEMPLATE = lib
 
 DEFINES += NOBELBASE_LIBRARY

@@ -9,7 +9,8 @@ NL_NAMESTART
     private:
 		void* list_lData;
 		Node* list_lNext;
-		static Memory* list_mManager;
+                static Memory** list_mManager;
+                static INDEX list_iSlot;
 		static INDEX list_iStack;
     public:
         Node(const void* _item, INDEX _index, Node* _next);
