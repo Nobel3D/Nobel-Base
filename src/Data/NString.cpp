@@ -123,8 +123,8 @@ void NString::addString(const NString &add)
 
 void NString::Delete()
 {
-    if(!this->Null())
-        memData->Free();
+
+    memData->Free();
 }
 
 void NString::Clear()

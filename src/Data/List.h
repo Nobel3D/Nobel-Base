@@ -1,122 +1,188 @@
 #pragma once
 
+#include <def.h>
 #include "Array.h"
 
 NL_NAMESTART
 
+    template <class type>
 	class Node
 	{
     private:
-		void* list_lData;
-		Node* list_lNext;
-                static Memory** list_mManager;
-                static INDEX list_iSlot;
-		static INDEX list_iStack;
+        type tData;
+        Node* pNext = nullptr;
     public:
-        Node(const void* _item, INDEX _index, Node* _next);
 
-		void* getData();
+        Node(type _item, Node* _next);
+        ~Node();
+
+        type& getData();
 		Node* getNext() const;
-		void setData(const void* _data);
+        void setData(const type& _data);
+        void setNext(const Node* _next);
 
-		void Clear();
-
-		static void Init(SIZE _object, INDEX _stackSize);
-		static Memory* getMemory();
+        Node* Clear();
 
 	};
+
+    template <class type>
+    Node<type>::Node(type _item, Node* _next)
+    {
+        tData = _item;
+        pNext = _next;
+    }
+
+    template <class type>
+    Node<type>::~Node()
+    {
+    }
+
+    template <class type>
+    type& Node<type>::getData()
+    {
+        return tData;
+    }
+
+    template <class type>
+    Node<type>* Node<type>::getNext() const
+    {
+        return pNext;
+    }
+
+    template <class type>
+    void Node<type>::setData(const type& _data)
+    {
+        tData = _data;
+    }
+
+    template <class type>
+    void Node<type>::setNext(const Node* _next)
+    {
+        pNext = _next;
+    }
+
+    template <class type>
+    Node<type>* Node<type>::Clear()
+    {
+        Node* tmp = pNext;
+        pNext = nullptr;
+        this->~Node();
+        return tmp;
+    }
+
 
     template <class type>
     class List
     {
     private:
-        Node* list_lHead= nullptr;
-		INDEX list_iTot = 0;
+        Node<type>* pHead = nullptr;
+        INDEX iNode = 0;
     public:
 
-
-        List(INDEX _stacksize = 1024);
+        List(){}
 
         void addItem(const type& _add);
 
-        Node* findByIndex(INDEX needle) const;
-        void deleteItem(INDEX _index);
-        void editItem(const type& _data, INDEX _index);
+        Node<type>* findByIndex(INDEX index);
+        Node<type>* findByObject(const type& obj);
+        void deleteItem(INDEX index);
 
         void Clear();
 
         Array<type>* toArray();
-        Memory* toStack();
 
-        type& operator[](INDEX _index) const;
+        type& operator[](INDEX index);
 
         INDEX getLength() const;
     };
 
     template <class type>
-    List<type>::List(INDEX _stacksize)
-    {
-        Node::Init(sizeof(type), _stacksize);
-    }
-
-    template <class type>
     void List<type>::addItem(const type& _add)
     {
-        Node* tmp = new Node(&_add, list_iTot, list_lHead);
-        list_lHead = tmp;
-        list_iTot++;
+        pHead = new Node<type>(_add, pHead);
+        iNode++;
     }
 
     template <class type>
-    Node* List<type>::findByIndex(INDEX needle) const
+    Node<type>* List<type>::findByIndex(INDEX index)
     {
-        ASSERT (needle <= list_iTot);
+        if ( index > iNode )
+            return nullptr;
 
-        Node* temp = list_lHead;
-        for (int i = list_iTot - 1; i != needle; i--)
+        Node<type>* temp = pHead;
+        int i = 0;
+        while( index != i++ )
             temp = temp->getNext();
+
         return temp;
     }
 
     template <class type>
-    void List<type>::deleteItem(INDEX _index)
+    Node<type>* List<type>::findByObject(const type& obj)
     {
-        findByIndex(_index)->Clear();
+        Node<type>* temp = pHead;
+        while( obj != temp->getData() )
+        {
+            if( temp->getNext() == nullptr )
+                return nullptr;
+            temp = temp->getNext();
+        }
+        return temp;
     }
 
     template <class type>
-    void List<type>::editItem(const type& _data, INDEX _index)
+    void List<type>::deleteItem(INDEX index)
     {
-        findByIndex(_index)->setData(&_data);
+        if ( index > iNode )
+            return;
+
+        Node<type>* prev = pHead;
+        Node<type>* next = nullptr;
+
+        int i = 0;
+        while( index - 1 != i++ )
+            prev = prev->getNext();
+
+        next = prev->getNext()->Clear();
+        if( next != nullptr )
+            prev->setNext(next);
     }
 
     template <class type>
     void List<type>::Clear()
     {
-        for (int i=0; i < list_iTot; i++)
-            findByIndex(i)->Clear();
+        Node<type>* tmp = pHead;
+
+        for( int i = 0; i < iNode; i++ )
+            tmp = tmp->Clear();
     }
 
     template <class type>
     Array<type>* List<type>::toArray()
     {
-        Array<type>* output = new Array<type>(*Node::getMemory());
+        if( iNode < 1 )
+            return nullptr;
+        Array<type>* output = new Array<type>(iNode);
+        Node<type>* tmp = pHead;
+
+        for ( int i = 0; i < iNode; i++)
+        {
+            (*output)[i] = tmp->getData();
+            tmp = tmp->getNext();
+        }
+
         return output;
     }
 
     template <class type>
-    Memory* List<type>::toStack()
+    type& List<type>::operator[](INDEX index)
     {
-        return Node::getMemory();
+        ASSERT ( index <= iNode )
+
+        return findByIndex(index)->getData();
     }
 
     template <class type>
-    type& List<type>::operator[](INDEX _index) const
-    {
-        return *(type*)findByIndex(_index)->getData();
-    }
-
-    template <class type>
-    INDEX List<type>::getLength() const { return list_iTot; }
+    INDEX List<type>::getLength() const { return iNode; }
 
 NL_NAMECLOSE

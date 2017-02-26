@@ -24,7 +24,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     src/Data/Float.cpp \
-    src/Data/List.cpp \
     src/Data/Memory.cpp \
     src/Data/NString.cpp \
     src/Data/Time.cpp \

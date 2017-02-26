@@ -44,11 +44,11 @@ NString NStream::ReadLine()
 			data.addItem(buffer);
 	}
 	while (buffer != '\n' && !bEoF);
-	Memory* stack = data.toStack();
-	stack->Cut(data.getLength() + 1);
-	NString* strOffset = new NString(*stack);
+//	Memory* stack = data.toStack();
+//	stack->Cut(data.getLength() + 1);
+//	NString* strOffset = new NString(*stack);
 
-	return *strOffset;
+//	return *strOffset;
 }
 NString NStream::ReadAll()
 {
@@ -61,5 +61,5 @@ NString NStream::ReadAll()
 	}
 	while (!bEoF);
 
-        return NString((byte*)data.toStack()->getPointer());
+        //return NString((byte*)data.toStack()->getPointer());
 }

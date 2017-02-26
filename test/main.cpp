@@ -135,32 +135,34 @@ void testArray()
 {
     Array<int> numbers(10);
     for(int i = 0; i < 10 ; i++)
-        numbers.Add(i);
+        numbers[i] = i;
     checkup("Array allocation", numbers[0] == 0 && numbers[5] == 5 && numbers[9] == 9);
 
     numbers.Expand(12);
-    numbers.Add(10);
-    numbers.Add(11);
+    numbers[10] = 10;
+    numbers[11] = 11;
     checkup("Array adding", numbers[10] == 10 && numbers[11] == 11);
 
     numbers[1] = 99;
     checkup("Array replace", numbers[1] == 99);
 
     numbers.Clear();
-    checkup("Array cleaning", numbers[2] != 2);
+    checkup("Array cleaning", numbers.getLength() == 0);
 
     int* othernumber = new int[10];
-    for(int i = 0; i < 10 ; i++)
+    for(int i = 0; i < 10; i++)
         othernumber[i] = i + 10;
-    numbers.Copy(othernumber,10);
-    checkup("Array copying", numbers[3] == 13);
+
+    Array<int> copy(othernumber,10);
+    checkup("Array copying", copy[3] == 13);
+
     Array<NString> strings(10);
-    strings.Add("ciao");
-    strings.Add("bello");
-    strings.Add("mondo");
-    strings.Add("hey");
-    strings.Add("xd");
-    strings.Add("lol");
+    strings[0] = "ciao";
+    strings[1] = "bello";
+    strings[2] = "mondo";
+    strings[3] = "hey";
+    strings[4] = "xd";
+    strings[5] = "lol";
 
     checkup("Array push stack", strings[0] == "ciao" && strings[1] == "bello" && strings[2] == "mondo" && strings[3] == "hey" && strings[4] == "xd" && strings[5] == "lol");
 
@@ -173,19 +175,26 @@ void testList()
         listed.addItem(i);
     checkup("List allocation", listed[9] == 9);
 
-    listed.editItem(99,9);
+    listed.findByIndex(9)->setData(99);
     checkup("List modify", listed[9] == 99);
 
     checkup("List get length", listed.getLength() == 10);
 
     checkup("List find by object", listed[6] == 6);
 
-    Array<int>* listarray = listed.toArray();
-    checkup("List to array", (*listarray)[6] = 6);
+//    Array<int>* listarray = listed.toArray();
+//    checkup("List to array", (*listarray)[6] = 6);
 
     listed.Clear();
-    checkup("List cleaning", listed[6] == 0);
+    checkup("List cleaning", listed.findByIndex(6) == nullptr);
 
+    for(int i = 0; i < 1024 * 4; i++)
+        listed.addItem(i);
+
+    for(int i = 0; i < 1024 * 4; i++)
+        cout << listed[i];
+
+    listed.Clear();
 }
 
 void testString()
@@ -260,13 +269,11 @@ int main(int argc, char** argv)
     testMemory();
     testArray();
     testList();
-    testString();
+//    testString();
     testTranslate();
-    testFilename();
-    testFile();
+//    testFilename();
+//    testFile();
     testLog();
-
-    cout << sizeof(NString);
 
     result();
     return 0;

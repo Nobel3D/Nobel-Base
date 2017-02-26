@@ -5,7 +5,7 @@ CONFIG -= qt
 
 SOURCES += test/main.cpp
 
-LIBS += -L$$PWD/bin -lNobel-Base
+LIBS += -L$$PWD/bin -lNobel
 
 INCLUDEPATH += $$PWD/src
 DEPENDPATH += $$PWD/bin

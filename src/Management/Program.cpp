@@ -14,14 +14,13 @@ NL_NAMESTART
         gen_sProgram = _name;
         gen_sVersion = _version;
         gen_aArg = new Array<NString>(_argc);
-        gen_aArg->Clear();
         for(int i=0; i < _argc; i++)
             (*gen_aArg)[i] = NString(_argv[i]);
     }
 
     NString Program::getName() { return gen_sProgram; }
     NString Program::getVersion() { return gen_sVersion; }
-    NString Program::getArgument(int _number) { ASSERT(gen_aArg->getSize() > _number) return (*gen_aArg)[_number]; }
+    NString Program::getArgument(int _number) { ASSERT(gen_aArg->getLength() > _number) return (*gen_aArg)[_number]; }
 
     class unixrusage : public rusage {
 

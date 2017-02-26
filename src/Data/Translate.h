@@ -10,7 +10,7 @@ NL_NAMESTART
     class Translate
     {
     public:
-        Translate(INDEX size);
+        Translate(INDEX _index);
         ~Translate();
 
         void            Add(const Source& src, const Destination& dst);
@@ -19,66 +19,62 @@ NL_NAMESTART
 
         Destination& operator[](const Source& src_key);
     private:
-        INDEX trs_iUsed = 0;
-        Array<Source> trs_tSrc;
-        Array<Destination> trs_tDst;
+        INDEX iUsed = 0;
+        Array<Source>* tSrc;
+        Array<Destination>* tDst;
 
     };
 
 template<typename Source, typename Destination>
-Translate<Source,Destination>::Translate(INDEX size)
+Translate<Source,Destination>::Translate(INDEX _index)
 {
 
-    if(size <= 0)
-        throw NException("NTranslate::NTranslate(int size)","if(size <= 0)",
-                         "trs_iSize cannot be lower than 0", "size="+NString::fromInt(size));
-
-    trs_tSrc.New(size);
-    trs_tDst.New(size);
+    tSrc = new Array<Source>(_index);
+    tDst = new Array<Destination>(_index);
 
 }
 
 template<typename Source, typename Destination>
 Translate<Source,Destination>::~Translate()
 {
-    trs_tSrc.Delete();
-    trs_tDst.Delete();
+    delete[] tSrc;
+    delete[] tDst;
 }
 
 template<typename Source, typename Destination>
 void Translate<Source,Destination>::Add(const Source& src, const Destination& dst)
 {
-    trs_tSrc[trs_iUsed] = Source(src);
-    trs_tDst[trs_iUsed] = Destination(dst);
-    trs_iUsed++;
+    (*tSrc)[iUsed] = Source(src);
+    (*tDst)[iUsed] = Destination(dst);
+    iUsed++;
 }
 
 template<typename Source, typename Destination>
 Destination& Translate<Source,Destination>::FindBySource(const Source& src_key)
 {
     int i = 0;
-    while (i < trs_iUsed)
+    while (i < iUsed)
     {
-        if (trs_tSrc[i] == src_key)
-            return trs_tDst[i];
+        if ((*tSrc)[i] == src_key)
+            return (*tDst)[i];
         i++;
     }
-    throw NException("Destination& Translate<Source,Destination>::FindBySource(const Destination& src_key)","while (i < trs_iUsed)",
-                         "src_key not found in trs_tSrc");
+    throw NException("Destination& Translate<Source,Destination>::FindBySource(const Destination& src_key)","while (i < iUsed)",
+                         "src_key not found in tSrc");
 }
 
 template<typename Source, typename Destination>
 Source& Translate<Source,Destination>::FindByDestination(const Destination& dst_key)
 {
     int i = 0;
-    while (i < trs_iUsed)
+    while (i < iUsed)
     {
-        if (trs_tDst[i] == dst_key)
-            return trs_tSrc[i];
+        if ((*tDst)[i] == dst_key)
+            return (*tSrc)[i];
         i++;
     }
-    throw NException("Source& Translate::FindByDestination(const Source& dst_key)","while (i < trs_iUsed)",
-                         "dst_key not found in trs_tDst");
+    throw NException("Source& Translate::FindByDestination(const Source& dst_key)","while (i < iUsed)",
+                         "dst_key not found in tDst");
 }
 
 template<typename Source, typename Destination>
