@@ -16,7 +16,7 @@
 #define NL_FAIL 0
 #define NL_DEBUG 1
 #define NL_ENDLINE "\n"
-#define NL_EMPTY (byte*)"\0"
+#define NL_ZERO '\0'
 #define NL_CHAR_PATH '/'
 
 typedef unsigned char byte;
@@ -33,12 +33,4 @@ template<class Type>
 inline Type Min(Type X, Type Y) { return X < Y ? X : Y; }
 
 #define ASSERT(expr) { assert(expr); }
-
-inline int getSize(const byte* array)
-{
-    int i = 0;
-     while(array[i] != '\0') i++;
-
-    return i;
-}
 

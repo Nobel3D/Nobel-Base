@@ -8,404 +8,262 @@
 using namespace NobelLib;
 
 NString::NString()
+{}
+
+NString::NString(const char _char)
 {
-	memData = new Memory(NL_EMPTY, 1 , 1);
+    int a = 1;
+    newString(&_char, a);
 }
 
-
-NString::NString(const char& str)
+NString::NString(const char* _str)
 {
-    newString(str);
+    newString(_str, strSize(_str));
 }
 
-NString::NString(const byte* str)
+NString::NString(const NString& _str)
 {
-    newString(str);
-}
-NString::NString(const char* str)
-{
-    newString((byte*)str);
+    newString(_str.pData, _str.iLength);
 }
 
-NString::NString(const NString& _copy)
+void NString::newString(const char* _str, INDEX _len)
 {
-	newString(_copy);
+    iLength = _len;
+    pData = new char[iLength + 1];
+
+    int i = iLength;
+    while(i--)
+        pData[i] = _str[i];
+
+    pData[iLength]= NL_ZERO;
 }
 
-NString::NString(const Memory& _copy)
+void NString::Chain(const char* add, INDEX len)
 {
-    newString(_copy);
-}
+    int newLength = iLength + len + 1;
+    char* str = new char[newLength];
 
-int NString::byteSize(const byte* array) const
-{
     int i = 0;
 
-     while(array[i] != '\0') i++;
+    while(i < iLength)
+    {
+        str[i] = pData[i];
+        i++;
+    }
 
-    return i;
-}
+    for (int c = 0; c < len; c++)
+        str[i++] = add[c];
 
-int NString::byteSize(const char* array) const
-{
-    int i = 0;
+    str[newLength] = NL_ZERO;
 
-    while(array[i] != '\0') i++;
+    delete[] pData;
 
-    return i;
-}
-
-void NString::newString(const byte* data)
-{
-    if(memData != nullptr)
-        Delete();
-    memData = new Memory(data,1, byteSize(data) + 1);
-}
-
-void NString::newString(const byte* data, INDEX _index)
-{
-    if(memData != nullptr)
-        Delete();
-    memData = new Memory(data,1, _index + 1);
-    memData->Write(NL_EMPTY, _index);
-}
-
-void NString::newString(const NString& data)
-{
-    if(memData != nullptr)
-        Delete();
-    memData = new Memory(*data.memData);
-}
-
-void NString::newString(const Memory& data)
-{
-    if(memData != nullptr)
-        Delete();
-    memData = new Memory(data.getPointer(), 1, data.getSize());
-    memData->Write(NL_EMPTY, data.getSize() - 1);
-}
-
-void NString::newString(const byte& data)
-{
-    if(memData != nullptr)
-        Delete();
-
-    byte tmp[] = {data, '\0'};
-    memData = new Memory(tmp,1, 2);
-}
-void NString::addString(const byte* add)
-{
-    INDEX addLength = byteSize(add);
-    INDEX oldLength = memData->getSize();
-	memData->Reallocate(oldLength + addLength);
-
-    memData->Write(add, oldLength - 1, addLength + 1);
-
-}
-
-void NString::addString(const byte& add)
-{
-    INDEX oldLength = memData->getSize();
-	memData->Reallocate(oldLength + 1);
-
-    memData->Write(&add, oldLength - 1, 1);
-    memData->Write(NL_EMPTY, oldLength, 1);
-}
-
-
-void NString::addString(const NString &add)
-{
-    INDEX oldLength = memData->getSize();
-	memData->Reallocate(oldLength + add.getLength());
-
-    memData->Write(add.memData->getPointer(), oldLength - 1, add.getLength() + 1);
+    iLength = newLength - 1;
+    pData = str;
 }
 
 void NString::Delete()
 {
+    delete[] pData;
 
-    memData->Free();
+    iLength = NULL;
+    pData = NULL;
 }
 
-void NString::Clear()
-{
-    memData->Zero();
-}
+
 bool NString::Null() const
 {
-	return *(byte*)memData->Read(0) == '\0';
+    return pData[0] == NL_ZERO;
 }
 
-bool NString::Null(const char* IsEmpty)
+bool NString::Null(const char* _str)
 {
-	return IsEmpty == "";
-}
-byte* NString::Zero()
-{
-	return NL_EMPTY;
+    return _str[0] == NL_ZERO;
 }
 
-bool NString::chk_Number()
+char NString::Zero()
 {
-	for (int i = 0;i < this->getLength(); i++)
-	{
-		if ((*this)[i] != '0' && (*this)[i] != '1' &&
-			(*this)[i] != '2' && (*this)[i] != '3' &&
-			(*this)[i] != '4' && (*this)[i] != '5' &&
-			(*this)[i] != '6' && (*this)[i] != '7' &&
-			(*this)[i] != '8' && (*this)[i] != '9')
-				return false;
-	}
-	return true;
-}
-bool NString::Find(const NString* str_My) const
-{
-	int c=0;
-	for(int i=0; i<getLength();i++)
-	{
-		if((*this)[i]==(*str_My)[0])
-	{
-		for(c; c < str_My->getLength();c++)
-			if((*str_My)[c]!=(*this)[i+c])
-				return false;
-        return true;
-	}
-	}
-	return false;
+    return NL_ZERO;
 }
 
-bool NString::Find(const char* charMy) const
+bool NString::isNumber()
 {
-	int lengthof=byteSize(charMy);
-	int c=0;
-
-	for(int i=0; i < getLength();i++)
-	{
-        if((*this)[i]==charMy[0])
-        {
-            for(c; c<lengthof;c++)
-                if(charMy[c]!=(*this)[i+c])
-                    break;
-            return c == lengthof;
-        }
-	}
-}
-
-NString& NString::Normalize() const
-{
-    NString* strOffset = new NString(*this);
-	strOffset->Replace(NL_ENDLINE, (char*)NL_EMPTY);
-	return *strOffset;
-}
-
-NString NString::Trim() const
-{
-    if(Null())
-        return *this;
-
-    int c = 0;
-    int i = getLength();
-
-	while ((*this)[c] == ' ')
-		c++;
-
-	for (i; i >= c; i--)
-		if ((*this)[i] != ' ')
-			break;
-
-    if(i == c)
+    for (int i = 0;i < getLength(); i++)
     {
-        return NString();
+        if ((*this)[i] != '0' && (*this)[i] != '1' &&
+            (*this)[i] != '2' && (*this)[i] != '3' &&
+            (*this)[i] != '4' && (*this)[i] != '5' &&
+            (*this)[i] != '6' && (*this)[i] != '7' &&
+            (*this)[i] != '8' && (*this)[i] != '9')
+                return false;
+    }
+    return true;
+}
+
+INDEX NString::Find(const char* key) const
+{
+    return strFind(pData, key);
+}
+
+void NString::Trim()
+{
+    size_t size;
+    char *end;
+
+    size = strSize(pData);
+    if (!size)
+        return;
+
+    end = pData + size;
+    while (end >= pData && *end == ' ')
+        end--;
+    *(end + 1) = '\0';
+
+    while (*pData++ == ' ');
+
+    iLength = strSize(pData);
+}
+
+void NString::Replace(const char* strNative, const char* strReplace)
+{
+    int delta;
+    char* n1;
+
+    for (int i = 0; i < iLength; i++)
+        if (pData[i]==strNative[0])
+        {
+            if (strCmp(pData + i, strNative) == 0)
+            {
+                n1 = strCut(pData, i);
+                int len = strSize(strNative);
+                delta = len - strSize(strReplace);
+                n1 = strCat(n1,strReplace);
+                n1 = strCat(n1, pData + i + len);
+                break;
+            }
     }
 
-    int strlen = i - c + 1;
-	return *this;
-}
-
-NString& NString::Replace(const char* strNative, const char* strReplace) const
-{
-	NString* strOutput = new NString(*this);
-	for (int i = 0; i < strOutput->getLength();i++)
-	if ((*strOutput)[i]==strNative[0])
-	{
-		if (strOutput->Sub(i, byteSize(strNative)) == strNative)
-		{
-			strOutput->newString(strOutput->Sub(0, i) + strReplace + strOutput->Sub( i + byteSize(strNative) ));
-		}
-	}
-	return *strOutput;
+    delete[] pData;
+    iLength = iLength - delta;
+    pData = n1;
+    return;
 }
 
 double NString::toDouble()
 {
-	return atof(*this);
+    return atof((char*)pData);
 }
 
 int NString::toInt()
 {
-	return atoi(*this);
+    return atoi((char*)pData);
 }
 NString& NString::toBinary(INDEX Decimal)
 {
-	NString* strOffset = new NString(Math::int2base(Decimal, 2));
-	return *strOffset;
+    NString* strOffset = new NString(Math::int2base(Decimal, 2));
+    return *strOffset;
 }
 NString& NString::toHex(INDEX Decimal)
 {
     NString* strOffset = new NString(Math::int2base(Decimal, 16));
-	return *strOffset;
+    return *strOffset;
 }
 NString& NString::toOct(INDEX Decimal)
 {
     NString* strOffset = new NString(Math::int2base(Decimal, 8));
-	return *strOffset;
+    return *strOffset;
 }
 NString& NString::fromInt(INDEX IntToString)
 {
     NString* strOffset = new NString(Math::int2base(IntToString, 10));
-	return *strOffset;
+    return *strOffset;
 }
 NString& NString::fromBool(bool value)
 {
     NString* strOffset = new NString(value ? "true" : "false");
-	return *strOffset;
+    return *strOffset;
 }
 
 NString& NString::fromAddress(void* value)
 {
     uintptr_t address = reinterpret_cast<uintptr_t>(value);
     NString* strOffset = new NString("0x" + toHex(address));
-	return *strOffset;
-}
-
-NString& NString::fromDouble(double Convert)
-{
-	char buffer[11];
-    NString* strOffset = new NString(buffer);
-	return *strOffset;
-	//TODO
-}
-
-NString& NString::Sub(INDEX _index) const
-{
-    NString* strOffset = new NString;
-
-    if (_index < 0 || _index >= getLength())
-        return *strOffset;
-
-    //TODO: Seems useless declaration...
-
-    strOffset->newString((byte*)memData->Read(_index, (getLength() + 1) - _index));
-	return *strOffset;
-}
-
-NString& NString::Sub(char _start) const
-{
-    NString* strOffset = new NString;
-
-    int iIndex = -1;
-
-    for(int i = 0; i < getLength(); i++)
-        if((*this)[i] == _start)
-        {
-            iIndex = i + 1;
-            break;
-        }
-    if(iIndex == -1)
-        return *strOffset;
-
-    //TODO: Seems useless declaration...
-
-    strOffset->newString((byte*)memData->Read(iIndex, getLength() - iIndex));
     return *strOffset;
 }
-
-NString& NString::Sub(INDEX _index, INDEX _length) const
+NString& NString::fromDouble(double Convert)
 {
-    NString* strOffset = new NString;
-    if(_index > this->getLength() || _index < 0)
-        return *strOffset;
+    char buffer[11];
+    NString* strOffset = new NString(buffer);
+    return *strOffset;
+    //TODO
+}
 
-    strOffset->newString((byte*)memData->Read(_index, _length), _length);
+Array<NString>& NString::fromArray(char** array, INDEX index)
+{
+    Array<NString>* out = new Array<NString>(index);
+    for(int i = 0; i < index; i++)
+        (*out)[i] = array[i];
+    return *out;
+}
 
-	return *strOffset;
+void NString::Sub(INDEX start)
+{
+    if (start < 1 || start > iLength)
+        return;
+
+    pData = strSub(pData, start);
+    iLength = iLength - start;
+    return;
+}
+void NString::Sub(INDEX start, INDEX len)
+{
+    if (start < 1 || len < 1 || start + len > iLength)
+        return;
+
+    pData = strSub(pData, start);
+    pData = strCut(pData, len);
+    iLength = iLength - (start + len);
+    return;
 }
 
 
-List<NString>* NString::Split(const char* Splitter) const
+Array<NString>& NString::Split(const char* sep) const
 {
-    List<NString>* output = new List<NString>;
-	int c = 0;
-	int lenSplit = byteSize(Splitter);
-
-	for(int i=0; i < getLength();i++)
-	{
-		if((*this)[i] == Splitter[0])
-        {
-            if(this->Sub(i,lenSplit)==Splitter)
-            {
-                output->addItem(this->Sub(c,i));
-                c = i+lenSplit;
-            }
-        }
-	}
-	output->addItem(this->Sub(c));
-    return output;
-}
-
-List<NString>* NString::Split(const char Splitter) const
-{
-    NString* strOutput = new NString(*this);
-    List<NString>* output = new List<NString>;
-
-	int c = 0;
-
-	for(int i=0; i < getLength();i++)
-		if((*this)[i] == Splitter)
-        {
-            output->addItem(strOutput->Sub(c,i));
-            c = i+1;
-        }
-    output->addItem(this->Sub(c));
-
-    return output;
+    int index;
+    char** array = strSplit(pData, sep, index);
+    return fromArray(array,index);
 }
 
 
-NString& NString::Cut(const char Splitter)
+void NString::Cut(const char Splitter)
 {
     NString* strOutput = new NString;
     for(int i = 0; i < getLength(); i++)
     {
-        if((*this)[i] == Splitter)
+        if(pData[i] == Splitter)
         {
-            *strOutput = Cut(i);
+            pData = strCut(pData, i);
+            iLength = strSize(pData);
             break;
         }
     }
 
-    return *strOutput;
 }
 
-NString& NString::Cut(int length)
+void NString::Cut(INDEX length)
 {
-    if(length > getLength())
-        return *this;
-
-    Memory* memOut = new Memory(this->memData->getPointer(), 1, length + 1);
-
-    memOut->Write(NL_EMPTY, length + 1);
-
-    NString* strOutput = new NString(*memOut);
-
-    return *strOutput;
+    if(length > iLength)
+        return;
+    pData = strCut(pData, length);
+    iLength = strSize(pData);
 }
+
 NString& NString::toLower() const
 {
   NString* strOutput = new NString(*this);
 
-  for (int i=0; i < strOutput->getLength(); i++)
-     strOutput->setChar(i,tolower((*this)[i]));
+  for (int i=0; i < strOutput->iLength; i++)
+     strOutput->pData[i] = tolower(strOutput->pData[i]);
 
   return *strOutput;
 }
@@ -413,8 +271,8 @@ NString& NString::toUpper() const
 {
   NString* strOutput = new NString(*this);
 
-  for (int i=0; i < strOutput->getLength(); i++)
-     strOutput->setChar(i, toupper((*this)[i]));
+  for (int i=0; i < strOutput->iLength; i++)
+     strOutput->pData[i] = toupper(strOutput->pData[i]);
 
   return *strOutput;
 }
@@ -422,129 +280,257 @@ NString& NString::toUpper() const
 NString& NString::toReverse() const
 {
     NString* strOutput = new NString(*this);
-    int tempLength = this->getLength();
+    int tempLength = iLength;
     int tempCounter = 0;
 
-    for (tempCounter; tempCounter < strOutput->getLength(); tempCounter++)
+    for (tempCounter; tempCounter < strOutput->iLength; tempCounter++)
     {
-        strOutput->setChar(tempCounter, (*strOutput)[tempLength]);
+        strOutput->pData[tempCounter] =  strOutput->pData[tempLength];
         tempLength--;
     }
-  strOutput->setChar(tempCounter+1, '\0');
+  strOutput->pData[tempCounter+1] = '\0';
 
   return *strOutput;
 }
 
 NString::operator char *()
 {
-  return (char*)memData->getPointer();
+  return (char*)pData;
 }
 
 NString::operator const char *() const
 {
-  return (char*)memData->getPointer();
+  return (char*)pData;
 }
 
-NString& NString::operator =(const char* newChar)
+NString& NString::operator =(const char* str)
 {
-	newString((byte*)newChar);
-	return *this;
+    Delete();
+    newString(str, strSize(str));
+    return *this;
 }
 
-NString& NString::operator =(const char& newChar)
+NString& NString::operator =(const char str)
 {
-	this->newString((byte*)&newChar);
-	return *this;
+    Delete();
+    newString(&str, 1);
+    return *this;
 }
 
-NString& NString::operator =(const NString& strCopy)
+NString& NString::operator =(NString& str)
 {
-	newString(strCopy);
-	return *this;
+    Delete();
+    newString(str.pData, str.iLength);
+    return *this;
 }
-NString& NString::operator+=(const char addMe)
+NString& NString::operator+=(const char str)
 {
-	addString(addMe);
-	return *this;
-}
-
-NString& NString::operator+=(const char* addMe)
-{
-	addString((byte*)addMe);
-	return *this;
+    Chain(&str, 1);
+    return *this;
 }
 
-NString& NString::operator+=(const NString& addMe)
+NString& NString::operator+=(const char* str)
 {
-    addString(addMe);
-	return *this;
+    Chain(str, strSize(str));
+    return *this;
 }
 
-NString& NString::operator+(const char* addMe) const
+NString& NString::operator+=(const NString& str)
 {
-    NString* strOffset = new NString(*this);
-    strOffset->addString(addMe);
-	return *strOffset;
+    Chain(str.pData, str.iLength);
+    return *this;
 }
 
-NString& NString::operator+(const NString& addMe) const
+NString& NString::operator+(const char* str) const
 {
     NString* strOffset = new NString(*this);
-    strOffset->addString(addMe);
-	return *strOffset;
+    strOffset->Chain(str,strSize(str));
+    return *strOffset;
 }
 
-NString& NString::operator+(const char addMe) const
+NString& NString::operator+(const NString& str) const
 {
     NString* strOffset = new NString(*this);
-	strOffset->addString(addMe);
-	return *strOffset;
+    strOffset->Chain(str.pData, str.iLength);
+    return *strOffset;
+}
+
+NString& NString::operator+(const char str) const
+{
+    NString* strOffset = new NString(*this);
+    strOffset->Chain(&str, 1);
+    return *strOffset;
 }
 
 
-char NString::operator[](INDEX _index)
+char NString::operator[](int INDEX)
 {
-	ASSERT(_index >= 0 && _index <= getLength())
-	return *(char*)(*memData)[_index];
+    if(INDEX>=0 && INDEX<=iLength)
+    return pData[INDEX];
 
 }
 
-bool NString::Equal(const char* charCompare)
-{
-    NString strCompare(charCompare);
 
-    return *memData == *strCompare.memData;
+bool NString::operator ==(const NString& str)
+{
+    return strCmp(pData, str.pData) == 0;
 }
 
-bool NString::Equal(const NString& strCompare)
+bool NString::operator !=(const NString& str)
 {
-    return *memData == *strCompare.memData;
+    return strCmp(pData, str.pData) != 0;
 }
 
-
-bool NString::operator ==(const NString& equal)
+bool NString::operator ==(const char* str)
 {
-	return Equal(equal);
+    return strCmp(pData, str) == 0;
 }
-
-bool NString::operator !=(const NString& equal)
+bool NString::operator !=(const char* str)
 {
-	return !Equal(equal);
-}
-
-bool NString::operator ==(const char* equal)
-{
-	return Equal(equal);
-}
-bool NString::operator !=(const char* equal)
-{
-	return !Equal(equal);
+    return strCmp(pData, str) != 0;
 }
 
 
-INDEX NString::getLength() const { return memData->getSize() - 1; }
-void NString::setChar(INDEX _index, char _char)
+INDEX NString::getLength() const { return iLength; }
+
+
+INDEX NString::strSize(const char* array)
 {
-    ASSERT(_index >= 0 && _index <= getLength())
-	*(char*)(*memData)[_index] = _char;
+    if(array == nullptr)
+        return -1;
+    int i = 0;
+
+    while(array[i] != '\0') i++;
+
+    return i;
+}
+
+char* NString::strCut(const char* str, INDEX len)
+{
+    ASSERT(len > 0 && len <= strSize(str))
+
+    INDEX nl = len + 1;
+    char* out = new char[nl];
+
+    for(int i = 0; i < nl; i++)
+        out[i] = str[i];
+
+    out[len] = NL_ZERO;
+
+    return out;
+}
+
+char* NString::strCpy(char* dest, const char* src, INDEX len)
+{
+    ASSERT(len > 0 && len <= strSize(src));
+
+    char *tmp = dest;
+
+    while ( len-- )
+        *dest++ = *src++;
+
+    return tmp;
+}
+
+char* NString::strCat(char* dest, const char* src)
+{
+    ASSERT(dest != nullptr && src != nullptr);
+    char* out = new char[strSize(dest) + strSize(src)];
+    char* tmp = out;
+
+    while (*dest != NL_ZERO)
+        *out++ = *dest++;
+    while (*src != NL_ZERO)
+        *out++ = *src++;
+
+    return tmp;
+}
+
+char* NString::strSub(const char* str, INDEX len)
+{
+    ASSERT(str != nullptr && len <= strSize(str));
+    const char* entry = str + len;
+    int size = strSize(entry) + 1;
+    char* tmp = new char[size];
+    for(int i = 0; i < size; i++)
+        tmp[i] = entry[i];
+
+    return tmp;
+}
+
+int NString::strCmp(const char* str1, const char* str2)
+{
+    ASSERT(str1 != nullptr && str2 != nullptr);
+    ASSERT(str1[0] != NL_ZERO && str2[0] != NL_ZERO);
+    byte s1, s2;
+
+    while(1)
+    {
+        s1 = *str1++;
+        s2 = *str2++;
+
+        if(!s1 || !s2)
+            return 0;
+        if(s1 != s2)
+            return s1 < s2 ? -1 : 1;
+    }
+}
+
+int NString::strFind(const char* str, const char* key)
+{
+    ASSERT(str != nullptr && key != nullptr);
+
+    for(int i=0; i < strSize(str); i++)
+    {
+        if(str[i] == key[0])
+            if(strCmp(str + i, key) == 0)
+                return i;
+    }
+    return -1;
+}
+
+int NString::strFindRecursive(const char* str, const char* key)
+{
+    ASSERT(str != nullptr && key != nullptr);
+
+    int out = 0;
+    for(int i=0; i < strSize(str); i++)
+    {
+        if(str[i] == key[0])
+            if(strCmp(str + i, key) == 0)
+                out++;
+    }
+
+    return out;
+}
+
+char** NString::strSplit(const char* str, const char* key, int& index)
+{
+    ASSERT(str != nullptr && key != nullptr);
+
+    index = strFindRecursive(str,key) + 1;
+
+    if(index == 0)
+        return nullptr;
+
+    char** out = new char*[index];
+    int c = 0;
+    int last = 0;
+    int strleng = strSize(str);
+
+    for(int i=0; i < strleng; i++)
+    {
+        if(str[i] == key[0])
+            if(strCmp(str + i, key) == 0)
+            {
+                out[c] = new char[i];
+                strCpy(out[c], str, i);
+                out[c][i] = NL_ZERO;
+                last = i;
+                c++;
+            }
+    }
+    out[c] = new char[strleng - last];
+    strCpy(out[c], str + last, strleng - last);
+    return out;
 }

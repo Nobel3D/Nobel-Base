@@ -188,10 +188,10 @@ void testList()
     listed.Clear();
     checkup("List cleaning", listed.findByIndex(6) == nullptr);
 
-    for(int i = 0; i < 1024 * 4; i++)
+    for(int i = 0; i < 1024; i++)
         listed.addItem(i);
 
-    for(int i = 0; i < 1024 * 4; i++)
+    for(int i = 0; i < 1024; i++)
         cout << listed[i];
 
     listed.Clear();
@@ -205,15 +205,15 @@ void testString()
     hello += " world";
     checkup("NString adding", hello=="Hello world");
 
-    checkup("NString replace", hello.Replace("world", "guys") == "Hello guys");
+    hello.Replace("world", "guys");
+    checkup("NString replace", hello == "Hello guys");
 
-    checkup("NString find", hello.Find("wor"));
+    checkup("NString find", hello.Find("guy"));
 
-    List<NString>* strList = hello.Split(" ");
-    Array<NString>* space = strList->toArray();
-    checkup("NString split", (*space)[0] == "Hello" && (*space)[1] == "world");
+    Array<NString> space = hello.Split(" ");;
+    checkup("NString split", space[0] == "Hello" && space[1] == " guys");
 
-    checkup("NString check Numbers", NString("123").chk_Number());
+    checkup("NString check Numbers", NString("123").isNumber());
 
     checkup("NString integer to binary",  NString::toBinary(200) == NString("11001000"));
     checkup("NString integer to hexadecimal",  NString::toHex(200) == NString("C8"));
@@ -222,12 +222,12 @@ void testString()
 
 void testTranslate()
 {
-    Translate<NString,int> voti(10);
-    const NString read[10] {"pippo","paolo","maria","erika","eleonora","roberto", "matteo", "luca", "francesco", "elisa"};
+    Translate<NString,int>* voti = new Translate<NString,int>(10);
+    NString read[10] {"pippo","paolo","maria","erika","eleonora","roberto", "matteo", "luca", "francesco", "elisa"};
     for(int i = 0; i<10; i++)
-        voti.Add(read[i],i);
-    checkup("Translate get destination", voti[read[0]] == 0 && voti.FindBySource(read[9]) == 9);
-    checkup("Translate get source", voti.FindByDestination(0) == read[0] && voti.FindByDestination(9) == read[9]);
+        voti->Add(read[i],i);
+    checkup("Translate get destination", (*voti)[read[0]] == 0 && voti->FindBySource(read[9]) == 9);
+    checkup("Translate get source", voti->FindByDestination(0) == read[0] && voti->FindByDestination(9) == read[9]);
 }
 void testFilename()
 {
@@ -269,10 +269,10 @@ int main(int argc, char** argv)
     testMemory();
     testArray();
     testList();
-//    testString();
+    testString();
     testTranslate();
-//    testFilename();
-//    testFile();
+    testFilename();
+    testFile();
     testLog();
 
     result();

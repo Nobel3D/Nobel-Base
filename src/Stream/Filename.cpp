@@ -18,17 +18,17 @@ Filename::Filename(const Filename& filename)
 
 NString& Filename::getPath() const
 {
-    NString* strOutput = new NString;
-    int length = sFile->getLength();
+    NString* strOutput = new NString(*sFile);
+    int length = strOutput->getLength();
     for (int i = length; i > 0; i--)
-        if((*sFile)[i] == NL_CHAR_PATH)
+        if((*strOutput)[i] == NL_CHAR_PATH)
         {
             length = i + 1;
             break;
         }
 
     if(length != sFile->getLength())
-        *strOutput = sFile->Cut(length);
+        strOutput->Cut(length);
 
     return *strOutput;
 }
@@ -39,32 +39,32 @@ NString& Filename::getName() const
 
     int length = sFile->getLength();
     for (int i = length; i > 0; i--)
-        if((*sFile)[i] == NL_CHAR_PATH)
+        if((*strOutput)[i] == NL_CHAR_PATH)
         {
             length = i + 1;
             break;
         }
 
-    if(length != sFile->getLength())
-        *strOutput = sFile->Sub(length);
+    if(length != strOutput->getLength())
+        strOutput->Sub(length);
 
     return *strOutput;
 }
 
 NString& Filename::getExt() const
 {
-    NString* strOutput = new NString;
+    NString* strOutput = new NString(*sFile);
 
-    int length = sFile->getLength();
+    int length = strOutput->getLength();
     for (int i = length; i > 0; i--)
-        if((*sFile)[i] == '.')
+        if((*strOutput)[i] == '.')
         {
             length = i;
             break;
         }
 
-    if(length != sFile->getLength())
-        *strOutput = sFile->Sub(length);
+    if(length != strOutput->getLength())
+        strOutput->Sub(length);
 
     return *strOutput;
 }

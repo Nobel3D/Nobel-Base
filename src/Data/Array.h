@@ -40,6 +40,8 @@ template <class type>
 Array<type>::Array(const Array<type> &copy)
 {
     pMemory = new type[copy.iIndex];
+    for(int i = 0; i < copy.iIndex; i++)
+        pMemory[i] = copy.pMemory[i];
     iIndex = copy.iIndex;
 }
 

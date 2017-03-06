@@ -9,6 +9,10 @@ NL_NAMESTART
     template<typename Source, typename Destination>
     class Translate
     {
+    private:
+         INDEX iUsed = 0;
+         Array<Source>* tSrc = nullptr;
+         Array<Destination>* tDst = nullptr;
     public:
         Translate(INDEX _index);
         ~Translate();
@@ -18,11 +22,6 @@ NL_NAMESTART
         Source&         FindByDestination(const Destination& dst_key);
 
         Destination& operator[](const Source& src_key);
-    private:
-        INDEX iUsed = 0;
-        Array<Source>* tSrc;
-        Array<Destination>* tDst;
-
     };
 
 template<typename Source, typename Destination>

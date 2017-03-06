@@ -110,8 +110,9 @@ NL_NAMESTART
             return nullptr;
 
         Node<type>* temp = pHead;
-        int i = 0;
-        while( index != i++ )
+
+        int a = iNode - 1 - index;
+        for ( int i = 0; i != a; i++ )
             temp = temp->getNext();
 
         return temp;

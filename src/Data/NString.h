@@ -2,7 +2,6 @@
 
 #include "List.h"
 #include "Array.h"
-#include "Memory.h"
 #include "def.h"
 
 NL_NAMESTART
@@ -10,94 +9,84 @@ NL_NAMESTART
 	class NString
 	{
     private:
-		Memory* memData = nullptr;
+        char* pData = nullptr;
+        INDEX iLength = 0;
 
-		void addString(const byte* add);
-		void addString(const NString& add);
-		void addString(const byte& add);
+        void Chain(const char*, INDEX);
 
-        void newString(const byte* data, INDEX _index);
-		void newString(const byte* data);
-		void newString(const NString& data);
-		void newString(const Memory& data);
-		void newString(const byte& data);
-
-		bool Equal(const char* charCompare);
-		bool Equal(const NString& strCompare);
-
-        int byteSize(const byte* array) const;
-		int byteSize(const char* array) const;
+        void newString(const char*, INDEX);
 
     public:
-		NString();
-		NString(const char& Const);
-		NString(const byte* Const);
-		NString(const char* Const);
-		NString(const NString& _copy);
-        NString(const Memory& _copy);
-
+        inline NString();
+        inline NString(const char);
+        inline NString(const char*);
+        inline NString(const NString&);
 
         void Delete();
-		void Clear();
-		bool Null() const;
-		static bool Null(const char*  IsEmpty);
-		static byte* Zero();
+        bool Null() const;
+        static bool Null(const char*);
+        static char Zero();
 
-		bool chk_Number(); //this string is a number?
+        bool isNumber(); //this string is a number?
 
-		List<NString>* Split(const char* Splitter) const;
-		List<NString>* Split(const char Splitter) const;
-		bool Find(const NString* strMy) const;
-		bool Find(const char* charMy) const;
-        NString& Sub(INDEX _index) const;
-        NString& Sub(char _start) const;
-        NString& Sub(INDEX _index, INDEX _length) const;
-		NString& Cut(const char Splitter);
-        NString& Cut(int length);
+        INDEX Find(const char*) const;
+        void Replace(const char* strNative, const char* strReplace);
+        void Sub(INDEX start);
+        void Sub(INDEX start, INDEX len);
+        void Cut(INDEX);
+        void Cut(const char);
+        Array<NString>& Split(const char* Splitter) const;
 
-		NString& Normalize() const;
-		NString Trim() const;
-		NString& Replace(const char* strNative, const char* strReplace) const;
-		NString& toLower() const;
-		NString& toUpper() const;
-		NString& toReverse() const;
-		int toInt();
-		double toDouble();
-		static NString& toHex(INDEX Decimal);
-		static NString& toOct(INDEX Decimal);
-		static NString& toBinary(INDEX Decimal);
-		static NString& fromInt(INDEX IntToString);
-		static NString& fromBool(bool value);
-		static NString& fromAddress(void* address);
-		static NString& fromDouble(double Convert);
+        void Trim();
+        NString& toLower() const;
+        NString& toUpper() const;
+        NString& toReverse() const;
+        int toInt();
+        double toDouble();
+        static NString& toHex(INDEX Decimal);
+        static NString& toOct(INDEX Decimal);
+        static NString& toBinary(INDEX Decimal);
+        static NString& fromInt(INDEX IntToString);
+        static NString& fromBool(bool value);
+        static NString& fromAddress(void* address);
+        static NString& fromDouble(double Convert);
+        static Array<NString>& fromArray(char**, INDEX);
 
-		INDEX getLength() const;
+        INDEX getLength() const;
 
-		operator char* ();
-		operator const char*() const;
+        static INDEX strSize(const char*);
+        static char* strCut(const char*, INDEX);
+        static char* strCpy(char*, const char*, INDEX);
+        static char* strCat(char*, const char*);
+        static char* strSub(const char*, INDEX);
+        static int strCmp(const char*, const char*);
+        static int strFind(const char*, const char*);
+        static int strFindRecursive(const char*, const char*);
+        static char** strSplit(const char*, const char*, int&);
 
-		NString& operator=(const char* newChar);
-		NString& operator=(const NString& strCopy);
-		NString& operator=(const char& newChar);
-		NString& operator+=(const char* addMe);
-		NString& operator+=(const char addMe);
-		NString& operator+=(const NString& addMe);
-		NString& operator+(const char* addMe) const;
-		NString& operator+(const NString& addMe) const;
-		NString& operator+(const char addMe) const;
-		friend NString& operator+(char* addMe, NString str)
-		{
-			return NString(addMe) + str;
-		}
+        operator char* ();
+        operator const char*() const;
 
-		char operator[](INDEX _index);
+        NString& operator=(const char* newChar);
+        NString& operator=(NString& strCopy);
+        NString& operator=(const char str);
+        NString& operator+=(const char* addMe);
+        NString& operator+=(const char addMe);
+        NString& operator+=(const NString& addMe);
+        NString& operator+(const char* addMe) const;
+        NString& operator+(const NString& addMe) const;
+        NString& operator+(const char addMe) const;
+        friend NString& operator+(char* addMe, NString str)
+        {
+            return NString(addMe) + str;
+        }
 
-		bool operator==(const char* equal);
-		bool operator!=(const char* equal);
-		bool operator==(const NString& equal);
-		bool operator!=(const NString& equal);
+        char operator[](int INDEX);
 
-		void setChar(INDEX _index, char _char);
+        bool operator==(const char* equal);
+        bool operator!=(const char* equal);
+        bool operator==(const NString& equal);
+        bool operator!=(const NString& equal);
 	};
 
 NL_NAMECLOSE
