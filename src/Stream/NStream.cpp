@@ -1,4 +1,5 @@
 #include "NStream.h"
+#include <Math/Math.h>
 #include <stdio.h>
 
 NL_NAMEUSING
@@ -9,18 +10,18 @@ NStream::NStream()
 
 void NStream::WriteLine(const NString& send)
 {
-	Write(send + '\n');
+    encode_ascii(NString(send + '\n'));
 }
 
 
 NStream& NStream::operator<< (const char* str)
 {
-	WriteLine(str);
+    encode_ascii(str);
 	return *this;
 }
 NStream& NStream::operator<<(const NString& str)
 {
-	Write(str);
+    encode_ascii(str);
 	return *this;
 }
 NStream& NStream::operator >>(NString& str)
@@ -28,38 +29,72 @@ NStream& NStream::operator >>(NString& str)
     str = ReadLine();
     return *this;
 }
-bool NStream::isEoF()
+
+NStream& NStream::operator >>(int& value)
 {
-	return bEoF;
+    value = decode_int();
+    return *this;
+}
+
+bool NStream::isEoS()
+{
+    return bEoS;
 }
 
 NString NStream::ReadLine()
 {
-	List<byte> data;
-	byte buffer = ' ';
+    List<char> data;
 
-	do
-	{
-		if (Read(&buffer, 1))
-			data.addItem(buffer);
-	}
-	while (buffer != '\n' && !bEoF);
-//	Memory* stack = data.toStack();
-//	stack->Cut(data.getLength() + 1);
-//	NString* strOffset = new NString(*stack);
+    do
+    {
+        data.addItem(decode_ascii());
+    }
+    while (*pData != '\n' && !bEoS);
 
-//	return *strOffset;
+    return NString::fromList(data);
 }
 NString NStream::ReadAll()
 {
-    List<byte> data;
-	byte buffer = ' ';
-	do
-	{
-		if (Read(&buffer, 1))
-			data.addItem(buffer);
-	}
-	while (!bEoF);
+    List<char> data;
 
-        //return NString((byte*)data.toStack()->getPointer());
+    do
+    {
+        data.addItem(decode_ascii());
+    }
+    while (!bEoS);
+
+    return NString::fromList(data);
+}
+
+int NStream::decode_int()
+{
+    int out = 0;
+    int exp = 0;
+    iSize = sizeof(int);
+    Read();
+    for(int i = iSize; i > 0; i--)
+    {
+        out += ((int)pData[i - 1]) * Math::power(16, exp);
+        exp += 2;
+    }
+    return out;
+}
+
+char NStream::decode_ascii()
+{
+    iSize = sizeof(char);
+    Read();
+    return *pData;
+}
+
+int NStream::encode_ascii(const char* value)
+{
+    iSize = sizeof(char);
+    pData = new byte(iSize);
+    for(int i = 0; i < NString::strSize(value); i++)
+    {
+        *pData = value[i];
+        Write();
+    }
+    return NL_OK;
 }

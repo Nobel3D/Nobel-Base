@@ -206,6 +206,19 @@ Array<NString>& NString::fromArray(char** array, INDEX index)
     return *out;
 }
 
+NString& NString::fromList(List<char>& list)
+{
+    int len = list.getLength();
+    char* str = new char[len + 1];
+
+    for(int i = 0; i < len; i++)
+        str[i] = list[i];
+
+    str[len] = NL_ZERO;
+    NString* out = new NString(str);
+    return *out;
+}
+
 void NString::Sub(INDEX start)
 {
     if (start < 1 || start > iLength)

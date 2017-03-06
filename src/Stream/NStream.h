@@ -12,10 +12,10 @@ NL_NAMESTART
 		class NStream
 		{
 		protected:
-			STREAM pStream;
-
-			bool bEoF = false;
-			bool bBinary = false;
+            STREAM pStream = nullptr;
+            SIZE iSize = 1;
+            byte* pData = nullptr;
+            bool bEoS = false;
 		public:
 			NStream();
 
@@ -23,17 +23,23 @@ NL_NAMESTART
 
 			void WriteLine(const NString& send);
 
-			virtual int Write(NString _string) = 0;
-			virtual int Write(byte* bin, INDEX length) = 0;
-			virtual INDEX Read(void* vpGet, INDEX length, INDEX count = 1) = 0;
+            virtual INDEX Write() = 0;
+            virtual INDEX Read() = 0;
 
 			NString ReadLine();
 			NString ReadAll();
 
+            int decode_int();
+            char decode_ascii();
+
+            int encode_int(const int value);
+            int encode_ascii(const char* value);
+
 			NStream& operator <<(const char* str);
 			NStream& operator <<(const NString& str);
 			NStream& operator >>(NString& str);
+            NStream& operator >>(int& value);
 
-			bool isEoF();
+            bool isEoS();
 		};
 NL_NAMECLOSE

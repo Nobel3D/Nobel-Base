@@ -249,6 +249,15 @@ void testFile()
     readfile >>  reading;
     readfile.Close();
     checkup("NFile write/read operations", reading == "somethings happened :D\n");
+
+
+    int num;
+    NFile readf("file.txt");
+    readf.Open(Reading);
+    readf >> num;
+    readf.Close();
+
+    std::cout << num << std::endl;
 }
 
 void testLog()

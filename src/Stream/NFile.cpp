@@ -13,9 +13,8 @@ NFile::~NFile()
     delete[] file;
 }
 
-bool NFile::Open(OpenMode _mode, bool isBinary)
+bool NFile::Open(OpenMode _mode)
 {
-    bBinary = isBinary;
 
     if(bStart)
     {
@@ -83,29 +82,24 @@ int NFile::Close()
         return -1;
 }
 
-int NFile::Write(NString _string)
+INDEX NFile::Write()
 {
-	return fwrite(_string, 1, _string.getLength(), (FILE*)pStream);
+    ASSERT (mode == OpenMode::Writing);
+    return fwrite(pData, 1, iSize, (FILE*)pStream);
 }
 
-INDEX NFile::Read(void* vpGet, INDEX length, INDEX count)
+INDEX NFile::Read()
 {
+    ASSERT (mode == OpenMode::Reading);
 
-    ASSERT (mode == OpenMode::Reading)
-    INDEX result = 0;
+    pData = new byte[iSize];
 
-    result = fread(vpGet, count, length, (FILE*)pStream);
-    if (result == length)
-        return length;
+    if (fread(pData, 1, iSize, (FILE*)pStream) == iSize)
+        return iSize;
     else
-		bEoF = true;
+        bEoS = true;
 
     return 0;
-}
-
-int NFile::Write(byte* bin, INDEX length)
-{
-    return fwrite(bin, length, 1, (FILE*)pStream);
 }
 
 Filename& NFile::getName() const

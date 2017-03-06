@@ -22,16 +22,14 @@ NL_NAMESTART
 			~NFile();
             void Destroy();
 
-            bool Open(OpenMode _mode, bool isBinary = false);
+            bool Open(OpenMode _mode);
 			int Close();
 
 			bool IsStarted();
 			INDEX getLenght();
 
-            INDEX Read(void* vp, INDEX length, INDEX count = 1);
-
-			int Write(NString _string);
-			int Write(byte* bin, INDEX length);
+            INDEX Read();
+            INDEX Write();
 
             Filename& getName() const;
 		};

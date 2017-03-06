@@ -51,6 +51,7 @@ NL_NAMESTART
         static NString& fromAddress(void* address);
         static NString& fromDouble(double Convert);
         static Array<NString>& fromArray(char**, INDEX);
+        static NString& fromList(List<char>&);
 
         INDEX getLength() const;
 
