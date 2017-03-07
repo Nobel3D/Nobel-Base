@@ -19,6 +19,9 @@
 #define NL_ZERO '\0'
 #define NL_CHAR_PATH '/'
 
+//Math definitions
+#define NL_BASE16 16
+
 typedef unsigned char byte;
 typedef unsigned int uint;
 typedef int8_t  SHORT;

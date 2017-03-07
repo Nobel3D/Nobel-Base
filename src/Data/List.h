@@ -156,6 +156,8 @@ NL_NAMESTART
 
         for( int i = 0; i < iNode; i++ )
             tmp = tmp->Clear();
+        iNode = 0;
+        pHead = nullptr;
     }
 
     template <class type>

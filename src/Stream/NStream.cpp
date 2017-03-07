@@ -19,6 +19,13 @@ NStream& NStream::operator<< (const char* str)
     encode_ascii(str);
 	return *this;
 }
+
+NStream& NStream::operator<< (int value)
+{
+    encode_int(value);
+    return *this;
+}
+
 NStream& NStream::operator<<(const NString& str)
 {
     encode_ascii(str);
@@ -68,16 +75,9 @@ NString NStream::ReadAll()
 
 int NStream::decode_int()
 {
-    int out = 0;
-    int exp = 0;
     iSize = sizeof(int);
-    Read();
-    for(int i = iSize; i > 0; i--)
-    {
-        out += ((int)pData[i - 1]) * Math::power(16, exp);
-        exp += 2;
-    }
-    return out;
+    Read();   
+    return Math::byte2int(pData);
 }
 
 char NStream::decode_ascii()
@@ -96,5 +96,13 @@ int NStream::encode_ascii(const char* value)
         *pData = value[i];
         Write();
     }
+    return NL_OK;
+}
+
+int NStream::encode_int(int value)
+{
+    iSize = sizeof(int);
+    pData = Math::int2byte(value);
+    Write();
     return NL_OK;
 }

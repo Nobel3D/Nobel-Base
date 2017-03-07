@@ -39,4 +39,35 @@ char* int2base(INDEX value, INDEX base)
 }
 }
 
+
+int Math::byte2int(const byte *value)
+{
+    ASSERT(value != nullptr);
+    int out = 0;
+    int exp = 0;
+
+    for(int i = sizeof(int); i > 0; i--)
+    {
+        out += ((int)value[i - 1]) * power(16, exp);
+        exp += 2;
+    }
+
+    return out;
+}
+
+byte* Math::int2byte(int value)
+{
+    ASSERT(value >= 0);
+    byte* out = new byte[sizeof(int)];
+
+    for(int i = sizeof(int); i > 0; i--)
+    {
+
+        out[i] = (byte)value % NL_BASE16;
+        value /= NL_BASE16;
+    }
+
+    return out;
+}
+
 NL_NAMECLOSE

@@ -32,13 +32,14 @@ NL_NAMESTART
             int decode_int();
             char decode_ascii();
 
-            int encode_int(const int value);
+            int encode_int(int value);
             int encode_ascii(const char* value);
 
 			NStream& operator <<(const char* str);
 			NStream& operator <<(const NString& str);
+            NStream& operator <<(int value);
 			NStream& operator >>(NString& str);
-            NStream& operator >>(int& value);
+            NStream& operator >>(int &value);
 
             bool isEoS();
 		};

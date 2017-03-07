@@ -182,8 +182,8 @@ void testList()
 
     checkup("List find by object", listed[6] == 6);
 
-//    Array<int>* listarray = listed.toArray();
-//    checkup("List to array", (*listarray)[6] = 6);
+    Array<int>* listarray = listed.toArray();
+    checkup("List to array", (*listarray)[6] = 6);
 
     listed.Clear();
     checkup("List cleaning", listed.findByIndex(6) == nullptr);
@@ -251,7 +251,13 @@ void testFile()
     checkup("NFile write/read operations", reading == "somethings happened :D\n");
 
 
-    int num;
+    int num = 41286639;
+
+    NFile writef("file.txt");
+    writef.Open(Writing);
+    writef << num;
+    writef.Close();
+
     NFile readf("file.txt");
     readf.Open(Reading);
     readf >> num;
