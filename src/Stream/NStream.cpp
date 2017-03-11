@@ -1,5 +1,6 @@
 #include "NStream.h"
 #include <Math/Math.h>
+#include <Data/Convert.h>
 #include <stdio.h>
 
 NL_NAMEUSING
@@ -11,36 +12,6 @@ NStream::NStream()
 void NStream::WriteLine(const NString& send)
 {
     encode_ascii(NString(send + '\n'));
-}
-
-
-NStream& NStream::operator<< (const char* str)
-{
-    encode_ascii(str);
-	return *this;
-}
-
-NStream& NStream::operator<< (int value)
-{
-    encode_int(value);
-    return *this;
-}
-
-NStream& NStream::operator<<(const NString& str)
-{
-    encode_ascii(str);
-	return *this;
-}
-NStream& NStream::operator >>(NString& str)
-{
-    str = ReadLine();
-    return *this;
-}
-
-NStream& NStream::operator >>(int& value)
-{
-    value = decode_int();
-    return *this;
 }
 
 bool NStream::isEoS()
@@ -75,16 +46,37 @@ NString NStream::ReadAll()
 
 int NStream::decode_int()
 {
-    iSize = sizeof(int);
-    Read();   
-    return Math::byte2int(pData);
+     return decode<int>();
+}
+
+float NStream::decode_float()
+{
+     return decode<float>();
+}
+
+double NStream::decode_double()
+{
+     return decode<double>();
 }
 
 char NStream::decode_ascii()
 {
-    iSize = sizeof(char);
-    Read();
-    return *pData;
+    return decode<char>();
+}
+
+int NStream::encode_int(const int& value)
+{
+    return encode<int>(value);
+}
+
+int NStream::encode_float(const float& value)
+{
+    return encode<float>(value);
+}
+
+int NStream::encode_double(const double& value)
+{
+    return encode<double>(value);
 }
 
 int NStream::encode_ascii(const char* value)
@@ -99,10 +91,51 @@ int NStream::encode_ascii(const char* value)
     return NL_OK;
 }
 
-int NStream::encode_int(int value)
+NStream& NStream::operator<< (const char* str)
 {
-    iSize = sizeof(int);
-    pData = Math::int2byte(value);
-    Write();
-    return NL_OK;
+    encode_ascii(str);
+    return *this;
+}
+
+NStream& NStream::operator<< (const int &value)
+{
+    encode_int(value);
+    return *this;
+}
+NStream& NStream::operator<<(const NString& str)
+{
+    encode_ascii(str);
+    return *this;
+}
+NStream& NStream::operator <<(const float &value)
+{
+    encode_float(value);
+    return *this;
+}
+NStream& NStream::operator <<(const double &value)
+{
+    encode_double(value);
+    return *this;
+}
+NStream& NStream::operator >>(NString& str)
+{
+    str = ReadLine();
+    return *this;
+}
+
+NStream& NStream::operator >>(int &value)
+{
+    value = decode_int();
+    return *this;
+}
+
+NStream& NStream::operator >>(float &value)
+{
+    value = decode_float();
+    return *this;
+}
+NStream& NStream::operator >>(double &value)
+{
+    value = decode_double();
+    return *this;
 }

@@ -16,6 +16,7 @@ public:
     Memory(const void* _data, SIZE _object, INDEX _number);
     Memory(const Memory& copy);
 
+    static void* memCpy(void* dest, const void* src, INDEX len);
     void Copy(const void* _from, INDEX _number);
     void Copy(const Memory& _memory);
     void* Push(const void* _data, INDEX _index);

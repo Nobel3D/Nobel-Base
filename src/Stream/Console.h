@@ -5,14 +5,13 @@
 
 NL_NAMESTART
 
-    class Console : public NStream
-    {
-    private:
-    public:
-        Console();
-        INDEX Read(void* vpGet, INDEX length, INDEX count = 1);
-        int Write(NString _string);
-        int Write(byte* bin, INDEX length);
-    };
+class Console : public NStream
+{
+private:
+public:
+    Console();
+    INDEX Read();
+    INDEX Write();
+};
 
 NL_NAMECLOSE

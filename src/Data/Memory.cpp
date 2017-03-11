@@ -215,3 +215,14 @@ bool Memory::operator!=(const Memory& compare)
 INDEX Memory::getSize() const { return iMemory; }
 SIZE Memory::getType() const { return iObject; }
 void* Memory::getPointer() const { return pMemory; }
+
+
+void* Memory::memCpy(void *dest, const void *src, INDEX len)
+{
+    ASSERT(src != nullptr && len > 0);
+
+    if(dest == nullptr)
+        return dest = memcpy(malloc(len), src, len);
+    else
+        return memcpy(dest, src, len);
+}

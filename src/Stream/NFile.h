@@ -8,30 +8,28 @@
 
 NL_NAMESTART
 
-		class NFile : public NStream
-		{
-		private:
-            Filename* file;
-            OpenMode mode;
-			bool bStart = false;
+class NFile : public NStream
+{
+    private:
+    Filename* file;
+    OpenMode mode;
 
-			bool CanLoad();
-            NString getModeOpen(OpenMode _mode);
-		public:
-            NFile(const Filename& _file);
-			~NFile();
-            void Destroy();
+    int CanLoad();
+    NString getModeOpen(OpenMode _mode);
+    public:
+    NFile(const Filename& _file);
+    ~NFile();
 
-            bool Open(OpenMode _mode);
-			int Close();
+    int Open(OpenMode _mode, bool binary = true);
+    int Close();
 
-			bool IsStarted();
-			INDEX getLenght();
+    bool IsStarted();
+    INDEX getLenght();
 
-            INDEX Read();
-            INDEX Write();
+    INDEX Read();
+    INDEX Write();
 
-            Filename& getName() const;
-		};
+    Filename& getName() const;
+};
 
 NL_NAMECLOSE

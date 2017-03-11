@@ -13,47 +13,37 @@ NFile::~NFile()
     delete[] file;
 }
 
-bool NFile::Open(OpenMode _mode)
+int NFile::Open(OpenMode _mode, bool binary)
 {
-
-    if(bStart)
-    {
-        NL_LOG("FILE", file->getAll() + " is already opened. Ignoring")
-        return false;
-    }
-
+    bBinary = binary;
     pStream = fopen(file->getAll(), getModeOpen(_mode));
 
-    if(pStream == 0)
+    if(pStream == nullptr)
     {
-        NL_LOG("FILE", file->getAll() + " cannot be open")
+        NL_LOG("FILE", file->getAll() + " cannot be open");
         return false;
     }
 
     mode = _mode;
-    bStart = true;
-    return true;
+    return NL_OK;
 }
 
-bool NFile::CanLoad()
+int NFile::CanLoad()
 {
-        if (FILE* _file = fopen(file->getAll(), "r")) {
-                fclose(_file);
-		return true;
-	}
-	else {
-		return false;
-	}
+    void* _file = fopen(file->getAll(), "r");
+    fclose((FILE*)_file);
+
+    return _file != nullptr ? NL_OK : NL_FAIL;
 }
 
 bool NFile::IsStarted()
 {
-	return bStart;
+    return pStream != nullptr;
 }
 
 INDEX NFile::getLenght()
 {
-	return ftell((FILE*)pStream);
+    return ftell((FILE*)pStream);
 }
 
 NString NFile::getModeOpen(OpenMode _mode)
@@ -76,10 +66,7 @@ NString NFile::getModeOpen(OpenMode _mode)
 
 int NFile::Close()
 {
-	if (bStart)
-		return fclose((FILE*)pStream);
-    else
-        return -1;
+    return fclose((FILE*)pStream);
 }
 
 INDEX NFile::Write()

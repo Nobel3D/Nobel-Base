@@ -2,7 +2,8 @@
 
 #include <def.h>
 #include <Data/NString.h>
-
+#include <Data/Memory.h>
+#include <Data/Convert.h>
 
 NL_NAMESTART
 
@@ -16,6 +17,7 @@ NL_NAMESTART
             SIZE iSize = 1;
             byte* pData = nullptr;
             bool bEoS = false;
+            bool bBinary = false;
 		public:
 			NStream();
 
@@ -29,18 +31,72 @@ NL_NAMESTART
 			NString ReadLine();
 			NString ReadAll();
 
+            template<class type>
+            type decode();
+
             int decode_int();
+            float decode_float();
+            double decode_double();
             char decode_ascii();
 
-            int encode_int(int value);
+            template<class type>
+            int encode(const type& value);
+
+            int encode_int(const int &value);
+            int encode_float(const float &value);
+            int encode_double(const double &value);
             int encode_ascii(const char* value);
 
 			NStream& operator <<(const char* str);
 			NStream& operator <<(const NString& str);
-            NStream& operator <<(int value);
+            NStream& operator <<(const int &value);
+            NStream& operator << (const float &value);
+            NStream& operator << (const double &value);
 			NStream& operator >>(NString& str);
             NStream& operator >>(int &value);
+            NStream& operator >>(float &value);
+            NStream& operator >>(double &value);
 
             bool isEoS();
 		};
+
+        template <class type>
+        type NStream::decode()
+        {
+            if(bBinary)
+            {
+                iSize = sizeof(type);
+                type* out = new type;
+                Read();
+                Memory::memCpy(out, pData, iSize);
+                return *out;
+            }
+            else
+            {
+                NString str = ReadAll();
+                if(str.Find("."))
+                    return Convert::toFloat(str);
+                else
+                    return Convert::toInt(str);
+            }
+        }
+
+        template <class type>
+        int NStream::encode(const type& value)
+        {
+            if(bBinary)
+            {
+                iSize = sizeof(type);
+                pData = new byte[iSize];
+                Memory::memCpy(pData, &value, iSize);
+                Write();
+                return NL_OK;
+            }
+            else
+            {
+                pData = (byte*)Convert::toString(value);
+                Write();
+                return NL_OK;
+            }
+        }
 NL_NAMECLOSE

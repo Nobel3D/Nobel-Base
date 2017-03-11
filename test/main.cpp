@@ -251,19 +251,42 @@ void testFile()
     checkup("NFile write/read operations", reading == "somethings happened :D\n");
 
 
-    int num = 41286639;
+    int num = 512;
 
-    NFile writef("file.txt");
-    writef.Open(Writing);
-    writef << num;
-    writef.Close();
+    writefile.Open(Writing);
+    writefile << num;
+    writefile.Close();
 
-    NFile readf("file.txt");
-    readf.Open(Reading);
-    readf >> num;
-    readf.Close();
+    readfile.Open(Reading);
+    readfile >> num;
+    readfile.Close();
 
-    std::cout << num << std::endl;
+    float f = 0.111111;
+
+    writefile.Open(Writing);
+    writefile << f;
+    writefile.Close();
+
+    readfile.Open(Reading);
+    readfile >> f;
+    readfile.Close();
+
+    double d = 3.14159265358979323846; //PI: last 5 digit will be ignored, long double to use!
+
+    writefile.Open(Writing);
+    writefile << d;
+    writefile.Close();
+
+    readfile.Open(Reading);
+    readfile >> d;
+    readfile.Close();
+
+    NobelLib::Console* ty = new NobelLib::Console();
+    *ty << d;
+
+    char buf[64];
+    sprintf(buf, "%i \n%f \n%0.15f \n", num, f, d);
+    printf("%s", buf);
 }
 
 void testLog()
@@ -279,7 +302,7 @@ int main(int argc, char** argv)
 
     timeStart = get_time();
 
-    cout << NString("HELLO ") + ":3\n";
+    cout << "HELLO " + NString(":3\n");
     testProgram();
     testMemory();
     testArray();

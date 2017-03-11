@@ -36,7 +36,8 @@ SOURCES += \
     src/Stream/Console.cpp \
     src/Stream/NFile.cpp \
     src/Stream/NStream.cpp \
-    src/Stream/Filename.cpp
+    src/Stream/Filename.cpp \
+    src/Data/Convert.cpp
 
 HEADERS +=\
     src/Data/Array.h \
@@ -57,7 +58,8 @@ HEADERS +=\
     src/Stream/NStream.h \
     src/def.h \
     src/NBL.h \
-    src/Stream/Filename.h
+    src/Stream/Filename.h \
+    src/Data/Convert.h
 
 unix {
     target.path = /usr/lib

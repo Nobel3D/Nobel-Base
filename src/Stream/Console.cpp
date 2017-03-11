@@ -5,19 +5,15 @@ NL_NAMEUSING
 
 Console::Console()
 {
+    bBinary = true;
 }
 
-INDEX Console::Read(void* vpGet, INDEX length, INDEX count)
+INDEX Console::Write()
 {
-    return fread(vpGet, length, count, stdin);
+    return fwrite(pData, 1, iSize, (FILE*)pStream);
 }
 
-int Console::Write(NString _string)
+INDEX Console::Read()
 {
-    return fwrite(_string, _string.getLength(),1, stdout);
-}
-
-int Console::Write(byte* bin, INDEX length)
-{
-    return fwrite(bin, length, 1, stdout);
+    return fread(pData, 1, iSize, (FILE*)pStream);
 }
